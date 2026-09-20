@@ -28,3 +28,6 @@ Thumbs.db
 app.zip
 attachments*
 
+
+.env.render
+
