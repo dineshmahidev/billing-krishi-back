@@ -2,7 +2,7 @@
 <head><meta charset="utf-8">
 <style>
 body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; margin:20px;}
-.header{border-bottom:2.5px solid #0B6B43; padding-bottom:8px; margin-bottom:12px; text-align:center;}
+.header{border-bottom:2.5px solid #0B6B43; padding-top:14px; padding-bottom:8px; margin-bottom:12px; text-align:center;}
 .logo{height:96px; width:96px; display:inline-block; vertical-align:middle;}
 .brand-block{display:inline-block; vertical-align:middle; text-align:center; margin-left:10px;}
 .brand-name{font-weight:900; color:#0B6B43; font-size:26pt; margin:0; text-align:center;}
@@ -18,7 +18,9 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 .remarks{border:1.5px solid #1F2937; margin:12px 0; min-height:60px;}
 .remarks-h{background:#EAF7F0; border-bottom:1.5px solid #1F2937; padding:4px 8px; font-weight:800; color:#0B6B43; font-size:9pt;}
 .remarks-b{padding:8px 10px; min-height:36px;}
-.sig{border:1.5px solid #1F2937; float:right; width:200px; text-align:center; padding:8px; margin-top:40px;}
+.sig{border:1.5px solid #1F2937; float:right; width:200px; text-align:center; padding:8px 10px 7px; margin-top:40px; min-height:86px;}
+.sig-line{font-weight:800; border-top:1.5px solid #1F2937; margin-top:6px; padding-top:5px;}
+.sig-sub{font-size:8pt; color:#6B7280; margin-top:2px;}
 </style></head>
 <body>
 @php
@@ -64,7 +66,7 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 
 <div class="remarks"><div class="remarks-h">Remarks / Opinion:</div><div class="remarks-b">{{ $report->remarks }}&nbsp;</div></div>
 
-<div class="sig"><div style="height:60px;">&nbsp;</div><div style="font-weight:800; border-top:1.5px solid #1F2937; padding-top:4px;">Authorized Signatory</div><div style="font-size:8pt; color:#6B7280;">KRISHI ANALYTICAL LAB</div></div>
+<div class="sig"><div style="height:56px;">&nbsp;</div><div class="sig-line">Authorized Signatory</div><div class="sig-sub">KRISHI ANALYTICAL LAB</div></div>
 <div style="clear:both; text-align:center; font-size:11pt; font-weight:700; color:#1F2937; margin-top:60px; border-top:2.5px solid #168B57; padding-top:6px;">{{ $address }}</div>
 <div style="text-align:center; background:#DBEAFE; border-top:1.5px solid #168B57; border-bottom:1.5px solid #168B57; padding:4px 8px; margin:5px 14px 0; font-size:9.5pt; color:#1F2937; font-weight:700;">{{ $email }} | {{ $phone }} | +91 94433 12345</div>
 </body></html>

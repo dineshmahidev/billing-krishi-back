@@ -1,8 +1,8 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><style>
-@page{size:A4 portrait; margin:138px 14px 78px 14px;}
+@page{size:A4 portrait; margin:146px 14px 78px 14px;}
 *{font-family:Helvetica,Arial,sans-serif; box-sizing:border-box;}
 body{font-size:11px; color:#1F2937; margin:0;}
-.header{position:fixed; top:-128px; left:0; right:0; height:120px; border-bottom:2.5px solid #0B6B43; background:#fff; padding-bottom:6px; text-align:center;}
+.header{position:fixed; top:-146px; left:0; right:0; height:138px; border-bottom:2.5px solid #0B6B43; background:#fff; padding:14px 0 6px 0; text-align:center;}
 .logo{height:96px; width:96px; object-fit:contain; display:inline-block;}
 .brand-block{display:inline-block; vertical-align:middle; text-align:center; margin-left:10px;}
 .brand-name{font-weight:900; color:#0B6B43; font-size:26px; letter-spacing:0.5px; line-height:1.1; margin:0; text-align:center;}
@@ -34,12 +34,10 @@ body{font-size:11px; color:#1F2937; margin:0;}
   $logoPath=file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
 @endphp
 <div class="header">
-  <div style="text-align:center;">
-    @if(file_exists($logoPath))<img src="{{$logoPath}}" class="logo" alt="logo">@endif
-    <div class="brand-block">
-      <div class="brand-name">{{$labName}}</div>
-      <div class="brand-tagline">"{{ $tagline }}"</div>
-    </div>
+  @if(file_exists($logoPath))<img src="{{$logoPath}}" class="logo" alt="logo">@endif
+  <div class="brand-block">
+    <div class="brand-name">{{$labName}}</div>
+    <div class="brand-tagline">"{{ $tagline }}"</div>
   </div>
 </div>
 <div class="footer">
@@ -83,7 +81,9 @@ body{font-size:11px; color:#1F2937; margin:0;}
 
 <div style="border:1.5px solid #1F2937; margin-top:14px; padding:8px; min-height:46px;"><div style="font-size:9px; font-weight:800; color:#0B6B43; border-bottom:1px solid #1F2937; padding-bottom:4px; margin-bottom:6px;">Terms & Notes</div><div style="font-size:9px; color:#374151;">1. Payment within 7 days. 2. Tests as per standard methods. 3. Report valid for tested sample only.</div></div>
 
-<div style="float:right; margin-top:30px; text-align:center; border:1px solid #1F2937; padding:10px 18px; min-width:170px;">
-<div style="height:50px;"></div><div style="font-weight:800; font-size:10px; border-top:1.5px solid #1F2937; padding-top:4px;">Authorized Signatory</div><div style="font-size:8px; color:#6B7280;">KRISHI ANALYTICAL LAB</div>
+<div style="float:right; margin-top:30px; width:200px; text-align:center; border:1.5px solid #1F2937; padding:8px 10px 7px; min-height:86px;">
+<div style="height:52px;"></div>
+<div style="font-weight:800; font-size:11px; border-top:1.5px solid #1F2937; margin-top:6px; padding-top:5px;">Authorized Signatory</div>
+<div style="font-size:9px; color:#6B7280; margin-top:2px;">KRISHI ANALYTICAL LAB</div>
 </div>
 </body></html>

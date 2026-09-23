@@ -5,19 +5,20 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 138px 14px 88px 14px;
+  margin: 146px 14px 88px 14px;
 }
 * { font-family: 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
 body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background: #FFFFFF; }
 .header {
   position: fixed;
-  top: -128px;
+  top: -146px;
   left: 0;
   right: 0;
-  height: 120px;
+  height: 138px;
   border-bottom: 2.5px solid #0B6B43;
-  padding-bottom: 6px;
+  padding: 14px 0 6px 0;
   background: #FFFFFF;
+  text-align: center;
 }
 .header-group { width: 100%; border-collapse: collapse; text-align: center; }
 .header-group td { vertical-align: middle; padding: 0; border: none; }
@@ -100,15 +101,17 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
   position: fixed;
   bottom: 92px;
   right: 14px;
-  text-align: right;
+  width: 200px;
+  text-align: center;
   page-break-inside: avoid;
-  border: 1px solid #1F2937;
-  padding: 6px 10px;
+  border: 1.5px solid #1F2937;
+  padding: 8px 10px 7px;
   background: #FFFFFF;
-  min-width: 180px;
-  min-height: 78px;
+  min-height: 86px;
 }
-.sig-img { height: 72px; width: auto; max-width: 180px; object-fit: contain; }
+.sig-img { height: 64px; width: auto; max-width: 170px; object-fit: contain; display: block; margin: 0 auto 4px auto; }
+.sig-line { border-top: 1.5px solid #1F2937; margin-top: 6px; padding-top: 5px; font-weight: 800; font-size: 11px; color: #1F2937; }
+.sig-sub { font-size: 9px; color: #6B7280; margin-top: 2px; }
 .watermark {
   position: fixed;
   bottom: 130px;
@@ -135,14 +138,12 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
 @endphp
 
 <div class="header">
-  <div style="text-align:center;">
-    @if(file_exists($logoPath))
-      <img src="{{ $logoPath }}" class="logo" alt="logo">
-    @endif
-    <div class="brand-block" style="margin-left:10px; vertical-align:middle;">
-      <div class="brand-name">{{ $labName }}</div>
-      <div class="brand-tagline">"{{ $tagline }}"</div>
-    </div>
+  @if(file_exists($logoPath))
+    <img src="{{ $logoPath }}" class="logo" alt="logo">
+  @endif
+  <div class="brand-block" style="margin-left:10px; vertical-align:middle;">
+    <div class="brand-name">{{ $labName }}</div>
+    <div class="brand-tagline">"{{ $tagline }}"</div>
   </div>
 </div>
 
@@ -215,14 +216,12 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
 <div style="height: 40px;"></div>
 <div class="signature-area">
   @if($sigPath)
-    <img src="{{ $sigPath }}" class="sig-img" alt="signature"><br>
+    <img src="{{ $sigPath }}" class="sig-img" alt="signature">
   @else
-    <div style="height:56px; border-bottom:1px solid #1F2937; margin-bottom:4px;">&nbsp;</div>
+    <div style="height:52px;">&nbsp;</div>
   @endif
-  <div style="font-weight:800; font-size:11px; color:#1F2937; text-align:center;">
-    Authorized Signatory
-  </div>
-  <div style="font-size:9px; color:#6B7280; text-align:center;">KRISHI ANALYTICAL LAB</div>
+  <div class="sig-line">Authorized Signatory</div>
+  <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
 </div>
 
 <script type="text/php">
