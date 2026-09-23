@@ -31,6 +31,8 @@ class ParameterController extends Controller
             'name'=>'required',
             'unit'=>'nullable|string',
             'specification'=>'nullable|string',
+            'price'=>'nullable|numeric|min:0|max:999999',
+            'hsn_code'=>'nullable|string|max:20',
             'display_order'=>'nullable|integer',
             'active'=>'boolean'
         ]);
@@ -47,6 +49,8 @@ class ParameterController extends Controller
             'name'=>'sometimes|required',
             'unit'=>'nullable|string',
             'specification'=>'nullable|string',
+            'price'=>'sometimes|nullable|numeric|min:0|max:999999',
+            'hsn_code'=>'sometimes|nullable|string|max:20',
             'display_order'=>'nullable|integer',
             'active'=>'boolean'
         ]);

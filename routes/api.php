@@ -8,9 +8,18 @@ use App\Http\Controllers\Api\ParameterController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\LabSettingController;
+use App\Http\Controllers\Api\CmsController;
+use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\CustomerController;
 
 // Public
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/cms/landing', [CmsController::class, 'landing']);
+
+// Public report download by report number (hero softcopy download)
+Route::get('/reports/by-no/{reportNo}', [ReportController::class, 'byNo']);
+Route::get('/reports/by-no/{reportNo}/pdf', [ReportController::class, 'pdfByNo']);
+Route::get('/reports/by-no/{reportNo}/pdf/download', [ReportController::class, 'downloadPdfByNo']);
 
 // Protected
 Route::middleware('auth:sanctum')->group(function () {
@@ -51,8 +60,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/settings', [LabSettingController::class, 'index']);
     Route::put('/settings', [LabSettingController::class, 'update']);
     Route::post('/settings', [LabSettingController::class, 'update']);
+
+    // CMS Landing (admin only for update)
+    Route::put('/cms/landing', [CmsController::class, 'updateLanding']);
+    Route::post('/cms/landing', [CmsController::class, 'updateLanding']);
+
+    // Customers - searchable for autocomplete, all authenticated can read, admin write
+    Route::get('/customers', [CustomerController::class, 'index']);
+    Route::get('/customers/search', [CustomerController::class, 'search']);
+    Route::get('/customers/{id}', [CustomerController::class, 'show']);
+    Route::post('/customers', [CustomerController::class, 'store']);
+    Route::put('/customers/{id}', [CustomerController::class, 'update']);
+    Route::delete('/customers/{id}', [CustomerController::class, 'destroy']);
 });
 
 // PDF routes - public with optional auth via header OR ?token= (for window.open direct)
 Route::get('/reports/{id}/pdf', [ReportController::class, 'pdf']);
 Route::get('/reports/{id}/pdf/download', [ReportController::class, 'downloadPdf']);
+Route::get('/reports/{id}/word', [ReportController::class, 'word']);
+Route::get('/reports/{id}/word/download', [ReportController::class, 'downloadWord']);
+Route::get('/reports/{id}/invoice', [InvoiceController::class, 'show']);
+Route::get('/reports/{id}/invoice/pdf', [InvoiceController::class, 'pdf']);
+Route::get('/reports/{id}/invoice/pdf/download', [InvoiceController::class, 'downloadPdf']);
+Route::get('/reports/{id}/invoice/word', [InvoiceController::class, 'word']);
+Route::get('/reports/{id}/invoice/word/download', [InvoiceController::class, 'downloadWord']);
+Route::put('/reports/{id}/invoice/gst', [InvoiceController::class, 'toggleGst'])->middleware('auth:sanctum');
+Route::put('/reports/{id}/invoice/status', [InvoiceController::class, 'toggleStatus'])->middleware('auth:sanctum');
+Route::get('/invoices', [InvoiceController::class, 'index']);

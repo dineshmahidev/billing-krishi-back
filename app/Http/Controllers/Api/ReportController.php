@@ -7,6 +7,7 @@ use App\Models\Report;
 use App\Models\ReportResult;
 use App\Models\Parameter;
 use App\Models\LabSetting;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -56,6 +57,21 @@ class ReportController extends Controller
         if (empty($data['party_name']) && empty($data['customer_name']) && empty($data['sample_name'])) {
             return response()->json(['message'=>'Party/Customer or Sample name required'], 422);
         }
+        // Auto-create customer/company if new name entered (selectable + manually enterable) and capture customer_id for auto-fetch
+        $customerId = null;
+        foreach (['party_name','customer_name'] as $field) {
+            if (!empty($data[$field])) {
+                $name = trim($data[$field]);
+                if ($name) {
+                    $customer = \App\Models\Customer::where('name', $name)->first();
+                    if (!$customer) {
+                        try { $customer = \App\Models\Customer::create(['name' => $name, 'company_name' => $name]); } catch (\Throwable $e) {}
+                    }
+                    if ($customer && !$customerId) $customerId = $customer->id;
+                }
+            }
+        }
+        $data['customer_id'] = $customerId;
         return DB::transaction(function() use ($data, $request){
             $reportNo = $this->generateReportNo();
             $report = Report::create([
@@ -75,6 +91,7 @@ class ReportController extends Controller
                 'remarks'=>$data['remarks'] ?? null,
                 'status'=>'completed',
                 'created_by'=>$request->user()->id ?? null,
+                'customer_id'=>$data['customer_id'] ?? null,
             ]);
             foreach ($data['results'] as $i => $r) {
                 $param = Parameter::find($r['parameter_id']);
@@ -87,6 +104,23 @@ class ReportController extends Controller
                 ]);
             }
             $report->load(['reportType','creator','results.parameter']);
+            // Auto create separate invoice (not in analysis report)
+            $lab = LabSetting::current();
+            $subtotal = $report->results->sum(fn($r) => floatval(Parameter::find($r['parameter_id'])?->price ?? 0));
+            $gstEnabled = (bool)($lab->gst_enabled ?? true);
+            $gstPercent = floatval($lab->default_gst_percent ?? 18);
+            $gstAmount = $gstEnabled ? round($subtotal * $gstPercent / 100,2) : 0;
+            Invoice::create([
+                'report_id' => $report->id,
+                'invoice_no' => Invoice::nextNo(),
+                'party_name' => $report->party_name,
+                'customer_name' => $report->customer_name,
+                'subtotal' => $subtotal,
+                'gst_percent' => $gstPercent,
+                'gst_amount' => $gstAmount,
+                'total_amount' => $subtotal + $gstAmount,
+                'gst_enabled' => $gstEnabled,
+            ]);
             return response()->json($report, 201);
         });
     }
@@ -179,13 +213,91 @@ class ReportController extends Controller
     public function downloadPdf(Request $request, $id)
     {
         $user = $this->resolveUser($request);
-        // if (!$user) return response()->json(['message' => 'Unauthenticated'], 401);
         $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
         $pdf->setPaper('A4','portrait');
         $filename = $this->pdfFilename($report);
         return $pdf->download($filename);
+    }
+
+    public function word(Request $request, $id)
+    {
+        $user = $this->resolveUser($request);
+        $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
+        $lab = LabSetting::current();
+        $html = view('word.report', compact('report','lab'))->render();
+        $filename = $this->wordFilename($report);
+        return response($html, 200, [
+            'Content-Type' => 'application/msword',
+            'Content-Disposition' => 'inline; filename="'.$filename.'"',
+        ]);
+    }
+
+    public function downloadWord(Request $request, $id)
+    {
+        $user = $this->resolveUser($request);
+        $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
+        $lab = LabSetting::current();
+        $html = view('word.report', compact('report','lab'))->render();
+        $filename = $this->wordFilename($report);
+        return response($html, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+        ]);
+    }
+
+    private function findOrFailByNo(string $reportNo): Report
+    {
+        $no = trim($reportNo);
+        $report = Report::with(['reportType','creator','results.parameter'])
+            ->where('report_no', $no)
+            ->orWhere('report_no', strtoupper($no))
+            ->first();
+
+        if (!$report) {
+            $digits = preg_replace('/\D+/', '', $no);
+            if ($digits !== '') {
+                $padded = 'KAL-'.str_pad($digits, 4, '0', STR_PAD_LEFT);
+                $report = Report::with(['reportType','creator','results.parameter'])
+                    ->where('report_no', $padded)
+                    ->orWhere('report_no', 'like', 'KAL-'.$digits)
+                    ->first();
+            }
+        }
+
+        if (!$report) abort(404, 'Report not found for number: '.$no);
+        return $report;
+    }
+
+    public function byNo(string $reportNo)
+    {
+        $report = $this->findOrFailByNo($reportNo);
+        return response()->json([
+            'id' => $report->id,
+            'report_no' => $report->report_no,
+            'report_type' => $report->reportType?->name,
+            'party_name' => $report->party_name ?? $report->customer_name,
+            'sample_date' => $report->sample_date,
+        ]);
+    }
+
+    public function pdfByNo(string $reportNo)
+    {
+        $report = $this->findOrFailByNo($reportNo);
+        $lab = LabSetting::current();
+        $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
+        $pdf->setPaper('A4','portrait');
+        return $pdf->stream($this->pdfFilename($report));
+    }
+
+    public function downloadPdfByNo(string $reportNo)
+    {
+        $report = $this->findOrFailByNo($reportNo);
+        $lab = LabSetting::current();
+        $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
+        $pdf->setPaper('A4','portrait');
+        return $pdf->download($this->pdfFilename($report));
     }
 
     private function generateReportNo(): string
@@ -215,7 +327,15 @@ class ReportController extends Controller
         $type = preg_replace('/[^A-Za-z0-9_\- ]/','', $type);
         $type = strtoupper(trim($type));
         $no = $report->report_no;
-        // Try party name for extra context sanitized, but spec says REPORTTYPE (REPORTNO).pdf
         return $type.' ('.$no.').pdf';
+    }
+
+    private function wordFilename(Report $report): string
+    {
+        $type = $report->reportType->name ?? 'REPORT';
+        $type = preg_replace('/[^A-Za-z0-9_\- ]/','', $type);
+        $type = strtoupper(trim($type));
+        $no = $report->report_no;
+        return $type.' ('.$no.').doc';
     }
 }

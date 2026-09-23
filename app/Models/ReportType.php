@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ReportType extends Model
 {
-    protected $fillable = ['name','title','active'];
-    protected $casts = ['active'=>'boolean'];
+    protected $fillable = ['name','title','active','show_specification','custom_columns'];
+    protected $casts = ['active'=>'boolean','show_specification'=>'boolean','custom_columns'=>'array'];
 
     public function parameters(): HasMany
     {

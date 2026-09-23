@@ -18,7 +18,7 @@ class ReportTypeController extends Controller
     public function store(Request $request)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
-        $data = $request->validate(['name'=>'required|unique:report_types,name','title'=>'required','active'=>'boolean']);
+        $data = $request->validate(['name'=>'required|unique:report_types,name','title'=>'required','active'=>'boolean','show_specification'=>'boolean','custom_columns'=>'nullable|array','custom_columns.*'=>'string|max:50']);
         $type = ReportType::create($data);
         return response()->json($type, 201);
     }
@@ -32,7 +32,7 @@ class ReportTypeController extends Controller
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
         $type = ReportType::findOrFail($id);
-        $data = $request->validate(['name'=>'sometimes|required|unique:report_types,name,'.$id,'title'=>'sometimes|required','active'=>'boolean']);
+        $data = $request->validate(['name'=>'sometimes|required|unique:report_types,name,'.$id,'title'=>'sometimes|required','active'=>'boolean','show_specification'=>'boolean','custom_columns'=>'nullable|array','custom_columns.*'=>'string|max:50']);
         $type->update($data);
         return response()->json($type);
     }
