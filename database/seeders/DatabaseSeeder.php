@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'password'=>Hash::make('Password123!'),
             'role'=>'staff',
             'status'=>'active',
-            'permissions'=>json_encode(['create_report','view_reports','generate_pdf','print_report']),
+            'permissions'=>['create_report','view_reports','generate_pdf','print_report'],
         ]);
 
         LabSetting::firstOrCreate(['lab_name'=>'KRISHI ANALYTICAL LAB'], [
@@ -99,6 +99,8 @@ class DatabaseSeeder extends Seeder
         ];
         $this->seedParams($rtFeed, $feedParams);
         $this->seedParams($rtRice, $feedParams);
+
+        $this->call(DemoSeeder::class);
     }
 
     private function seedParams($reportType, array $params): void

@@ -47,7 +47,7 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
   <div style="text-align:right; font-size:9pt;">Report No: <strong style="border:1px solid #1F2937; padding:2px 8px; font-family:monospace;">{{ $report->report_no }}</strong></div>
 </div>
 <div class="outer">
-@php $companyW = $report->party_name ?? $report->customer_name ?? ''; $showSpecW = $report->reportType->show_specification ?? true; $customColsW = $report->reportType->custom_columns ?? []; @endphp
+@php $companyW = $report->party_name ?? $report->customer_name ?? ''; $showSpecW = $report->reportType->show_specification ?? true; $customColsW = $report->reportType->custom_columns ?? []; $rowsW = $report->results->filter(fn($r) => $r->enabled !== false)->values(); @endphp
 <table class="meta">
 <tr><td class="meta-label">Sample Date</td><td>{{ $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '' }}&nbsp;</td><td class="meta-label">COA Date</td><td>{{ $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : '' }}&nbsp;</td></tr>
 <tr><td class="meta-label">Party Name</td><td>{{ $companyW }}&nbsp;</td><td class="meta-label">Sample Name</td><td>{{ $report->sample_name }}&nbsp;</td></tr>
@@ -57,10 +57,10 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 </table>
 
 <table class="results"><tr><th style="width:40px;">S.No</th><th>Parameters</th><th style="width:110px;">Result</th>@if($showSpecW)<th>Specification</th>@endif @foreach($customColsW as $col)<th>{{ $col }}</th>@endforeach</tr>
-@foreach($report->results as $idx => $res)
+@foreach($rowsW as $idx => $res)
 <tr><td style="text-align:center;">{{ $idx+1 }}</td><td><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif</td><td style="text-align:center; font-weight:700;">{{ $res->result }}&nbsp;</td>@if($showSpecW)<td>{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>@endif @foreach($customColsW as $col)<td>&nbsp;</td>@endforeach</tr>
 @endforeach
-@for($i = count($report->results); $i < 8; $i++)<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>@if($showSpecW)<td>&nbsp;</td>@endif @foreach($customColsW as $col)<td>&nbsp;</td>@endforeach</tr>@endfor
+@for($i = count($rowsW); $i < 8; $i++)<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>@if($showSpecW)<td>&nbsp;</td>@endif @foreach($customColsW as $col)<td>&nbsp;</td>@endforeach</tr>@endfor
 </table>
 </div>
 

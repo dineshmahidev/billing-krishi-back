@@ -5,49 +5,48 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 146px 14px 88px 14px;
+  margin: 168px 14px 96px 14px;
 }
-* { font-family: 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
+* { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
 body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background: #FFFFFF; }
 .header {
   position: fixed;
-  top: -146px;
+  top: -168px;
   left: 0;
   right: 0;
-  height: 138px;
-  border-bottom: 2.5px solid #0B6B43;
-  padding: 14px 0 6px 0;
-  background: #FFFFFF;
+  height: 144px;
+  border-bottom: 3px solid #0B6B43;
+  padding: 8px 14px;
   text-align: center;
 }
 .header-group { width: 100%; border-collapse: collapse; text-align: center; }
 .header-group td { vertical-align: middle; padding: 0; border: none; }
-.logo { height: 96px; width: 96px; object-fit: contain; display: inline-block; }
-.brand-block { display: inline-block; vertical-align: middle; text-align: center; }
+.logo { height: 128px; width: 128px; object-fit: contain; display: inline-block; }
+.brand-block { display: block; width: 100%; text-align: center; }
 .brand-name {
-  font-weight: 900;
+  font-weight: bold;
   color: #0B6B43;
-  font-size: 26px;
+  font-size: 36px;
   letter-spacing: 0.5px;
   line-height: 1.1;
   margin: 0;
   text-align: center;
 }
 .brand-tagline {
-  font-size: 9.5px;
-  color: #168B57;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  margin-top: 4px;
+  font-size: 14px;
+  color: #374151;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  margin-top: 7px;
   text-align: center;
 }
 .footer {
   position: fixed;
-  bottom: -74px;
+  bottom: -82px;
   left: 0;
   right: 0;
-  height: 72px;
-  border-top: 2.5px solid #168B57;
+  height: 80px;
+  border-top: 3px solid #168B57;
   text-align: center;
   font-size: 9px;
   color: #6B7280;
@@ -56,29 +55,30 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
 }
 .footer-address {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: bold;
   color: #1F2937;
   margin-top: 5px;
   text-align: center;
 }
 .footer-contact {
   margin: 5px 14px 0;
-  background: #DBEAFE;
-  border-top: 1.5px solid #168B57;
-  border-bottom: 1.5px solid #168B57;
+  background: #EAF7F0;
+  border-top: 1.5px solid #A7D7C1;
+  border-bottom: 1.5px solid #A7D7C1;
   padding: 4px 8px;
   font-size: 9.5px;
   color: #1F2937;
-  font-weight: 700;
+  font-weight: bold;
 }
-.footer-sep { color: #168B57; margin: 0 10px; }
+.footer-contact a { color: #0B6B43; font-weight: bold; text-decoration: none; }
+.footer-sep { color: #9CA3AF; margin: 0 10px; }
 .divider { border: none; border-top: 2px solid #168B57; margin: 6px 0; }
 .title {
-  background: #0B6B43;
-  color: #fff;
+  background: #EAF7F0;
+  color: #0B6B43;
   display: inline-block;
   padding: 5px 18px;
-  font-weight: 800;
+  font-weight: bold;
   font-size: 13px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -86,31 +86,28 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
 }
 /* BOXES FOR EMPTY SPACE - every cell is a box with border */
 .meta-table { width: 100%; border-collapse: collapse; margin: 8px 0 10px 0; font-size: 10.5px; border: 1.5px solid #1F2937; }
-.meta-table td { padding: 6px 7px; border: 1px solid #1F2937; height: 22px; vertical-align: middle; }
-.meta-label { font-weight: 700; color: #1F2937; width: 148px; background: #EAF7F0; font-size: 10px; border: 1px solid #1F2937; }
-.results-table { width: 100%; border-collapse: collapse; margin-top: 10px; border: 1.5px solid #1F2937; }
-.results-table th { background: #168B57; color: #fff; padding: 7px 8px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid #1F2937; }
+.meta-table td { padding: 6px 7px; border: 1px solid #1F2937; height: 22px; vertical-align: middle; font-weight: 700; color: #1F2937; }
+.meta-label { background: #EAF7F0; font-weight: bold; width: 130px; }
+.section-bar { background: #EAF7F0; border: 1.5px solid #1F2937; border-bottom: none; padding: 6px 10px; font-weight: bold; font-size: 11.5px; letter-spacing: 1.2px; text-transform: uppercase; color: #0B6B43; margin-top: 10px; }
+.results-table { width: 100%; border-collapse: collapse; margin-top: 0; border: 1.5px solid #1F2937; }
+.results-table th { background: #EAF7F0; color: #0B6B43; padding: 7px 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid #1F2937; }
 .results-table td { padding: 7px 8px; border: 1px solid #1F2937; font-size: 11px; height: 22px; }
 .results-table tr:nth-child(even) td { background: #F9FAFB; border: 1px solid #1F2937; }
 .box-empty { display: inline-block; min-width: 100%; min-height: 12px; border: 1px solid #1F2937; }
 .remarks { border: 1.5px solid #1F2937; background: #FFFFFF; padding: 0; margin: 12px 0; min-height: 48px; }
-.remarks-header { background: #EAF7F0; border-bottom: 1px solid #1F2937; padding: 4px 8px; font-weight: 800; font-size: 9px; text-transform: uppercase; color: #0B6B43; }
+.remarks-header { background: #EAF7F0; border-bottom: 1px solid #1F2937; padding: 4px 8px; font-weight: bold; font-size: 9px; text-transform: uppercase; color: #0B6B43; }
 .remarks-body { padding: 8px 10px; min-height: 32px; font-size: 10.5px; }
 .outer-box { border: 1.5px solid #1F2937; padding: 10px; margin-top: 6px; }
 .signature-area {
-  position: fixed;
-  bottom: 92px;
+  position: absolute;
+  bottom: 19px;
   right: 14px;
   width: 200px;
   text-align: center;
   page-break-inside: avoid;
-  border: 1.5px solid #1F2937;
-  padding: 8px 10px 7px;
-  background: #FFFFFF;
-  min-height: 86px;
 }
 .sig-img { height: 64px; width: auto; max-width: 170px; object-fit: contain; display: block; margin: 0 auto 4px auto; }
-.sig-line { border-top: 1.5px solid #1F2937; margin-top: 6px; padding-top: 5px; font-weight: 800; font-size: 11px; color: #1F2937; }
+.sig-line { border-top: 1.5px solid #1F2937; margin-top: 6px; padding-top: 5px; font-weight: bold; font-size: 11px; color: #1F2937; }
 .sig-sub { font-size: 9px; color: #6B7280; margin-top: 2px; }
 .watermark {
   position: fixed;
@@ -130,6 +127,8 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
   $address = $lab->address ?? '182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701, Tiruppur Dist, Tamil Nadu';
   $phone = $lab->phone ?? '+91 63793 12357';
   $email = $lab->email ?? 'info@krishianalyticallab.com';
+  $website = $lab->website ?: 'https://krishianalyticallab.com';
+  $websiteLabel = preg_replace('#^https?://#i', '', $website);
   $reportTitle = $report->reportType->title ?? (in_array($report->reportType->name ?? '', ['Rice Bran','Animal Feed']) ? 'ANALYSIS REPORT' : 'CERTIFICATE OF ANALYSIS');
   // Transparent big logo as requested
   $logoPath = file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
@@ -138,19 +137,25 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
 @endphp
 
 <div class="header">
-  @if(file_exists($logoPath))
-    <img src="{{ $logoPath }}" class="logo" alt="logo">
-  @endif
-  <div class="brand-block" style="margin-left:10px; vertical-align:middle;">
-    <div class="brand-name">{{ $labName }}</div>
-    <div class="brand-tagline">"{{ $tagline }}"</div>
-  </div>
+  <table class="header-group">
+    <tr>
+      <td style="width:150px; text-align:left;">
+        @if(file_exists($logoPath))
+          <img src="{{ $logoPath }}" class="logo" alt="logo">
+        @endif
+      </td>
+      <td class="brand-block">
+        <div class="brand-name">{{ $labName }}</div>
+        <div class="brand-tagline">"{{ $tagline }}"</div>
+      </td>
+    </tr>
+  </table>
 </div>
 
 <div class="footer">
   <div class="footer-address">{{ $address }}</div>
   <div class="footer-contact">
-    <span>{{ $email }}</span><span class="footer-sep">|</span><span>{{ $phone }}</span><span class="footer-sep">|</span><span>+91 94433 12345</span>
+    <span>{{ $phone }}</span><span class="footer-sep">|</span><span>{{ $email }}</span><span class="footer-sep">|</span><a href="{{ $website }}">{{ $websiteLabel }}</a>
   </div>
   <div class="page-number" style="margin-top:4px;">Page <span class="pagenum"></span></div>
 </div>
@@ -163,8 +168,13 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
 
 <div style="text-align:center;">
   <div class="title">{{ $reportTitle }}</div>
-  <div style="text-align:right; font-size:9px; margin-top:2px;">Report No: <strong style="font-family: monospace; font-size:11px; border:1px solid #1F2937; padding:2px 6px; display:inline-block; min-width:90px; text-align:center;">{{ $report->report_no }}</strong></div>
 </div>
+<table style="width:100%; border:none; border-collapse:collapse; font-size:9px; margin-top:4px;">
+<tr>
+<td style="border:none; padding:0; text-align:left;">Date: <strong>{{ \Carbon\Carbon::parse($report->created_at)->format('d-M-Y') }}</strong></td>
+<td style="border:none; padding:0; text-align:right;">Report No: <strong style="border:1px solid #1F2937; padding:2px 6px; font-family:monospace; font-size:11px;">{{ $report->report_no }}</strong></td>
+</tr>
+</table>
 
 <div class="outer-box">
 @php $companyAll = $report->party_name ?? $report->customer_name ?? ''; @endphp
@@ -173,10 +183,15 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
   <tr><td class="meta-label">Party Name</td><td>{!! $companyAll ? e($companyAll) : '&nbsp;' !!}</td><td class="meta-label">Sample Name</td><td>{!! $report->sample_name ? e($report->sample_name) : '&nbsp;' !!}</td></tr>
   <tr><td class="meta-label">Vehicle No</td><td>{!! $report->vehicle_no ? e($report->vehicle_no) : '&nbsp;' !!}</td><td class="meta-label">Bill No</td><td>{!! $report->bill_no ? e($report->bill_no) : '&nbsp;' !!}</td></tr>
   <tr><td class="meta-label">Bags / Tons</td><td>{!! $report->bags_tons ? e($report->bags_tons) : '&nbsp;' !!}</td><td class="meta-label">Buyer</td><td>{!! $report->buyer ? e($report->buyer) : '&nbsp;' !!}</td></tr>
-  <tr><td class="meta-label">Seller</td><td colspan="3">{!! $report->seller ? e($report->seller) : '&nbsp;' !!}</td></tr>
+  <tr><td class="meta-label">Seller</td><td>{!! $report->seller ? e($report->seller) : '&nbsp;' !!}</td><td class="meta-label">Report No</td><td><strong>{{ $report->report_no }}</strong></td></tr>
 </table>
 
-@php $showSpec = $report->reportType->show_specification ?? true; $customCols = $report->reportType->custom_columns ?? []; @endphp
+@php
+  $showSpec = $report->reportType->show_specification ?? true;
+  $customCols = $report->reportType->custom_columns ?? [];
+  $rows = $report->results->filter(fn($r) => $r->enabled !== false && $r->parameter && $r->parameter->active)->values();
+@endphp
+<div style="text-align:center;"><div class="title">Test Result</div></div>
 <table class="results-table">
   <thead>
     <tr>
@@ -188,22 +203,19 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
     </tr>
   </thead>
   <tbody>
-    @foreach($report->results as $idx => $res)
+    @foreach($rows as $idx => $res)
+    @php $z = ($idx % 2 === 1) ? 'background:#F9FAFB;' : ''; @endphp
     <tr>
-      <td style="text-align:center; height:22px;">{{ $idx+1 }}</td>
-      <td>
+      <td style="text-align:center; height:22px; {{ $z }}">{{ $idx+1 }}</td>
+      <td style="{{ $z }}">
         <strong>{{ $res->parameter->name ?? 'Parameter' }}</strong>
-        @if($res->parameter->unit)<span style="color:#6B7280;"> ({{ $res->parameter->unit }})</span>@endif
+        @if($res->parameter->unit && $res->parameter->unit !== '%')<span style="color:#6B7280;"> ({{ $res->parameter->unit }})</span>@endif
       </td>
-      <td style="text-align:center; font-weight:700; height:22px;">{!! ($res->result && $res->result !== '-') ? e($res->result) . (($res->parameter->unit ?? '') === '%' && !str_contains($res->result, '%') ? ' %' : '') : '&nbsp;' !!}</td>
-      @if($showSpec)<td style="height:22px;">{!! ($res->specification ?? $res->parameter->specification) ? e($res->specification ?? $res->parameter->specification) : '&nbsp;' !!}</td>@endif
-      @foreach($customCols as $col)<td style="height:22px;">&nbsp;</td>@endforeach
+      <td style="text-align:center; font-weight:700; height:22px; {{ $z }}">{!! ($res->result && $res->result !== '-') ? e($res->result) . (($res->parameter->unit ?? '') === '%' && !str_contains($res->result, '%') ? ' %' : '') : '&nbsp;' !!}</td>
+      @if($showSpec)<td style="height:22px; {{ $z }}">{!! ($res->specification ?? $res->parameter->specification) ? e($res->specification ?? $res->parameter->specification) : '&nbsp;' !!}</td>@endif
+      @foreach($customCols as $col)<td style="height:22px; {{ $z }}">&nbsp;</td>@endforeach
     </tr>
     @endforeach
-    {{-- Fill empty rows to keep box height if less than 8 rows --}}
-    @for($i = count($report->results); $i < 8; $i++)
-    <tr><td style="height:22px; text-align:center;">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>@if($showSpec)<td>&nbsp;</td>@endif @foreach($customCols as $col)<td>&nbsp;</td>@endforeach</tr>
-    @endfor
   </tbody>
 </table>
 </div>

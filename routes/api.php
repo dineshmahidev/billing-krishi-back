@@ -24,6 +24,8 @@ Route::get('/reports/by-no/{reportNo}/pdf/download', [ReportController::class, '
 // Protected
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/user/password', [AuthController::class, 'changePassword']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -69,12 +71,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/customers', [CustomerController::class, 'index']);
     Route::get('/customers/search', [CustomerController::class, 'search']);
     Route::get('/customers/{id}', [CustomerController::class, 'show']);
+    Route::get('/customers/{id}/summary', [CustomerController::class, 'summary']);
     Route::post('/customers', [CustomerController::class, 'store']);
     Route::put('/customers/{id}', [CustomerController::class, 'update']);
     Route::delete('/customers/{id}', [CustomerController::class, 'destroy']);
+
+    // Company groups
+    Route::get('/customer-groups', [CustomerController::class, 'groups']);
+    Route::post('/customer-groups', [CustomerController::class, 'storeGroup']);
+    Route::put('/customer-groups/{id}', [CustomerController::class, 'updateGroup']);
+    Route::delete('/customer-groups/{id}', [CustomerController::class, 'destroyGroup']);
+    Route::post('/customer-groups/{id}/assign', [CustomerController::class, 'assignGroup']);
+
+    // Invoices list - authenticated only (sidebar is admin-gated)
+    Route::get('/invoices', [InvoiceController::class, 'index']);
+    Route::put('/reports/{id}/invoice/gst', [InvoiceController::class, 'toggleGst']);
+    Route::put('/reports/{id}/invoice/status', [InvoiceController::class, 'toggleStatus']);
+    Route::put('/reports/{id}/invoice/items', [InvoiceController::class, 'updateItems']);
+    Route::get('/group-summary', [InvoiceController::class, 'groupSummary']);
+    Route::post('/group-summary/pdf', [InvoiceController::class, 'groupSummaryPdf']);
+    Route::get('/bulk-settlement', [InvoiceController::class, 'bulkSettlement']);
+    Route::post('/bulk-settlement/pdf', [InvoiceController::class, 'settlementPdf']);
 });
 
-// PDF routes - public with optional auth via header OR ?token= (for window.open direct)
+// PDF/Word routes - public with optional auth via header OR ?token= (for window.open direct)
 Route::get('/reports/{id}/pdf', [ReportController::class, 'pdf']);
 Route::get('/reports/{id}/pdf/download', [ReportController::class, 'downloadPdf']);
 Route::get('/reports/{id}/word', [ReportController::class, 'word']);
@@ -84,6 +104,3 @@ Route::get('/reports/{id}/invoice/pdf', [InvoiceController::class, 'pdf']);
 Route::get('/reports/{id}/invoice/pdf/download', [InvoiceController::class, 'downloadPdf']);
 Route::get('/reports/{id}/invoice/word', [InvoiceController::class, 'word']);
 Route::get('/reports/{id}/invoice/word/download', [InvoiceController::class, 'downloadWord']);
-Route::put('/reports/{id}/invoice/gst', [InvoiceController::class, 'toggleGst'])->middleware('auth:sanctum');
-Route::put('/reports/{id}/invoice/status', [InvoiceController::class, 'toggleStatus'])->middleware('auth:sanctum');
-Route::get('/invoices', [InvoiceController::class, 'index']);

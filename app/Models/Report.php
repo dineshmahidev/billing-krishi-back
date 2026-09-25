@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\DemoScoped;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,17 +10,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Report extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, DemoScoped;
 
     protected $fillable = [
         'report_no','report_type_id','sample_date','coa_date','party_name','customer_name',
         'sample_name','nature_of_sample','vehicle_no','bill_no','bags_tons','buyer','seller',
-        'remarks','status','created_by','customer_id'
+        'remarks','status','created_by','customer_id','is_demo'
     ];
 
     protected $casts = [
         'sample_date'=>'date',
         'coa_date'=>'date',
+        'is_demo'=>'boolean',
     ];
 
     public function reportType(): BelongsTo

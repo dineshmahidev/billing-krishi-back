@@ -9,10 +9,29 @@ use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
+    // Permissions column may hold a double-encoded JSON string (old seeds) — always return an array
+    private function normalize($users)
+    {
+        return collect($users)->map(function ($u) {
+            $u->permissions = $this->permsToArray($u->permissions);
+            return $u;
+        });
+    }
+
+    private function permsToArray($value): array
+    {
+        if (is_array($value)) return $value;
+        if (is_string($value) && $value !== '') {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) return $decoded;
+        }
+        return [];
+    }
+
     public function index(Request $request)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
-        return response()->json(User::orderBy('created_at','desc')->get());
+        return response()->json($this->normalize(User::orderBy('created_at','desc')->get()));
     }
 
     public function store(Request $request)
@@ -37,7 +56,9 @@ class StaffController extends Controller
     public function show(Request $request, $id)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
-        return response()->json(User::findOrFail($id));
+        $user = User::findOrFail($id);
+        $user->permissions = $this->permsToArray($user->permissions);
+        return response()->json($user);
     }
 
     public function update(Request $request, $id)

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\ReportResult;
+use App\Models\ReportType;
 use App\Models\Parameter;
 use App\Models\LabSetting;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Support\PdfFont;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
@@ -26,16 +28,35 @@ class ReportController extends Controller
             });
         }
         if ($request->report_type_id) $query->where('report_type_id', $request->report_type_id);
+        if ($party = $request->party) {
+            $query->where(function($q) use ($party){
+                $q->where('party_name','like',"%$party%")
+                  ->orWhere('customer_name','like',"%$party%");
+            });
+        }
         if ($request->from) $query->whereDate('sample_date','>=',$request->from);
         if ($request->to) $query->whereDate('sample_date','<=',$request->to);
+
+        // Stats for the active filters (date + party + type + search)
+        $ids = (clone $query)->pluck('id');
+        $stats = [
+            'total_reports' => $ids->count(),
+            'completed' => (clone $query)->where('status','completed')->count(),
+            'draft' => (clone $query)->where('status','draft')->count(),
+            'parties' => Report::whereIn('id', $ids)->selectRaw("COUNT(DISTINCT NULLIF(COALESCE(NULLIF(party_name,''), customer_name), '')) as c")->value('c') ?: 0,
+            'tests' => \App\Models\ReportResult::whereIn('report_id', $ids)->count(),
+        ];
+
         $perPage = $request->input('per_page', 15);
-        return response()->json($query->paginate($perPage));
+        $paginated = $query->paginate($perPage);
+        return response()->json(array_merge($paginated->toArray(), ['stats'=>$stats]));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'report_type_id'=>'required|exists:report_types,id',
+            'report_no'=>'nullable|string|max:50|unique:reports,report_no',
+            'report_type_id'=>'required|integer',
             'sample_date'=>'nullable|date',
             'coa_date'=>'nullable|date',
             'party_name'=>'nullable|string',
@@ -49,10 +70,23 @@ class ReportController extends Controller
             'seller'=>'nullable|string',
             'remarks'=>'nullable|string',
             'results'=>'required|array|min:1',
-            'results.*.parameter_id'=>'required|exists:parameters,id',
+            'results.*.parameter_id'=>'required|integer',
             'results.*.result'=>'nullable|string',
             'results.*.specification'=>'nullable|string',
+            'results.*.enabled'=>'sometimes|nullable|boolean',
         ]);
+        // Scoped existence checks (raw exists: rules bypass demo isolation)
+        if (!ReportType::whereKey($data['report_type_id'])->exists()) {
+            return response()->json(['message'=>'The selected report type id is invalid.', 'errors'=>['report_type_id'=>['The selected report type id is invalid.']]], 422);
+        }
+        $validParams = Parameter::whereIn('id', array_column($data['results'], 'parameter_id'))->pluck('id')->all();
+        $badParams = false;
+        foreach ($data['results'] as $i => $r) {
+            if (!in_array($r['parameter_id'], $validParams)) $badParams = true;
+        }
+        if ($badParams) {
+            return response()->json(['message'=>'The given data was invalid.', 'errors'=>['results'=>['The selected parameter id is invalid.']]], 422);
+        }
         // Require at least one of party/customer
         if (empty($data['party_name']) && empty($data['customer_name']) && empty($data['sample_name'])) {
             return response()->json(['message'=>'Party/Customer or Sample name required'], 422);
@@ -73,7 +107,7 @@ class ReportController extends Controller
         }
         $data['customer_id'] = $customerId;
         return DB::transaction(function() use ($data, $request){
-            $reportNo = $this->generateReportNo();
+            $reportNo = !empty($data['report_no']) ? trim($data['report_no']) : $this->generateReportNo();
             $report = Report::create([
                 'report_no'=>$reportNo,
                 'report_type_id'=>$data['report_type_id'],
@@ -100,17 +134,18 @@ class ReportController extends Controller
                     'parameter_id'=>$r['parameter_id'],
                     'result'=> $r['result'] ?? '-',
                     'specification'=> $r['specification'] ?? $param->specification ?? '',
+                    'enabled'=> array_key_exists('enabled', $r) ? (bool)($r['enabled'] ?? true) : true,
                     'display_order'=> $i+1,
                 ]);
             }
             $report->load(['reportType','creator','results.parameter']);
             // Auto create separate invoice (not in analysis report)
             $lab = LabSetting::current();
-            $subtotal = $report->results->sum(fn($r) => floatval(Parameter::find($r['parameter_id'])?->price ?? 0));
+            $subtotal = $report->results->filter(fn($r) => $r->enabled !== false)->sum(fn($r) => floatval(Parameter::find($r['parameter_id'])?->price ?? 0));
             $gstEnabled = (bool)($lab->gst_enabled ?? true);
             $gstPercent = floatval($lab->default_gst_percent ?? 18);
             $gstAmount = $gstEnabled ? round($subtotal * $gstPercent / 100,2) : 0;
-            Invoice::create([
+            $invoice = Invoice::create([
                 'report_id' => $report->id,
                 'invoice_no' => Invoice::nextNo(),
                 'party_name' => $report->party_name,
@@ -121,6 +156,8 @@ class ReportController extends Controller
                 'total_amount' => $subtotal + $gstAmount,
                 'gst_enabled' => $gstEnabled,
             ]);
+            $invoice->syncItems($report);
+            $invoice->recalcTotals();
             return response()->json($report, 201);
         });
     }
@@ -135,6 +172,7 @@ class ReportController extends Controller
     {
         $report = Report::findOrFail($id);
         $data = $request->validate([
+            'report_no'=>'sometimes|nullable|string|max:50|unique:reports,report_no,'.$id,
             'sample_date'=>'nullable|date',
             'coa_date'=>'nullable|date',
             'party_name'=>'nullable|string',
@@ -151,7 +189,11 @@ class ReportController extends Controller
             'results.*.parameter_id'=>'required_with:results|exists:parameters,id',
             'results.*.result'=>'nullable|string',
             'results.*.specification'=>'nullable|string',
+            'results.*.enabled'=>'sometimes|nullable|boolean',
         ]);
+        if (array_key_exists('report_no', $data) && trim((string)$data['report_no']) === '') {
+            unset($data['report_no']); // blank = keep existing number
+        }
         DB::transaction(function() use ($report, $data){
             $report->update(collect($data)->except('results')->toArray());
             if (isset($data['results'])) {
@@ -164,11 +206,18 @@ class ReportController extends Controller
                         'parameter_id'=>$r['parameter_id'],
                         'result'=> $r['result'] ?? '-',
                         'specification'=> $r['specification'] ?? $param->specification ?? '',
+                        'enabled'=> array_key_exists('enabled', $r) ? (bool)($r['enabled'] ?? true) : true,
                         'display_order'=> $i+1,
                     ]);
                 }
             }
         });
+        // Keep invoice lines + totals in sync with enabled parameters (edited rates kept)
+        $invoice = Invoice::where('report_id', $report->id)->first();
+        if ($invoice) {
+            $invoice->syncItems($report);
+            $invoice->recalcTotals();
+        }
         return response()->json($report->load(['reportType','creator','results.parameter']));
     }
 
@@ -205,6 +254,7 @@ class ReportController extends Controller
         $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
+        PdfFont::apply($pdf);
         $pdf->setPaper('A4','portrait');
         $filename = $this->pdfFilename($report);
         return $pdf->stream($filename);
@@ -216,6 +266,7 @@ class ReportController extends Controller
         $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
+        PdfFont::apply($pdf);
         $pdf->setPaper('A4','portrait');
         $filename = $this->pdfFilename($report);
         return $pdf->download($filename);
@@ -229,7 +280,7 @@ class ReportController extends Controller
         $html = view('word.report', compact('report','lab'))->render();
         $filename = $this->wordFilename($report);
         return response($html, 200, [
-            'Content-Type' => 'application/msword',
+            'Content-Type' => 'application/msword; charset=UTF-8',
             'Content-Disposition' => 'inline; filename="'.$filename.'"',
         ]);
     }
@@ -242,7 +293,7 @@ class ReportController extends Controller
         $html = view('word.report', compact('report','lab'))->render();
         $filename = $this->wordFilename($report);
         return response($html, 200, [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'Content-Type' => 'application/msword; charset=UTF-8',
             'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
@@ -287,6 +338,7 @@ class ReportController extends Controller
         $report = $this->findOrFailByNo($reportNo);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
+        PdfFont::apply($pdf);
         $pdf->setPaper('A4','portrait');
         return $pdf->stream($this->pdfFilename($report));
     }
@@ -296,14 +348,17 @@ class ReportController extends Controller
         $report = $this->findOrFailByNo($reportNo);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
+        PdfFont::apply($pdf);
         $pdf->setPaper('A4','portrait');
         return $pdf->download($this->pdfFilename($report));
     }
 
     private function generateReportNo(): string
     {
+        // Include trashed rows: report_no is UNIQUE in DB even for soft-deleted reports
+        $base = Report::withTrashed()->withoutGlobalScope(\App\Models\Scopes\DemoScope::class);
         // Find max numeric part
-        $last = Report::where('report_no','like','KAL-%')->orderByRaw("CAST(SUBSTRING(report_no,5) AS UNSIGNED) DESC")->first();
+        $last = (clone $base)->where('report_no','like','KAL-%')->orderByRaw("CAST(SUBSTRING(report_no,5) AS UNSIGNED) DESC")->first();
         $next = 1;
         if ($last) {
             $num = intval(substr($last->report_no, 4));
@@ -314,7 +369,7 @@ class ReportController extends Controller
         // Ensure padded 4 digits, but allow larger
         $candidate = 'KAL-'.str_pad($next, 4, '0', STR_PAD_LEFT);
         // Ensure uniqueness loop
-        while (Report::where('report_no',$candidate)->exists()) {
+        while ((clone $base)->where('report_no',$candidate)->exists()) {
             $next++;
             $candidate = 'KAL-'.str_pad($next, 4, '0', STR_PAD_LEFT);
         }

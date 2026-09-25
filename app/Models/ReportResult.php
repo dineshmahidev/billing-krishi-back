@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ReportResult extends Model
 {
-    protected $fillable = ['report_id','parameter_id','result','specification','display_order'];
+    protected $fillable = ['report_id','parameter_id','result','specification','display_order','enabled'];
+
+    protected $casts = ['enabled'=>'boolean'];
 
     public function report(): BelongsTo
     {

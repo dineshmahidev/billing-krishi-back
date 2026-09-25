@@ -16,6 +16,7 @@ class LabSettingController extends Controller
     public function update(Request $request)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
+        if ($request->user()->is_demo) return response()->json(['message'=>'Demo mode: lab settings are read-only'], 403);
         $lab = LabSetting::current();
         $data = $request->validate([
             'lab_name'=>'sometimes|required|string',
@@ -23,6 +24,7 @@ class LabSettingController extends Controller
             'address'=>'sometimes|nullable|string',
             'phone'=>'sometimes|nullable|string',
             'email'=>'sometimes|nullable|email',
+            'website'=>'sometimes|nullable|string|max:120',
             'default_gst_percent'=>'sometimes|nullable|numeric|min:0|max:100',
             'gst_enabled'=>'sometimes|boolean',
             'gstin'=>'sometimes|nullable|string|max:30',

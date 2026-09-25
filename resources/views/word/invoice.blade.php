@@ -34,6 +34,7 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
   $email = $lab->email ?? 'info@krishianalyticallab.com';
   $gstin = $lab->gstin ?? '33AAAFK8921B1Z2';
   $logoW = file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
+  $fmt = function($v){ $v = round(floatval($v), 2); return (fmod($v, 1) == 0) ? number_format($v, 0) : number_format($v, 2); };
 @endphp
 <div class="header">
   <div style="text-align:center;">
@@ -47,9 +48,9 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 
 <div style="text-align:center;">
   <div class="title">TAX INVOICE</div>
-  <div style="text-align:right; font-size:9pt;">Invoice No: <strong style="border:1px solid #1F2937; padding:2px 8px; font-family:monospace;">{{ $invoice->invoice_no }}</strong> <span style="margin-left:12px;">Date: {{ \Carbon\Carbon::parse($invoice->created_at)->format('d-M-Y') }}</span></div>
-  <div style="text-align:right; font-size:8pt; color:#6B7280;">Report: {{ $report->report_no }} • {{ $report->reportType->name }}</div>
 </div>
+<div style="width:100%; font-size:9pt; margin-top:4px;"><span style="float:left;">Date: <strong>{{ \Carbon\Carbon::parse($invoice->created_at)->format('d-M-Y') }}</strong></span><span style="float:right;">Invoice No: <strong style="border:1px solid #1F2937; padding:2px 8px; font-family:monospace;">{{ $invoice->invoice_no }}</strong></span></div>
+<div style="clear:both; text-align:right; font-size:8pt; color:#6B7280;">Report: {{ $report->report_no }} • {{ $report->reportType->name }}</div>
 
 @php $companyI = $invoice->party_name ?? $invoice->customer_name ?? $report->party_name ?? $report->customer_name ?? ''; @endphp
 <table class="meta">
@@ -62,20 +63,27 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 </table>
 
 <table class="items">
-<tr><th style="width:40px;">S.No</th><th>Test Parameter</th><th style="width:90px;">HSN</th><th style="width:100px;">Price (₹)</th></tr>
-@foreach($report->results as $i => $res)
-<tr><td style="text-align:center;">{{ $i+1 }}</td><td><strong>{{ $res->parameter->name }}</strong>@if($res->parameter->unit) <span style="color:#6B7280;">({{ $res->parameter->unit }})</span>@endif</td><td style="text-align:center;">{{ $res->parameter->hsn_code ?? '-' }}</td><td style="text-align:right;">{{ number_format(floatval($res->parameter->price ?? 0),2) }}</td></tr>
+<tr><th style="width:40px;">S.No</th><th>Test Parameter</th><th style="width:55px;">Qty</th><th style="width:90px;">HSN</th><th style="width:100px;">Rate (₹)</th><th style="width:110px;">Amount (₹)</th></tr>
+@php $invItems = $invoice->items->sortBy('display_order')->values(); @endphp
+@if($invItems->count())
+@foreach($invItems as $i => $it)
+<tr><td style="text-align:center;">{{ $i+1 }}</td><td><strong>{{ $it->name }}</strong>@if($it->unit) <span style="color:#6B7280;">({{ $it->unit }})</span>@endif</td><td style="text-align:center;">{{ intval($it->qty) }}</td><td style="text-align:center;">{{ $it->hsn_code ?? '-' }}</td><td style="text-align:right;">{{ $fmt($it->rate) }}</td><td style="text-align:right;">{{ $fmt($it->amount) }}</td></tr>
 @endforeach
+@else
+@foreach($report->results->filter(fn($r) => $r->enabled !== false)->values() as $i => $res)
+<tr><td style="text-align:center;">{{ $i+1 }}</td><td><strong>{{ $res->parameter->name }}</strong>@if($res->parameter->unit) <span style="color:#6B7280;">({{ $res->parameter->unit }})</span>@endif</td><td style="text-align:center;">1</td><td style="text-align:center;">{{ $res->parameter->hsn_code ?? '-' }}</td><td style="text-align:right;">{{ $fmt($res->parameter->price ?? 0) }}</td><td style="text-align:right;">{{ $fmt($res->parameter->price ?? 0) }}</td></tr>
+@endforeach
+@endif
 </table>
 
 <table class="totals">
-<tr><td class="label">Subtotal</td><td style="text-align:right;">₹ {{ number_format($invoice->subtotal,2) }}</td></tr>
+<tr><td class="label">Subtotal</td><td style="text-align:right;">₹ {{ $fmt($invoice->subtotal) }}</td></tr>
 @if($invoice->gst_enabled)
-<tr><td class="label">GST ({{ rtrim(rtrim(number_format($invoice->gst_percent,2), '0'), '.') }}%)</td><td style="text-align:right;">₹ {{ number_format($invoice->gst_amount,2) }}</td></tr>
+<tr><td class="label">GST ({{ rtrim(rtrim(number_format($invoice->gst_percent,2), '0'), '.') }}%)</td><td style="text-align:right;">₹ {{ $fmt($invoice->gst_amount) }}</td></tr>
 @else
 <tr><td class="label">GST</td><td style="text-align:center; color:#6B7280;">Disabled</td></tr>
 @endif
-<tr class="grand"><td>Total Amount</td><td style="text-align:right;">₹ {{ number_format($invoice->total_amount,2) }}</td></tr>
+<tr class="grand"><td>Total Amount</td><td style="text-align:right;">₹ {{ $fmt($invoice->total_amount) }}</td></tr>
 </table>
 
 @if($invoice->gst_enabled && $gstin)

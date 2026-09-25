@@ -27,7 +27,7 @@ class ParameterController extends Controller
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
         $data = $request->validate([
-            'report_type_id'=>'required|exists:report_types,id',
+            'report_type_id'=>'required|integer',
             'name'=>'required',
             'unit'=>'nullable|string',
             'specification'=>'nullable|string',
@@ -36,6 +36,9 @@ class ParameterController extends Controller
             'display_order'=>'nullable|integer',
             'active'=>'boolean'
         ]);
+        if (!ReportType::whereKey($data['report_type_id'])->exists()) {
+            return response()->json(['message'=>'The selected report type id is invalid.', 'errors'=>['report_type_id'=>['The selected report type id is invalid.']]], 422);
+        }
         $data['display_order'] = $data['display_order'] ?? (Parameter::where('report_type_id',$data['report_type_id'])->max('display_order')+1);
         $param = Parameter::create($data);
         return response()->json($param, 201);

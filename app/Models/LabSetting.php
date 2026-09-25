@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LabSetting extends Model
 {
-    protected $fillable = ['lab_name','tagline','address','phone','email','logo_path','seal_path','signature_path','default_gst_percent','gst_enabled','gstin','invoice_prefix'];
+    protected $fillable = ['lab_name','tagline','address','phone','email','website','logo_path','seal_path','signature_path','default_gst_percent','gst_enabled','gstin','invoice_prefix'];
 
     public static function current(): self
     {

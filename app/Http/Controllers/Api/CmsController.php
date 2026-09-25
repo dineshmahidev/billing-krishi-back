@@ -15,6 +15,7 @@ class CmsController extends Controller
     public function updateLanding(Request $request)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message' => 'Forbidden - Admin only'], 403);
+        if ($request->user()->is_demo) return response()->json(['message' => 'Demo mode: landing page is read-only'], 403);
         $data = $request->validate([
             'hero_badge' => 'sometimes|string|max:255',
             'hero_title' => 'sometimes|string|max:255',
