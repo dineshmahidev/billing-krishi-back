@@ -220,8 +220,15 @@ class InvoiceController extends Controller
         [$members, $names, $from, $to] = $this->scopeOf($request);
 
         $invoices = $this->invoicesQuery($members, $names)
-            ->whereDate('created_at', '>=', $from)
-            ->whereDate('created_at', '<=', $to)
+            ->where(function($q) use ($from, $to) {
+                $q->where(function($qq) use ($from, $to) {
+                    $qq->whereDate('invoices.created_at', '>=', $from)
+                       ->whereDate('invoices.created_at', '<=', $to);
+                })->orWhereHas('report', function($r) use ($from, $to) {
+                    $r->whereRaw('COALESCE(sample_date, DATE(created_at)) >= ?', [$from])
+                      ->whereRaw('COALESCE(sample_date, DATE(created_at)) <= ?', [$to]);
+                });
+            })
             ->with('report:id,customer_id,party_name,customer_name')
             ->get(['id','invoice_no','report_id','party_name','customer_name','status','subtotal','gst_amount','total_amount','created_at']);
 
@@ -271,7 +278,7 @@ class InvoiceController extends Controller
         ];
     }
 
-    // Tab 3: Bulk Settlement â€” type-wise parameter breakdown, static rate + editable qty
+    // Tab 3: Bulk Settlement — type-wise parameter breakdown, static rate + editable qty
     public function bulkSettlement(Request $request) {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
         return response()->json($this->buildSettlement($request));
@@ -312,7 +319,7 @@ class InvoiceController extends Controller
         $pdf = Pdf::loadView('pdf.settlement', ['data'=>$data, 'lab'=>LabSetting::current()]);
         PdfFont::apply($pdf);
         $pdf->setPaper('A4', 'portrait');
-        $who = $data['scope']==='group' ? ($data['group']['name'] ?? 'group') : ($data['customer']['name'] ?? 'party');
+        $who = $data['scope']==='group' ? ($data['group']['name'] ?? 'group') : ($data['customer']['company_name'] ?? ($data['customer']['name'] ?? 'party'));
         $file = 'settlement-'.preg_replace('/[^A-Za-z0-9]+/', '-', $who).'-'.$data['range']['from'].'-to-'.$data['range']['to'].'.pdf';
         return $pdf->download($file);
     }
@@ -320,36 +327,45 @@ class InvoiceController extends Controller
     private function buildSettlement(Request $request): array {
         [$members, $names, $from, $to] = $this->scopeOf($request);
 
-        $reportIds = $this->reportsQuery($members, $names, $from, $to)->pluck('id');
+        $reports = $this->reportsQuery($members, $names, $from, $to)->with(['reportType', 'results.parameter'])->get();
+        $reportIds = $reports->pluck('id');
         $typeNames = ReportType::pluck('name', 'id');
-        $reportsPerType = Report::whereIn('id', $reportIds)->groupBy('report_type_id')
-            ->selectRaw('report_type_id, COUNT(*) as c')->pluck('c', 'report_type_id');
+        $reportsPerType = $reports->groupBy('report_type_id')->map->count();
 
-        $raw = DB::table('report_results')
-            ->join('parameters', 'parameters.id', '=', 'report_results.parameter_id')
-            ->join('reports', 'reports.id', '=', 'report_results.report_id')
-            ->whereIn('report_results.report_id', $reportIds)
-            ->where(function ($q) { $q->whereNull('report_results.enabled')->orWhere('report_results.enabled', 1); })
-            ->groupBy('reports.report_type_id', 'parameters.id', 'parameters.name', 'parameters.unit', 'parameters.price')
-            ->orderBy('parameters.name')
-            ->selectRaw('reports.report_type_id, parameters.id as parameter_id, parameters.name, parameters.unit,
-                         parameters.price as rate, COUNT(*) as times')
+        // Ensure all invoices exist and their items are synced
+        foreach ($reports as $rep) {
+            $this->invoiceFor($rep);
+        }
+
+        $raw = DB::table('invoice_items')
+            ->join('invoices', 'invoices.id', '=', 'invoice_items.invoice_id')
+            ->join('reports', 'reports.id', '=', 'invoices.report_id')
+            ->whereIn('reports.id', $reportIds)
+            ->groupBy('reports.report_type_id', 'invoice_items.parameter_id', 'invoice_items.name', 'invoice_items.unit')
+            ->orderBy('invoice_items.name')
+            ->selectRaw('reports.report_type_id, invoice_items.parameter_id, invoice_items.name, invoice_items.unit,
+                         SUM(invoice_items.qty) as qty,
+                         COUNT(DISTINCT invoices.id) as times,
+                         SUM(invoice_items.amount) as amount,
+                         ROUND(SUM(invoice_items.amount) / NULLIF(SUM(invoice_items.qty), 0), 2) as rate')
             ->get();
 
         $grouped = [];
         foreach ($raw as $r) {
             $tid = $r->report_type_id ?: 0;
             $grouped[$tid] = $grouped[$tid] ?? ['report_type_id'=>$tid, 'name'=>$typeNames[$tid] ?? 'Unknown', 'reports'=>(int)($reportsPerType[$tid] ?? 0), 'rows'=>[]];
+            $qty = (int)$r->qty;
             $rate = round(floatval($r->rate), 2);
+            $amount = round(floatval($r->amount), 2);
             $times = (int)$r->times;
             $grouped[$tid]['rows'][] = [
                 'parameter_id' => $r->parameter_id,
                 'name' => $r->name,
                 'unit' => $r->unit,
-                'rate' => $rate,          // default static price â€” editable on screen
+                'rate' => $rate,
                 'times' => $times,
-                'qty' => $times,          // editable, defaults to times tested
-                'amount' => round($rate * $times, 2),
+                'qty' => $qty,
+                'amount' => $amount,
             ];
         }
         foreach ($grouped as &$g) $g['subtotal'] = round(collect($g['rows'])->sum('amount'), 2);
