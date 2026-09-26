@@ -26,7 +26,8 @@ body{font-size:11px; color:#1F2937; margin:0;}
 .totals td{border:1px solid #1F2937; padding:6px 8px; font-size:11px;}
 .totals .label{background:#EAF7F0; font-weight:700;}
 .grand{background:#EAF7F0; color:#0B6B43; font-weight:bold;}
-.signature-area{position:absolute; bottom:18px; right:14px; width:200px; text-align:center; page-break-inside:avoid;}
+.sig-container{width:100%; margin-top:24px; page-break-inside:avoid; clear:both;}
+.signature-area{float:right; width:200px; text-align:center; page-break-inside:avoid;}
 .sig-line{border-top:1.5px solid #1F2937; margin-top:6px; padding-top:5px; font-weight:bold; font-size:11px;}
 .sig-sub{font-size:9px; color:#6B7280; margin-top:2px;}
 .sig-img{height:64px; width:auto; max-width:170px; object-fit:contain; display:block; margin:0 auto 4px auto;}
@@ -105,10 +106,12 @@ body{font-size:11px; color:#1F2937; margin:0;}
 <div style="font-size:8px; color:#6B7280; margin-top:6px; text-align:right;">GSTIN: {{$gstin}} • HSN as per test • Round off as applicable</div>
 @endif
 
-<div class="signature-area">
-@php $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? '')); $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null; @endphp
-@if($sigPath)<img src="{{ $sigPath }}" class="sig-img" alt="signature">@else<div style="height:52px;">&nbsp;</div>@endif
-<div class="sig-line">Authorized Signatory</div>
-<div class="sig-sub">KRISHI ANALYTICAL LAB</div>
+<div class="sig-container">
+  <div class="signature-area">
+    @php $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? '')); $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null; @endphp
+    @if($sigPath)<img src="{{ $sigPath }}" class="sig-img" alt="signature">@else<div style="height:52px;">&nbsp;</div>@endif
+    <div class="sig-line">Authorized Signatory</div>
+    <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
+  </div>
 </div>
 </body></html>

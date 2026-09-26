@@ -27,10 +27,9 @@ body{font-size:11px; color:#1F2937; margin:0;}
 .grand td{border:1px solid #1F2937; padding:8px 10px; font-size:12px;}
 .grand .lbl{background:#F3F4F6; font-weight:700; width:60%;}
 .grand .val{background:#EAF7F0; color:#0B6B43; font-weight:bold; font-size:14px; text-align:right;}
-.note{border:1.5px solid #1F2937; margin-top:14px; padding:8px; font-size:9.5px; color:#374151;}
-.note b{color:#0B6B43;}
 .right{text-align:right;}
-.signature-area{position:absolute; bottom:26px; right:14px; width:200px; text-align:center; page-break-inside:avoid;}
+.sig-container{width:100%; margin-top:28px; page-break-inside:avoid; clear:both;}
+.signature-area{float:right; width:200px; text-align:center; page-break-inside:avoid;}
 .sig-img{height:64px; width:auto; max-width:170px; object-fit:contain; display:block; margin:0 auto 4px auto;}
 .sig-line{border-top:1.5px solid #1F2937; margin-top:6px; padding-top:5px; font-weight:bold; font-size:11px; color:#1F2937;}
 .sig-sub{font-size:9px; color:#6B7280; margin-top:2px;}
@@ -124,16 +123,12 @@ body{font-size:11px; color:#1F2937; margin:0;}
   </tr>
 </table>
 
-<div class="note">
-  <b>Notes:</b> 1. Rate &amp; Qty as per edited settlement screen{{ $data['edited'] ? ' (edited values applied)' : '' }}.
-  2. Times = number of times the parameter was tested by this party in the duration.
-  3. Amount = Rate × Qty. 4. This is a settlement statement, not a tax invoice.
-</div>
-
-<div class="signature-area">
-  @php $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? '')); $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null; @endphp
-  @if($sigPath)<img src="{{ $sigPath }}" class="sig-img" alt="signature">@else<div style="height:52px;">&nbsp;</div>@endif
-  <div class="sig-line">Authorized Signatory</div>
-  <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
+<div class="sig-container">
+  <div class="signature-area">
+    @php $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? '')); $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null; @endphp
+    @if($sigPath)<img src="{{ $sigPath }}" class="sig-img" alt="signature">@else<div style="height:52px;">&nbsp;</div>@endif
+    <div class="sig-line">Authorized Signatory</div>
+    <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
+  </div>
 </div>
 </body></html>

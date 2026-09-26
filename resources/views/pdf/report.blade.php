@@ -98,10 +98,14 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
 .remarks-header { background: #EAF7F0; border-bottom: 1px solid #1F2937; padding: 4px 8px; font-weight: bold; font-size: 9px; text-transform: uppercase; color: #0B6B43; }
 .remarks-body { padding: 8px 10px; min-height: 32px; font-size: 10.5px; }
 .outer-box { border: 1.5px solid #1F2937; padding: 10px; margin-top: 6px; }
+.sig-container {
+  width: 100%;
+  margin-top: 24px;
+  page-break-inside: avoid;
+  clear: both;
+}
 .signature-area {
-  position: absolute;
-  bottom: 19px;
-  right: 14px;
+  float: right;
   width: 200px;
   text-align: center;
   page-break-inside: avoid;
@@ -225,15 +229,16 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
   <div class="remarks-body">{!! $report->remarks ? nl2br(e($report->remarks)) : '&nbsp;<br>&nbsp;' !!}</div>
 </div>
 
-<div style="height: 40px;"></div>
-<div class="signature-area">
-  @if($sigPath)
-    <img src="{{ $sigPath }}" class="sig-img" alt="signature">
-  @else
-    <div style="height:52px;">&nbsp;</div>
-  @endif
-  <div class="sig-line">Authorized Signatory</div>
-  <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
+<div class="sig-container">
+  <div class="signature-area">
+    @if($sigPath)
+      <img src="{{ $sigPath }}" class="sig-img" alt="signature">
+    @else
+      <div style="height:52px;">&nbsp;</div>
+    @endif
+    <div class="sig-line">Authorized Signatory</div>
+    <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
+  </div>
 </div>
 
 <script type="text/php">
