@@ -55,4 +55,27 @@ class LabSettingController extends Controller
         $lab->update($data);
         return response()->json($lab);
     }
+
+    public function testMail(Request $request)
+    {
+        if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        try {
+            \App\Support\MailConfig::apply();
+            $lab = LabSetting::current();
+            $to = $request->input('email');
+
+            \Illuminate\Support\Facades\Mail::raw("Hello,\n\nThis is a test email sent from Krishi Analytical Lab Billing Software to verify that your SMTP mail settings are working perfectly.\n\nRegards,\n{$lab->lab_name}", function($message) use ($to, $lab) {
+                $message->to($to)
+                        ->subject("SMTP Test Email - {$lab->lab_name}");
+            });
+
+            return response()->json(['message' => "Test email successfully sent to {$to}!"]);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => "Failed to send email: " . $e->getMessage()], 422);
+        }
+    }
 }

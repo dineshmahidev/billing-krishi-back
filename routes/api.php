@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/settings', [LabSettingController::class, 'index']);
     Route::put('/settings', [LabSettingController::class, 'update']);
     Route::post('/settings', [LabSettingController::class, 'update']);
+    Route::post('/settings/test-mail', [LabSettingController::class, 'testMail']);
 
     // CMS Landing (admin only for update)
     Route::put('/cms/landing', [CmsController::class, 'updateLanding']);

@@ -38,6 +38,9 @@ class MailConfig
             'mail.from.name' => $lab->mail_from_name ?: ($lab->lab_name ?: config('mail.from.name')),
         ]);
 
-        app('mail')->forgetMailers();
+        if (app()->bound('mail.manager')) {
+            app('mail.manager')->forgetMailers();
+        }
+        \Illuminate\Support\Facades\Mail::purge('smtp');
     }
 }
