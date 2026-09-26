@@ -18,6 +18,6 @@ class ReportResult extends Model
 
     public function parameter(): BelongsTo
     {
-        return $this->belongsTo(Parameter::class);
+        return $this->belongsTo(Parameter::class)->withTrashed();
     }
 }

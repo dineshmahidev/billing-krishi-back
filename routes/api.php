@@ -21,6 +21,9 @@ Route::get('/reports/by-no/{reportNo}', [ReportController::class, 'byNo']);
 Route::get('/reports/by-no/{reportNo}/pdf', [ReportController::class, 'pdfByNo']);
 Route::get('/reports/by-no/{reportNo}/pdf/download', [ReportController::class, 'downloadPdfByNo']);
 
+// Public website forms — sample test enquiry + contact (throttled)
+Route::post('/enquiries', [\App\Http\Controllers\Api\EnquiryController::class, 'store'])->middleware('throttle:10,1');
+
 // Protected
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);

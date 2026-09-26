@@ -32,7 +32,18 @@ class LabSettingController extends Controller
             'logo'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
             'seal'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
             'signature'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'smtp_host'=>'sometimes|nullable|string|max:190',
+            'smtp_port'=>'sometimes|nullable|integer|min:1|max:65535',
+            'smtp_username'=>'sometimes|nullable|string|max:190',
+            'smtp_password'=>'sometimes|nullable|string|max:190',
+            'smtp_encryption'=>'sometimes|nullable|in:none,tls,ssl',
+            'mail_from_address'=>'sometimes|nullable|email',
+            'mail_from_name'=>'sometimes|nullable|string|max:120',
         ]);
+        // blank password field in the UI = keep the stored one
+        if (array_key_exists('smtp_password', $data) && $data['smtp_password'] === '') {
+            unset($data['smtp_password']);
+        }
         foreach (['logo','seal','signature'] as $field) {
             if ($request->hasFile($field)) {
                 $path = $request->file($field)->store('lab','public');

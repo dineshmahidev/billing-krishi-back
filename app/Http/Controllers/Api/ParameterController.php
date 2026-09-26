@@ -64,12 +64,17 @@ class ParameterController extends Controller
     public function destroy(Request $request, $id)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
-        $param = Parameter::findOrFail($id);
-        if ($param->id && \App\Models\ReportResult::where('parameter_id',$param->id)->exists()) {
-            $param->update(['active'=>false]);
-            return response()->json(['message'=>'Deactivated (used in reports)','parameter'=>$param]);
+        $param = Parameter::withTrashed()->findOrFail($id);
+        if ($param->trashed()) {
+            return response()->json(['message'=>'Already removed from this type'], 422);
         }
+        $mapped = \App\Models\ReportResult::where('parameter_id', $param->id)->exists();
         $param->delete();
-        return response()->json(['message'=>'Deleted']);
+        return response()->json([
+            'message' => $mapped
+                ? 'Removed from this type — old reports keep their row'
+                : 'Deleted',
+            'parameter' => $param,
+        ]);
     }
 }

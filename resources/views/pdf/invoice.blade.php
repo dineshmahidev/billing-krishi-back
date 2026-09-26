@@ -29,6 +29,7 @@ body{font-size:11px; color:#1F2937; margin:0;}
 .signature-area{position:absolute; bottom:18px; right:14px; width:200px; text-align:center; page-break-inside:avoid;}
 .sig-line{border-top:1.5px solid #1F2937; margin-top:6px; padding-top:5px; font-weight:bold; font-size:11px;}
 .sig-sub{font-size:9px; color:#6B7280; margin-top:2px;}
+.sig-img{height:64px; width:auto; max-width:170px; object-fit:contain; display:block; margin:0 auto 4px auto;}
 </style></head><body>
 @php
   $labName=$lab->lab_name??'KRISHI ANALYTICAL LAB';
@@ -52,7 +53,7 @@ body{font-size:11px; color:#1F2937; margin:0;}
   </table>
 </div>
 <div class="footer">
-  <div class="footer-address">{{$addr}}@if($gstin) &nbsp;•&nbsp; GSTIN: {{$gstin}} @endif</div>
+  <div class="footer-address">{{$addr}}@if($gstin && $invoice->gst_enabled) &nbsp;•&nbsp; GSTIN: {{$gstin}} @endif</div>
   <div class="footer-contact">
     <span>{{$email}}</span><span class="footer-sep">|</span><span>{{$phone}}</span><span class="footer-sep">|</span><span>+91 94433 12345</span>
   </div>
@@ -96,8 +97,6 @@ body{font-size:11px; color:#1F2937; margin:0;}
 <tr><td class="label">Subtotal</td><td style="text-align:right;">₹ {{ $fmt($invoice->subtotal) }}</td></tr>
 @if($invoice->gst_enabled)
 <tr><td class="label">GST ({{ rtrim(rtrim(number_format($invoice->gst_percent,2), '0'), '.') }}%)</td><td style="text-align:right;">₹ {{ $fmt($invoice->gst_amount) }}</td></tr>
-@else
-<tr><td class="label">GST</td><td style="text-align:center; color:#6B7280;">Disabled</td></tr>
 @endif
 <tr class="grand"><td>Total Amount</td><td style="text-align:right;">₹ {{ $fmt($invoice->total_amount) }}</td></tr>
 </table>
@@ -107,7 +106,8 @@ body{font-size:11px; color:#1F2937; margin:0;}
 @endif
 
 <div class="signature-area">
-<div style="height:52px;"></div>
+@php $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? '')); $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null; @endphp
+@if($sigPath)<img src="{{ $sigPath }}" class="sig-img" alt="signature">@else<div style="height:52px;">&nbsp;</div>@endif
 <div class="sig-line">Authorized Signatory</div>
 <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
 </div>

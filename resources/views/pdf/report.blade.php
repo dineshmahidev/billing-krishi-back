@@ -132,7 +132,7 @@ body { font-size: 11px; color: #1F2937; line-height: 1.45; margin: 0; background
   $reportTitle = $report->reportType->title ?? (in_array($report->reportType->name ?? '', ['Rice Bran','Animal Feed']) ? 'ANALYSIS REPORT' : 'CERTIFICATE OF ANALYSIS');
   // Transparent big logo as requested
   $logoPath = file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
-  $sigPath = $lab->signature_path && file_exists(public_path($lab->signature_path)) ? public_path($lab->signature_path) : null;
+  $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? '')); $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null;
   $isFeed = in_array($report->reportType->name ?? '', ['Rice Bran','Animal Feed','Rice bran','Animal feed']);
 @endphp
 

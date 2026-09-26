@@ -80,8 +80,6 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 <tr><td class="label">Subtotal</td><td style="text-align:right;">₹ {{ $fmt($invoice->subtotal) }}</td></tr>
 @if($invoice->gst_enabled)
 <tr><td class="label">GST ({{ rtrim(rtrim(number_format($invoice->gst_percent,2), '0'), '.') }}%)</td><td style="text-align:right;">₹ {{ $fmt($invoice->gst_amount) }}</td></tr>
-@else
-<tr><td class="label">GST</td><td style="text-align:center; color:#6B7280;">Disabled</td></tr>
 @endif
 <tr class="grand"><td>Total Amount</td><td style="text-align:right;">₹ {{ $fmt($invoice->total_amount) }}</td></tr>
 </table>
@@ -97,6 +95,6 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 
 <div class="sig"><div style="height:52px;">&nbsp;</div><div class="sig-line">Authorized Signatory</div><div class="sig-sub">KRISHI ANALYTICAL LAB</div></div>
 
-<div style="clear:both; text-align:center; font-size:11pt; font-weight:700; color:#1F2937; margin-top:60px; border-top:2.5px solid #168B57; padding-top:6px;">{{ $address }}@if($gstin) &nbsp;•&nbsp; GSTIN: {{ $gstin }}@endif</div>
+<div style="clear:both; text-align:center; font-size:11pt; font-weight:700; color:#1F2937; margin-top:60px; border-top:2.5px solid #168B57; padding-top:6px;">{{ $address }}@if($gstin && $invoice->gst_enabled) &nbsp;•&nbsp; GSTIN: {{ $gstin }}@endif</div>
 <div style="text-align:center; background:#DBEAFE; border-top:1.5px solid #168B57; border-bottom:1.5px solid #168B57; padding:4px 8px; margin:5px 14px 0; font-size:9.5pt; color:#1F2937; font-weight:700;">{{ $email }} | {{ $phone }} | +91 94433 12345</div>
 </body></html>

@@ -131,7 +131,7 @@ body{font-size:11px; color:#1F2937; margin:0;}
 </div>
 
 <div class="signature-area">
-  @php $sigPath = ($lab->signature_path ?? null) && file_exists(public_path($lab->signature_path)) ? public_path($lab->signature_path) : null; @endphp
+  @php $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? '')); $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null; @endphp
   @if($sigPath)<img src="{{ $sigPath }}" class="sig-img" alt="signature">@else<div style="height:52px;">&nbsp;</div>@endif
   <div class="sig-line">Authorized Signatory</div>
   <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
