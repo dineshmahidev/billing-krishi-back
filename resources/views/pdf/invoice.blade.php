@@ -82,12 +82,12 @@ body{font-size:11px; color:#1F2937; margin:0;}
 @if($invItems->count())
 @foreach($invItems as $i => $it)
 @php $z = ($i % 2 === 1) ? 'background:#F9FAFB;' : ''; @endphp
-<tr><td style="text:center; {{ $z }}">{{$i+1}}</td><td style="{{ $z }}"><strong>{{$it->name}}</strong> @if($it->unit && $it->unit !== '%') <span style="color:#6B7280;">({{$it->unit}})</span> @endif</td><td style="text:center; {{ $z }}">{{intval($it->qty)}}</td><td style="text:center; {{ $z }}">{{$it->hsn_code ?? '-'}}</td><td style="text:right; {{ $z }}">{{ $fmt($it->rate) }}</td><td style="text:right; {{ $z }}">{{ $fmt($it->amount) }}</td></tr>
+<tr><td style="text-align:center; {{ $z }}">{{$i+1}}</td><td style="{{ $z }}"><strong>{{$it->name}}</strong> @if($it->unit && $it->unit !== '%') <span style="color:#6B7280;">({{$it->unit}})</span> @endif</td><td style="text-align:center; {{ $z }}">{{intval($it->qty)}}</td><td style="text-align:center; {{ $z }}">{{$it->hsn_code ?? '-'}}</td><td style="text-align:right; {{ $z }}">{{ $fmt($it->rate) }}</td><td style="text-align:right; {{ $z }}">{{ $fmt($it->amount) }}</td></tr>
 @endforeach
 @else
 @foreach($report->results->filter(fn($r) => $r->enabled !== false && $r->parameter && $r->parameter->active)->values() as $i => $res)
 @php $z = ($i % 2 === 1) ? 'background:#F9FAFB;' : ''; @endphp
-<tr><td style="text:center; {{ $z }}">{{$i+1}}</td><td style="{{ $z }}"><strong>{{$res->parameter->name}}</strong> @if($res->parameter->unit && $res->parameter->unit !== '%') <span style="color:#6B7280;">({{$res->parameter->unit}})</span> @endif</td><td style="text:center; {{ $z }}">1</td><td style="text:center; {{ $z }}">{{$res->parameter->hsn_code ?? '-'}}</td><td style="text:right; {{ $z }}">{{ $fmt($res->parameter->price ?? 0) }}</td><td style="text:right; {{ $z }}">{{ $fmt($res->parameter->price ?? 0) }}</td></tr>
+<tr><td style="text-align:center; {{ $z }}">{{$i+1}}</td><td style="{{ $z }}"><strong>{{$res->parameter->name}}</strong> @if($res->parameter->unit && $res->parameter->unit !== '%') <span style="color:#6B7280;">({{$res->parameter->unit}})</span> @endif</td><td style="text-align:center; {{ $z }}">1</td><td style="text-align:center; {{ $z }}">{{$res->parameter->hsn_code ?? '-'}}</td><td style="text-align:right; {{ $z }}">{{ $fmt($res->parameter->price ?? 0) }}</td><td style="text-align:right; {{ $z }}">{{ $fmt($res->parameter->price ?? 0) }}</td></tr>
 @endforeach
 @endif
 </tbody>

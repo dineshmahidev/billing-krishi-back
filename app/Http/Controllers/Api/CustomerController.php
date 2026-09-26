@@ -161,19 +161,30 @@ class CustomerController extends Controller
             ->whereRaw('COALESCE(sample_date, DATE(created_at)) <= ?', [$to])
             ->pluck('id');
 
-        $rows = ReportResult::query()
-            ->join('parameters', 'parameters.id', '=', 'report_results.parameter_id')
-            ->whereIn('report_results.report_id', $reportIds)
-            ->where(function ($q) { $q->whereNull('report_results.enabled')->orWhere('report_results.enabled', 1); })
-            ->groupBy('parameters.id','parameters.name','parameters.unit','parameters.hsn_code','parameters.price')
-            ->orderBy('parameters.name')
-            ->selectRaw('parameters.id as parameter_id, parameters.name, parameters.unit, parameters.hsn_code,
-                         parameters.price as rate, COUNT(*) as times')
-            ->get()
-            ->map(function ($r) {
-                $r->amount = round(floatval($r->rate) * intval($r->times), 2);
-                return $r;
-            });
+        $raw = DB::table('invoice_items')
+            ->join('invoices', 'invoices.id', '=', 'invoice_items.invoice_id')
+            ->whereIn('invoices.report_id', $reportIds)
+            ->groupBy('invoice_items.parameter_id', 'invoice_items.name', 'invoice_items.unit', 'invoice_items.hsn_code')
+            ->orderBy('invoice_items.name')
+            ->selectRaw('invoice_items.parameter_id, invoice_items.name, invoice_items.unit, invoice_items.hsn_code,
+                         SUM(invoice_items.qty) as qty,
+                         COUNT(DISTINCT invoices.id) as times,
+                         SUM(invoice_items.amount) as amount,
+                         ROUND(SUM(invoice_items.amount) / NULLIF(SUM(invoice_items.qty), 0), 2) as rate')
+            ->get();
+
+        $rows = $raw->map(function ($r) {
+            return [
+                'parameter_id' => $r->parameter_id,
+                'name' => $r->name,
+                'unit' => $r->unit,
+                'hsn_code' => $r->hsn_code,
+                'rate' => round(floatval($r->rate), 2),
+                'times' => (int)$r->times,
+                'qty' => (int)$r->qty,
+                'amount' => round(floatval($r->amount), 2),
+            ];
+        });
 
         $invoices = Invoice::whereIn('report_id', $reportIds)
             ->with('report:id,report_no,sample_date')
