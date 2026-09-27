@@ -5,86 +5,80 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 160px 14px 76px 14px;
+  margin: 148px 14px 62px 14px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
 body { font-size: 11px; color: #1F2937; line-height: 1.4; margin: 0; background: #FFFFFF; }
 
 .header {
   position: fixed;
-  top: -160px;
+  top: -148px;
   left: 0;
   right: 0;
-  height: 140px;
+  height: 136px;
   border-bottom: 3px solid #0B6B43;
-  padding: 4px 10px 8px 10px;
+  padding: 2px 10px 4px 10px;
   text-align: center;
   background: #FFFFFF;
 }
-.header-group { margin: 0 auto; border-collapse: collapse; }
+.header-group { width: 100%; border-collapse: collapse; margin: 0; }
 .header-group td { vertical-align: middle; padding: 0; border: none; }
-.logo { height: 104px; width: 104px; object-fit: contain; display: block; margin: 0 auto; }
+.logo { height: 114px; width: 114px; object-fit: contain; display: block; margin: 0 auto; }
 .logo-kla {
   font-weight: 900;
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #0B6B43;
-  letter-spacing: 2.5px;
+  letter-spacing: 3px;
   text-align: center;
   margin-top: 1px;
   line-height: 1;
 }
-.brand-block { text-align: left; padding-left: 16px; }
+.brand-block { text-align: center; padding-left: 10px; padding-right: 10px; }
 .brand-name {
   font-weight: 900;
   color: #0B6B43;
-  font-size: 32px;
-  letter-spacing: 0.8px;
+  font-size: 34px;
+  letter-spacing: 0.5px;
   line-height: 1.1;
-  margin: 0;
-  text-align: left;
+  margin: 0 auto;
+  text-align: center;
   text-transform: uppercase;
 }
 .brand-tagline {
-  font-size: 13px;
+  font-size: 13.5px;
   color: #1F2937;
   font-weight: bold;
   font-style: italic;
   letter-spacing: 0.5px;
   margin-top: 4px;
-  text-align: left;
+  text-align: center;
+}
+.brand-address {
+  font-size: 11px;
+  font-weight: bold;
+  color: #1F2937;
+  margin-top: 5px;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .footer {
   position: fixed;
-  bottom: -62px;
+  bottom: -56px;
   left: 0;
   right: 0;
-  height: 58px;
-  border-top: 2.5px solid #168B57;
+  height: 52px;
+  border-top: 2px solid #0B6B43;
   text-align: center;
-  font-size: 9px;
-  color: #6B7280;
-  padding-top: 0;
+  padding-top: 4px;
   background: #FFFFFF;
 }
-.footer-address {
-  font-size: 10px;
-  font-weight: bold;
-  color: #1F2937;
-  margin-top: 4px;
+.footer-notes {
+  font-size: 7.5px;
+  color: #6B7280;
   text-align: center;
+  line-height: 1.25;
 }
-.footer-contact {
-  margin: 4px 14px 0;
-  background: #EAF7F0;
-  border-top: 1px solid #A7D7C1;
-  border-bottom: 1px solid #A7D7C1;
-  padding: 2.5px 8px;
-  font-size: 9px;
-  color: #1F2937;
-  font-weight: bold;
-}
-.footer-contact a { color: #0B6B43; font-weight: bold; text-decoration: none; }
 .footer-sep { color: #9CA3AF; margin: 0 10px; }
 .page-number { font-size: 8px; color: #6B7280; }
 
@@ -177,25 +171,31 @@ body { font-size: 11px; color: #1F2937; line-height: 1.4; margin: 0; background:
 @endphp
 
 <div class="header">
-  <table class="header-group" align="center">
+  <table class="header-group">
     <tr>
-      <td style="text-align:center; vertical-align:middle;">
+      <td style="width: 120px; text-align: center; vertical-align: middle;">
         @if(file_exists($logoPath))
           <img src="{{ $logoPath }}" class="logo" alt="logo">
           <div class="logo-kla">KLA</div>
         @endif
       </td>
-      <td class="brand-block" style="vertical-align:middle;">
+      <td class="brand-block" style="text-align: center; vertical-align: middle;">
         <div class="brand-name">{{ $labName }}</div>
         <div class="brand-tagline">“{{ $tagline }}”</div>
+        <div class="brand-address">
+          {{ $address }}@if($gstin) &nbsp;&bull;&nbsp; GSTIN: {{ $gstin }}@endif
+        </div>
       </td>
     </tr>
   </table>
 </div>
 
 <div class="footer">
-  <div style="font-size:9px; font-weight:bold; color:#1F2937; padding-top:6px; line-height:1.3;">
-    {{ $address }}@if($gstin) &nbsp;&bull;&nbsp; GSTIN: {{ $gstin }}@endif &nbsp;&bull;&nbsp; Ph: {{ $phone }} &nbsp;&bull;&nbsp; {{ $email }} &nbsp;&bull;&nbsp; {{ $websiteLabel }}
+  <div style="font-size:9px; font-weight:bold; color:#111827; line-height:1.3;">
+    Ph: {{ $phone }} &nbsp;&bull;&nbsp; {{ $email }} &nbsp;&bull;&nbsp; {{ $websiteLabel }}
+  </div>
+  <div class="footer-notes" style="margin-top:2px;">
+    This is a computer generated statement of account.
   </div>
 </div>
 

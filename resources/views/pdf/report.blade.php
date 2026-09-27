@@ -5,87 +5,92 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 158px 14px 82px 14px;
+  margin: 148px 14px 62px 14px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
 body { font-size: 12px; color: #111827; line-height: 1.45; margin: 0; background: #FFFFFF; }
 
 .header {
   position: fixed;
-  top: -158px;
+  top: -148px;
   left: 0;
   right: 0;
-  height: 140px;
+  height: 136px;
   border-bottom: 3px solid #0B6B43;
-  padding: 4px 10px 8px 10px;
+  padding: 2px 10px 4px 10px;
   text-align: center;
 }
-.header-group { margin: 0 auto; border-collapse: collapse; }
+.header-group { width: 100%; border-collapse: collapse; margin: 0; }
 .header-group td { vertical-align: middle; padding: 0; border: none; }
-.logo { height: 104px; width: 104px; object-fit: contain; display: block; margin: 0 auto; }
+.logo { height: 114px; width: 114px; object-fit: contain; display: block; margin: 0 auto; }
 .logo-kla {
   font-weight: 900;
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #0B6B43;
-  letter-spacing: 2.5px;
+  letter-spacing: 3px;
   text-align: center;
   margin-top: 1px;
   line-height: 1;
 }
-.brand-block { text-align: left; padding-left: 16px; }
+.brand-block { text-align: center; padding-left: 10px; padding-right: 10px; }
 .brand-name {
   font-weight: 900;
   color: #0B6B43;
-  font-size: 32px;
-  letter-spacing: 0.8px;
+  font-size: 34px;
+  letter-spacing: 0.5px;
   line-height: 1.1;
-  margin: 0;
-  text-align: left;
+  margin: 0 auto;
+  text-align: center;
   text-transform: uppercase;
 }
 .brand-tagline {
-  font-size: 13px;
+  font-size: 13.5px;
   color: #1F2937;
   font-weight: bold;
   font-style: italic;
   letter-spacing: 0.5px;
   margin-top: 4px;
-  text-align: left;
+  text-align: center;
+}
+.brand-address {
+  font-size: 11px;
+  font-weight: bold;
+  color: #1F2937;
+  margin-top: 5px;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .footer {
   position: fixed;
-  bottom: -76px;
+  bottom: -56px;
   left: 0;
   right: 0;
-  height: 70px;
+  height: 52px;
   border-top: 2px solid #0B6B43;
   text-align: center;
   padding-top: 4px;
   background: #FFFFFF;
 }
-.footer-line {
+.footer-contact {
   font-size: 9px;
   font-weight: bold;
   color: #111827;
-  text-align: center;
-  line-height: 1.25;
+  line-height: 1.3;
 }
-.footer-sep { color: #9CA3AF; margin: 0 5px; }
+.footer-sep { color: #9CA3AF; margin: 0 6px; }
 .footer-notes {
   font-size: 7.5px;
   color: #374151;
   text-align: center;
-  line-height: 1.2;
-  margin-top: 3px;
-  border-top: 0.5px solid #E5E7EB;
-  padding-top: 2px;
+  line-height: 1.25;
+  margin-top: 2px;
 }
 
-/* 2-Line Big Bold Heading */
+/* Heading */
 .heading-container {
   text-align: center;
-  margin: 4px 0 8px 0;
+  margin: 2px 0 6px 0;
   padding: 2px 0;
 }
 .main-title {
@@ -96,21 +101,25 @@ body { font-size: 12px; color: #111827; line-height: 1.45; margin: 0; background
   color: #000000;
   line-height: 1.2;
 }
-.sub-title {
-  font-weight: 800;
-  font-size: 13.5px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #111827;
-  line-height: 1.2;
-  margin-top: 3px;
+
+.report-meta-bar {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4px 0 4px 0;
+}
+.report-meta-bar td {
+  border: none;
+  padding: 0 0 2px 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #000000;
 }
 
 /* Pure Black and White Meta Table - No background color, bold text */
 .meta-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 4px 0 8px 0;
+  margin: 2px 0 8px 0;
   font-size: 11.5px;
   border: 1.5px solid #000000;
 }
@@ -133,9 +142,9 @@ body { font-size: 12px; color: #111827; line-height: 1.45; margin: 0; background
   letter-spacing: 0.5px;
 }
 
-/* Test Results Section Heading */
+/* Test Results Section Heading - matching CERTIFICATE OF ANALYSIS size */
 .test-results-heading {
-  font-size: 12.5px;
+  font-size: 17.5px;
   font-weight: 900;
   color: #000000;
   letter-spacing: 2px;
@@ -146,6 +155,7 @@ body { font-size: 12px; color: #111827; line-height: 1.45; margin: 0; background
   border-bottom: 1.5px solid #000000;
   padding: 3px 0;
   background: #FFFFFF;
+  line-height: 1.2;
 }
 
 /* Clean Black and White Results Table - No background color, bold header */
@@ -273,25 +283,26 @@ body { font-size: 12px; color: #111827; line-height: 1.45; margin: 0; background
 @endphp
 
 <div class="header">
-  <table class="header-group" align="center">
+  <table class="header-group">
     <tr>
-      <td style="text-align:center; vertical-align:middle;">
+      <td style="width: 120px; text-align: center; vertical-align: middle;">
         @if(file_exists($logoPath))
           <img src="{{ $logoPath }}" class="logo" alt="logo">
           <div class="logo-kla">KLA</div>
         @endif
       </td>
-      <td class="brand-block" style="vertical-align:middle;">
+      <td class="brand-block" style="text-align: center; vertical-align: middle;">
         <div class="brand-name">{{ $labName }}</div>
         <div class="brand-tagline">“{{ $tagline }}”</div>
+        <div class="brand-address">{{ $address }}</div>
       </td>
     </tr>
   </table>
 </div>
 
 <div class="footer">
-  <div class="footer-line">
-    {{ $address }}<span class="footer-sep">&bull;</span>Ph: {{ $phone }}<span class="footer-sep">&bull;</span>{{ $email }}<span class="footer-sep">&bull;</span>{{ $websiteLabel }}
+  <div class="footer-contact">
+    Ph: {{ $phone }}<span class="footer-sep">&bull;</span>{{ $email }}<span class="footer-sep">&bull;</span>{{ $websiteLabel }}
   </div>
   <div class="footer-notes">
     <strong>Note:</strong> 1. The results relate only to the sample tested. &nbsp;&bull;&nbsp; 2. This report shall not be reproduced, except in full, without written approval of the laboratory. &nbsp;&bull;&nbsp; 3. Tested samples retained for 15 days from report date.
@@ -300,16 +311,16 @@ body { font-size: 12px; color: #111827; line-height: 1.45; margin: 0; background
 
 <div class="heading-container">
   <div class="main-title">CERTIFICATE OF ANALYSIS</div>
-  <div class="sub-title">{{ $reportTypeTitle }}</div>
 </div>
 
-<table class="meta-table">
+<table class="report-meta-bar">
   <tr>
-    <td class="meta-label">Report No</td>
-    <td><strong style="font-family:monospace; font-size:12px;">{{ $report->report_no }}</strong></td>
-    <td class="meta-label">Date</td>
-    <td><strong>{{ $sampleDateFormatted }}</strong></td>
+    <td style="text-align: left;">Date: <strong>{{ $sampleDateFormatted }}</strong></td>
+    <td style="text-align: right;">Report No: <strong style="font-family: monospace; font-size: 12.5px;">{{ $report->report_no }}</strong></td>
   </tr>
+</table>
+
+<table class="meta-table">
   <tr>
     <td class="meta-label">Party Name</td>
     <td>
@@ -328,7 +339,7 @@ body { font-size: 12px; color: #111827; line-height: 1.45; margin: 0; background
     <td>{!! $report->bill_no ? e($report->bill_no) : '&nbsp;' !!}</td>
   </tr>
   <tr>
-    <td class="meta-label">Quantity</td>
+    <td class="meta-label">{{ $report->reportType?->quantity_label ?: 'Tons / Bags' }}</td>
     <td colspan="3">{!! $report->bags_tons ? e($report->bags_tons) : '&nbsp;' !!}</td>
   </tr>
 </table>

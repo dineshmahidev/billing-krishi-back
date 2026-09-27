@@ -10,7 +10,7 @@ class ReportType extends Model
 {
     use DemoScoped;
 
-    protected $fillable = ['name','title','active','show_specification','custom_columns','is_demo'];
+    protected $fillable = ['name','title','quantity_label','active','show_specification','custom_columns','is_demo'];
     protected $casts = ['active'=>'boolean','show_specification'=>'boolean','custom_columns'=>'array','is_demo'=>'boolean'];
 
     public function parameters(): HasMany

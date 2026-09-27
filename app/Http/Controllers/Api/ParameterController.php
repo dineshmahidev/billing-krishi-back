@@ -29,6 +29,7 @@ class ParameterController extends Controller
         $data = $request->validate([
             'report_type_id'=>'required|integer',
             'name'=>'required',
+            'short_code'=>'nullable|string|max:50',
             'unit'=>'nullable|string',
             'specification'=>'nullable|string',
             'price'=>'nullable|numeric|min:0|max:999999',
@@ -50,6 +51,7 @@ class ParameterController extends Controller
         $param = Parameter::findOrFail($id);
         $data = $request->validate([
             'name'=>'sometimes|required',
+            'short_code'=>'sometimes|nullable|string|max:50',
             'unit'=>'nullable|string',
             'specification'=>'nullable|string',
             'price'=>'sometimes|nullable|numeric|min:0|max:999999',

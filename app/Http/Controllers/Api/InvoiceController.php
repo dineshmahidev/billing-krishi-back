@@ -429,10 +429,10 @@ class InvoiceController extends Controller
             $paramParts = [];
             foreach ($rep->results as $res) {
                 if ($res->enabled === false || !$res->parameter) continue;
-                $pName = $res->parameter->name ?? 'TEST';
                 $val = trim((string)($res->result ?? ''));
-                if ($val === '-') $val = '';
-                $paramParts[] = strtoupper($pName) . ': ' . $val;
+                if ($val === '' || $val === '-' || $val === 'null') continue;
+                $code = method_exists($res->parameter, 'getShortCode') ? $res->parameter->getShortCode() : ($res->parameter->short_code ?: $res->parameter->name);
+                $paramParts[] = $code . ': ' . $val;
             }
             $paramsSummary = implode(', ', $paramParts);
             $desc = $dateStr . ' ' . $paramsSummary;
