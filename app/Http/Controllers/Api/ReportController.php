@@ -18,7 +18,7 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Report::with(['reportType','creator','results.parameter'])->latest();
+        $query = Report::with(['reportType','creator','customer','results.parameter'])->latest();
         if ($search = $request->search) {
             $query->where(function($q) use ($search){
                 $q->where('report_no','like',"%$search%")
@@ -138,7 +138,7 @@ class ReportController extends Controller
                     'display_order'=> $i+1,
                 ]);
             }
-            $report->load(['reportType','creator','results.parameter']);
+            $report->load(['reportType','creator','customer','results.parameter']);
             // Auto create separate invoice (not in analysis report)
             $lab = LabSetting::current();
             $subtotal = $report->results->filter(fn($r) => $r->enabled !== false)->sum(fn($r) => floatval(Parameter::find($r['parameter_id'])?->price ?? 0));
@@ -164,7 +164,7 @@ class ReportController extends Controller
 
     public function show($id)
     {
-        $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
+        $report = Report::with(['reportType','creator','customer','results.parameter'])->findOrFail($id);
         return response()->json($report);
     }
 

@@ -19,29 +19,38 @@ class LabSettingController extends Controller
         if ($request->user()->is_demo) return response()->json(['message'=>'Demo mode: lab settings are read-only'], 403);
         $lab = LabSetting::current();
         $data = $request->validate([
-            'lab_name'=>'sometimes|required|string',
+            'lab_name'=>'sometimes|nullable|string',
             'tagline'=>'sometimes|nullable|string',
             'address'=>'sometimes|nullable|string',
             'phone'=>'sometimes|nullable|string',
-            'email'=>'sometimes|nullable|email',
-            'website'=>'sometimes|nullable|string|max:120',
+            'email'=>'sometimes|nullable|string',
+            'website'=>'sometimes|nullable|string|max:190',
             'default_gst_percent'=>'sometimes|nullable|numeric|min:0|max:100',
-            'gst_enabled'=>'sometimes|boolean',
-            'gstin'=>'sometimes|nullable|string|max:30',
-            'invoice_prefix'=>'sometimes|nullable|string|max:20',
-            'logo'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
-            'seal'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
-            'signature'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'gst_enabled'=>'sometimes|nullable',
+            'gstin'=>'sometimes|nullable|string|max:50',
+            'invoice_prefix'=>'sometimes|nullable|string|max:30',
+            'logo'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+            'seal'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
+            'signature'=>'sometimes|nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
             'smtp_host'=>'sometimes|nullable|string|max:190',
             'smtp_port'=>'sometimes|nullable|integer|min:1|max:65535',
             'smtp_username'=>'sometimes|nullable|string|max:190',
             'smtp_password'=>'sometimes|nullable|string|max:190',
-            'smtp_encryption'=>'sometimes|nullable|in:none,tls,ssl',
-            'mail_from_address'=>'sometimes|nullable|email',
+            'smtp_encryption'=>'sometimes|nullable|string|max:20',
+            'mail_from_address'=>'sometimes|nullable|string|max:190',
             'mail_from_name'=>'sometimes|nullable|string|max:120',
         ]);
+
+        if (array_key_exists('gst_enabled', $data)) {
+            $data['gst_enabled'] = filter_var($data['gst_enabled'], FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if (empty($data['lab_name'])) {
+            $data['lab_name'] = $lab->lab_name ?: 'KRISHI ANALYTICAL LAB';
+        }
+
         // blank password field in the UI = keep the stored one
-        if (array_key_exists('smtp_password', $data) && $data['smtp_password'] === '') {
+        if (array_key_exists('smtp_password', $data) && ($data['smtp_password'] === '' || $data['smtp_password'] === null)) {
             unset($data['smtp_password']);
         }
         foreach (['logo','seal','signature'] as $field) {

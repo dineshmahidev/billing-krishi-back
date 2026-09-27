@@ -38,4 +38,9 @@ class Report extends Model
     {
         return $this->hasMany(ReportResult::class)->orderBy('display_order');
     }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

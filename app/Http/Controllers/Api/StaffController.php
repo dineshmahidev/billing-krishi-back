@@ -37,6 +37,7 @@ class StaffController extends Controller
     public function store(Request $request)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
+        if ($request->user()->is_demo) return response()->json(['message'=>'Demo mode: staff cannot be created'], 403);
         $data = $request->validate([
             'name'=>'required|string|max:255',
             'email'=>'required|email|unique:users,email',
@@ -64,6 +65,7 @@ class StaffController extends Controller
     public function update(Request $request, $id)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
+        if ($request->user()->is_demo) return response()->json(['message'=>'Demo mode: staff cannot be modified'], 403);
         $user = User::findOrFail($id);
         $data = $request->validate([
             'name'=>'sometimes|required|string',
@@ -82,6 +84,7 @@ class StaffController extends Controller
     public function updateStatus(Request $request, $id)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
+        if ($request->user()->is_demo) return response()->json(['message'=>'Demo mode: staff status cannot be modified'], 403);
         $user = User::findOrFail($id);
         $data = $request->validate(['status'=>'required|in:active,inactive']);
         $user->update($data);
@@ -91,6 +94,7 @@ class StaffController extends Controller
     public function destroy(Request $request, $id)
     {
         if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden'], 403);
+        if ($request->user()->is_demo) return response()->json(['message'=>'Demo mode: staff cannot be deleted'], 403);
         $user = User::findOrFail($id);
         if ($user->id === auth()->id()) return response()->json(['message'=>'Cannot delete yourself'], 422);
         $user->delete();

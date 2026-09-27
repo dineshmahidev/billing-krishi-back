@@ -36,8 +36,9 @@ class AuthController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $request->validate(['name'=>'required|string|max:255']);
         $user = $request->user();
+        if ($user->is_demo) return response()->json(['message'=>'Demo mode: profile is read-only'], 403);
+        $request->validate(['name'=>'required|string|max:255']);
         $user->name = $request->name;
         $user->save();
         return response()->json(['message'=>'Profile updated','user'=>$user]);
@@ -45,11 +46,12 @@ class AuthController extends Controller
 
     public function changePassword(Request $request)
     {
+        $user = $request->user();
+        if ($user->is_demo) return response()->json(['message'=>'Demo mode: password cannot be changed'], 403);
         $request->validate([
             'current_password'=>'required',
             'password'=>'required|min:6|confirmed',
         ]);
-        $user = $request->user();
         if (!Hash::check($request->current_password, $user->password)) {
             return response()->json(['message'=>'Current password is incorrect'], 422);
         }

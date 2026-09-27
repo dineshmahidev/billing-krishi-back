@@ -1,17 +1,18 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><style>
-@page{size:A4 portrait; margin:168px 14px 78px 14px;}
+@page{size:A4 portrait; margin:160px 14px 76px 14px;}
 *{font-family:Krishi,Helvetica,Arial,sans-serif; box-sizing:border-box;}
 body{font-size:11px; color:#1F2937; margin:0;}
-.header{position:fixed; top:-168px; left:0; right:0; height:144px; border-bottom:3px solid #0B6B43; padding:8px 14px; text-align:center;}
-.header-group{width:100%; border-collapse:collapse;}
+.header{position:fixed; top:-160px; left:0; right:0; height:140px; border-bottom:3px solid #0B6B43; padding:4px 10px 8px 10px; text-align:center; background:#fff;}
+.header-group{margin:0 auto; border-collapse:collapse;}
 .header-group td{vertical-align:middle; padding:0; border:none;}
-.logo{height:128px; width:128px; object-fit:contain; display:inline-block;}
-.brand-block{display:block; width:100%; text-align:center;}
-.brand-name{font-weight:bold; color:#0B6B43; font-size:36px; letter-spacing:0.5px; line-height:1.1; margin:0; text-align:center;}
-.brand-tagline{font-size:14px; color:#374151; font-weight:bold; letter-spacing:0.5px; margin-top:6px; text-align:center;}
-.footer{position:fixed; bottom:-66px; left:0; right:0; height:64px; border-top:2.5px solid #168B57; text-align:center; font-size:9px; color:#6B7280; padding-top:0; background:#fff;}
-.footer-address{font-size:11px; font-weight:700; color:#1F2937; margin-top:5px; text-align:center;}
-.footer-contact{margin:5px 14px 0; background:#EAF7F0; border-top:1.5px solid #A7D7C1; border-bottom:1.5px solid #A7D7C1; padding:4px 8px; font-size:9.5px; color:#1F2937; font-weight:700;}
+.logo{height:104px; width:104px; object-fit:contain; display:block; margin:0 auto;}
+.logo-kla{font-weight:900; font-size:13.5px; color:#0B6B43; letter-spacing:2.5px; text-align:center; margin-top:1px; line-height:1;}
+.brand-block{text-align:left; padding-left:16px;}
+.brand-name{font-weight:900; color:#0B6B43; font-size:32px; letter-spacing:0.8px; line-height:1.1; margin:0; text-align:left; text-transform:uppercase;}
+.brand-tagline{font-size:13px; color:#1F2937; font-weight:bold; font-style:italic; letter-spacing:0.5px; margin-top:4px; text-align:left;}
+.footer{position:fixed; bottom:-62px; left:0; right:0; height:58px; border-top:2.5px solid #168B57; text-align:center; font-size:9px; color:#6B7280; padding-top:0; background:#fff;}
+.footer-address{font-size:10px; font-weight:700; color:#1F2937; margin-top:4px; text-align:center;}
+.footer-contact{margin:4px 14px 0; background:#EAF7F0; border-top:1px solid #A7D7C1; border-bottom:1px solid #A7D7C1; padding:2.5px 8px; font-size:9px; color:#1F2937; font-weight:700;}
 .footer-sep{color:#9CA3AF; margin:0 10px;}
 .title{background:#EAF7F0; color:#0B6B43; display:inline-block; padding:5px 16px; font-weight:bold; font-size:13px; letter-spacing:1px; margin:8px 0;}
 .box{border:1.5px solid #1F2937; padding:10px; margin:8px 0;}
@@ -35,28 +36,34 @@ body{font-size:11px; color:#1F2937; margin:0;}
 @php
   $labName=$lab->lab_name??'KRISHI ANALYTICAL LAB';
   $tagline=$lab->tagline??'Discovering Solutions, One Test at a Time';
-  $addr=$lab->address??'182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701, Tiruppur Dist, Tamil Nadu';
-  $phone=$lab->phone??'+91 63793 12357';
-  $email=$lab->email??'info@krishianalyticallab.com';
+  $addr=$lab->address??'182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701';
+  $phone='+91 63793 12357, +91 88838 64756';
+  $email=$lab->email??'krishianalyticallab@gmail.com';
+  $website=$lab->website?:'https://krishilab25.in';
+  $websiteLabel=preg_replace('#^https?://#i', '', $website);
   $gstin=$lab->gstin??'33AAAFK8921B1Z2';
   $logoPath=file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
   $fmt = function($v){ $v = round(floatval($v), 2); return (fmod($v, 1) == 0) ? number_format($v, 0) : number_format($v, 2); };
 @endphp
 <div class="header">
-  <table class="header-group">
+  <table class="header-group" align="center">
     <tr>
-      <td style="width:150px; text-align:left;">@if(file_exists($logoPath))<img src="{{$logoPath}}" class="logo" alt="logo">@endif</td>
-      <td class="brand-block">
+      <td style="text-align:center; vertical-align:middle;">
+        @if(file_exists($logoPath))
+          <img src="{{$logoPath}}" class="logo" alt="logo">
+          <div class="logo-kla">KLA</div>
+        @endif
+      </td>
+      <td class="brand-block" style="vertical-align:middle;">
         <div class="brand-name">{{$labName}}</div>
-        <div class="brand-tagline">"{{ $tagline }}"</div>
+        <div class="brand-tagline">“{{ $tagline }}”</div>
       </td>
     </tr>
   </table>
 </div>
 <div class="footer">
-  <div class="footer-address">{{$addr}}@if($gstin && $invoice->gst_enabled) &nbsp;•&nbsp; GSTIN: {{$gstin}} @endif</div>
-  <div class="footer-contact">
-    <span>{{$email}}</span><span class="footer-sep">|</span><span>{{$phone}}</span><span class="footer-sep">|</span><span>+91 94433 12345</span>
+  <div style="font-size:9px; font-weight:bold; color:#1F2937; padding-top:6px; line-height:1.3;">
+    {{$addr}}@if($gstin && $invoice->gst_enabled) &nbsp;&bull;&nbsp; GSTIN: {{$gstin}} @endif &nbsp;&bull;&nbsp; Ph: {{$phone}} &nbsp;&bull;&nbsp; {{$email}} &nbsp;&bull;&nbsp; {{$websiteLabel}}
   </div>
 </div>
 
@@ -68,8 +75,19 @@ body{font-size:11px; color:#1F2937; margin:0;}
 </tr>
 </table>
 
+@php
+  $custGroup = $report->customer?->group?->name ?? null;
+@endphp
 <table class="meta">
-<tr><td class="meta-label">Party Name</td><td><strong>{{ $invoice->party_name ?? $invoice->customer_name ?? $report->party_name ?? $report->customer_name ?? '' }}</strong></td><td class="meta-label">Sample Name</td><td>{!! $report->sample_name ? e($report->sample_name) : '&nbsp;' !!}</td></tr>
+<tr>
+  <td class="meta-label">Party Name</td>
+  <td>
+    <strong>{{ $invoice->party_name ?? $invoice->customer_name ?? $report->party_name ?? $report->customer_name ?? '' }}</strong>
+    @if($custGroup)<span style="color:#0B6B43; font-size:9.5px; font-weight:bold; margin-left:4px;">(Group: {{ $custGroup }})</span>@endif
+  </td>
+  <td class="meta-label">Sample Name</td>
+  <td>{!! $report->sample_name ? e($report->sample_name) : '&nbsp;' !!}</td>
+</tr>
 <tr><td class="meta-label">Report No</td><td colspan="3">{{ $report->report_no }}</td></tr>
 </table>
 
@@ -114,4 +132,20 @@ body{font-size:11px; color:#1F2937; margin:0;}
     <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
   </div>
 </div>
+
+<script type="text/php">
+  if (isset($pdf)) {
+    $pdf->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+      if ($pageCount > 1) {
+        $text = "Page " . $pageNumber . " of " . $pageCount;
+        $size = 7.5;
+        $font = $fontMetrics->getFont("Helvetica");
+        $width = $fontMetrics->getTextWidth($text, $font, $size);
+        $x = ($canvas->get_width() - $width) / 2;
+        $y = $canvas->get_height() - 18;
+        $canvas->text($x, $y, $text, $font, $size, array(0.42, 0.45, 0.5));
+      }
+    });
+  }
+</script>
 </body></html>

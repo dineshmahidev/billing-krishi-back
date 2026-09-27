@@ -98,7 +98,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bulk-settlement/pdf', [InvoiceController::class, 'settlementPdf']);
 });
 
-// PDF/Word routes - public with optional auth via header OR ?token= (for window.open direct)
+// PDF/Word routes - public with optional auth via header OR ?token= (for window.open direct / WhatsApp links)
 Route::get('/reports/{id}/pdf', [ReportController::class, 'pdf']);
 Route::get('/reports/{id}/pdf/download', [ReportController::class, 'downloadPdf']);
 Route::get('/reports/{id}/word', [ReportController::class, 'word']);
@@ -108,3 +108,4 @@ Route::get('/reports/{id}/invoice/pdf', [InvoiceController::class, 'pdf']);
 Route::get('/reports/{id}/invoice/pdf/download', [InvoiceController::class, 'downloadPdf']);
 Route::get('/reports/{id}/invoice/word', [InvoiceController::class, 'word']);
 Route::get('/reports/{id}/invoice/word/download', [InvoiceController::class, 'downloadWord']);
+Route::match(['get', 'post'], '/bulk-settlement/pdf', [InvoiceController::class, 'settlementPdf']);

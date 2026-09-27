@@ -4,7 +4,7 @@
 @php
   $addr = $lab->address ?? '';
   $email = $lab->email ?? '';
-  $phone = $lab->phone ?? '';
+  $phone = '+91 63793 12357, +91 88838 64756';
   $logo = file_exists(public_path('krishi-logo.png')) ? public_path('krishi-logo.png') : public_path('logo-krishi.png');
 @endphp
 <style>
@@ -44,7 +44,10 @@
 <div class="header">
   <table>
     <tr>
-      <td width="100"><img src="{{ $logo }}" class="logo" alt="logo"></td>
+      <td width="100" style="text-align: center;">
+        <img src="{{ $logo }}" class="logo" alt="logo">
+        <div style="font-size: 10px; font-weight: 900; color: #0B6B43; letter-spacing: 2.5px; margin-top: 1px; text-align: center;">KLA</div>
+      </td>
       <td>
         <div class="brand-name">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
         <div class="brand-tagline">{{ $lab->tagline ?? '' }}</div>
@@ -76,8 +79,9 @@
 </div>
 
 <div class="footer">
-  <div class="footer-address">{{ $addr }}</div>
-  <div class="footer-contact">{{ $email }} &nbsp;|&nbsp; {{ $phone }}</div>
+  <div style="font-size:9px; font-weight:bold; color:#1F2937; text-align:center; padding-top:6px; line-height:1.3;">
+    {{ $addr ?: '182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701' }} &nbsp;&bull;&nbsp; Ph: {{ $phone ?: '+91 63793 12357' }} &nbsp;&bull;&nbsp; {{ $email ?: 'krishianalyticallab@gmail.com' }} &nbsp;&bull;&nbsp; {{ $lab->website ? preg_replace('#^https?://#i', '', $lab->website) : 'krishilab25.in' }}
+  </div>
 </div>
 </body>
 </html>

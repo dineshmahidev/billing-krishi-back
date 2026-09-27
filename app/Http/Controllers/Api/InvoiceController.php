@@ -25,7 +25,7 @@ class InvoiceController extends Controller
     }
 
     public function index(Request $request) {
-        $q = Invoice::with(['report.reportType'])->latest();
+        $q = Invoice::with(['report.reportType', 'report.customer'])->latest();
         if ($search = $request->search) {
             $q->where(function($qq) use ($search){
                 $qq->where('invoice_no','like',"%$search%")
@@ -190,23 +190,25 @@ class InvoiceController extends Controller
     private function reportsQuery($members, array $names, string $from, string $to) {
         $ids = $members->pluck('id');
         return Report::where(function ($q) use ($ids, $names) {
-                $q->whereIn('customer_id', $ids)
-                  ->orWhereIn('party_name', $names)
-                  ->orWhereIn('customer_name', $names);
+                $q->whereIn('reports.customer_id', $ids)
+                  ->orWhereIn('reports.party_name', $names)
+                  ->orWhereIn('reports.customer_name', $names);
             })
-            ->whereRaw('COALESCE(sample_date, DATE(created_at)) >= ?', [$from])
-            ->whereRaw('COALESCE(sample_date, DATE(created_at)) <= ?', [$to]);
+            ->whereRaw('COALESCE(reports.sample_date, DATE(reports.created_at)) >= ?', [$from])
+            ->whereRaw('COALESCE(reports.sample_date, DATE(reports.created_at)) <= ?', [$to]);
     }
 
-    // Tab 2: Group Summary â€” party-wise invoice totals for the selected duration
+    // Tab 2: Group Summary — party-wise invoice totals for the selected duration
     public function groupSummary(Request $request) {
-        if (!$request->user()->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
+        $user = $this->resolveUser($request);
+        if ($user && method_exists($user, 'isAdmin') && !$user->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
         return response()->json($this->buildGroupSummary($request));
     }
 
     // Group Summary PDF download
     public function groupSummaryPdf(Request $request) {
-        if (!$request->user()->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
+        $user = $this->resolveUser($request);
+        if ($user && method_exists($user, 'isAdmin') && !$user->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
         $data = $this->buildGroupSummary($request);
         $pdf = Pdf::loadView('pdf.group-summary', ['data'=>$data, 'lab'=>LabSetting::current()]);
         PdfFont::apply($pdf);
@@ -225,8 +227,8 @@ class InvoiceController extends Controller
                     $qq->whereDate('invoices.created_at', '>=', $from)
                        ->whereDate('invoices.created_at', '<=', $to);
                 })->orWhereHas('report', function($r) use ($from, $to) {
-                    $r->whereRaw('COALESCE(sample_date, DATE(created_at)) >= ?', [$from])
-                      ->whereRaw('COALESCE(sample_date, DATE(created_at)) <= ?', [$to]);
+                    $r->whereRaw('COALESCE(reports.sample_date, DATE(reports.created_at)) >= ?', [$from])
+                      ->whereRaw('COALESCE(reports.sample_date, DATE(reports.created_at)) <= ?', [$to]);
                 });
             })
             ->with('report:id,customer_id,party_name,customer_name')
@@ -280,16 +282,18 @@ class InvoiceController extends Controller
 
     // Tab 3: Bulk Settlement — type-wise parameter breakdown, static rate + editable qty
     public function bulkSettlement(Request $request) {
-        if (!$request->user()->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
+        $user = $this->resolveUser($request);
+        if ($user && method_exists($user, 'isAdmin') && !$user->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
         return response()->json($this->buildSettlement($request));
     }
 
-    // Type-wise settlement bill PDF (each report type = one bill section)
+    // Type-wise settlement bill PDF (Customer Account Statement format)
     public function settlementPdf(Request $request) {
-        if (!$request->user()->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
+        $user = $this->resolveUser($request);
+        if ($user && method_exists($user, 'isAdmin') && !$user->isAdmin()) return response()->json(['message'=>'Admin only'], 403);
         $data = $this->buildSettlement($request);
 
-        // Apply edited rate / qty overrides from the screen
+        // Apply edited rate / qty overrides from the screen if any
         $map = [];
         foreach ((array)$request->input('overrides', []) as $o) {
             if (!isset($o['type_id'], $o['parameter_id'])) continue;
@@ -319,22 +323,146 @@ class InvoiceController extends Controller
         $pdf = Pdf::loadView('pdf.settlement', ['data'=>$data, 'lab'=>LabSetting::current()]);
         PdfFont::apply($pdf);
         $pdf->setPaper('A4', 'portrait');
-        $who = $data['scope']==='group' ? ($data['group']['name'] ?? 'group') : ($data['customer']['company_name'] ?? ($data['customer']['name'] ?? 'party'));
-        $file = 'settlement-'.preg_replace('/[^A-Za-z0-9]+/', '-', $who).'-'.$data['range']['from'].'-to-'.$data['range']['to'].'.pdf';
+        $who = $data['scope']==='group' ? ($data['group']->name ?? ($data['customer_name'] ?? 'group')) : ($data['customer_name'] ?? 'party');
+        $file = 'statement-'.preg_replace('/[^A-Za-z0-9]+/', '-', $who).'-'.$data['range']['from'].'-to-'.$data['range']['to'].'.pdf';
         return $pdf->download($file);
     }
 
     private function buildSettlement(Request $request): array {
         [$members, $names, $from, $to] = $this->scopeOf($request);
 
-        $reports = $this->reportsQuery($members, $names, $from, $to)->with(['reportType', 'results.parameter'])->get();
+        // Parse optional type_ids filter
+        $rawTypeIds = $request->input('type_ids');
+        $typeIds = null;
+        if ($rawTypeIds !== null && $rawTypeIds !== '' && $rawTypeIds !== 'all') {
+            if (is_array($rawTypeIds)) {
+                $typeIds = array_values(array_filter(array_map('intval', $rawTypeIds)));
+            } else {
+                $typeIds = array_values(array_filter(array_map('intval', explode(',', (string)$rawTypeIds))));
+            }
+        }
+
+        // Query all available report types in scope & date range (unfiltered by type_ids)
+        $availableTypes = $this->reportsQuery($members, $names, $from, $to)
+            ->whereNotNull('reports.report_type_id')
+            ->join('report_types', 'report_types.id', '=', 'reports.report_type_id')
+            ->select('report_types.id', 'report_types.name', DB::raw('count(reports.id) as report_count'))
+            ->groupBy('report_types.id', 'report_types.name')
+            ->orderBy('report_types.name')
+            ->get()
+            ->map(fn($t) => [
+                'id' => (int)$t->id,
+                'name' => (string)$t->name,
+                'report_count' => (int)$t->report_count,
+            ])
+            ->values();
+
+        $reportsQuery = $this->reportsQuery($members, $names, $from, $to)
+            ->with(['reportType', 'results.parameter'])
+            ->when(!empty($typeIds), function($q) use ($typeIds) {
+                $q->whereIn('reports.report_type_id', $typeIds);
+            })
+            ->orderByRaw('COALESCE(reports.sample_date, DATE(reports.created_at)) asc')
+            ->orderBy('reports.id', 'asc');
+
+        $reports = $reportsQuery->get();
         $reportIds = $reports->pluck('id');
         $typeNames = ReportType::pluck('name', 'id');
         $reportsPerType = $reports->groupBy('report_type_id')->map->count();
 
         // Ensure all invoices exist and their items are synced
+        $invoicesMap = [];
         foreach ($reports as $rep) {
-            $this->invoiceFor($rep);
+            $invoicesMap[$rep->id] = $this->invoiceFor($rep);
+        }
+
+        // Calculate Opening Balance before $from date (filtered by type_ids if specified)
+        $priorInvoices = $this->invoicesQuery($members, $names)
+            ->where(function($q) use ($from) {
+                $q->where(function($qq) use ($from) {
+                    $qq->whereDate('invoices.created_at', '<', $from);
+                })->orWhereHas('report', function($r) use ($from) {
+                    $r->whereRaw('COALESCE(reports.sample_date, DATE(reports.created_at)) < ?', [$from]);
+                });
+            })
+            ->when(!empty($typeIds), function($q) use ($typeIds) {
+                $q->whereHas('report', function($r) use ($typeIds) {
+                    $r->whereIn('reports.report_type_id', $typeIds);
+                });
+            })
+            ->get(['id', 'status', 'total_amount']);
+
+        $openingBalance = 0.0;
+        foreach ($priorInvoices as $pInv) {
+            if ($pInv->status !== 'paid') {
+                $openingBalance += floatval($pInv->total_amount);
+            }
+        }
+        $openingBalance = round($openingBalance, 2);
+
+        // Build Statement Rows (Chronological List for Statement)
+        $statementRows = [];
+        $sno = 1;
+
+        // 1. Opening Balance row
+        $statementRows[] = [
+            'sno' => $sno++,
+            'date' => null,
+            'report_no' => null,
+            'sample_name' => null,
+            'vehicle_no' => null,
+            'params_text' => null,
+            'description' => 'O/B',
+            'debit' => $openingBalance,
+            'credit' => 0.00,
+            'type' => 'ob',
+            'status' => null,
+        ];
+
+        $totalDebit = $openingBalance;
+        $totalCredit = 0.00;
+
+        foreach ($reports as $rep) {
+            $inv = $invoicesMap[$rep->id] ?? $this->invoiceFor($rep);
+            $dateStr = \Carbon\Carbon::parse($rep->sample_date ?? $rep->created_at)->format('d-M-Y');
+
+            $paramParts = [];
+            foreach ($rep->results as $res) {
+                if ($res->enabled === false || !$res->parameter) continue;
+                $pName = $res->parameter->name ?? 'TEST';
+                $val = trim((string)($res->result ?? ''));
+                if ($val === '-') $val = '';
+                $paramParts[] = strtoupper($pName) . ': ' . $val;
+            }
+            $paramsSummary = implode(', ', $paramParts);
+            $desc = $dateStr . ' ' . $paramsSummary;
+            if (!empty($rep->vehicle_no)) {
+                $desc .= ' (' . $rep->vehicle_no . ')';
+            }
+
+            $debit = round(floatval($inv->total_amount), 2);
+            $credit = round($inv->status === 'paid' ? floatval($inv->total_amount) : 0.0, 2);
+            $totalDebit += $debit;
+            $totalCredit += $credit;
+
+            $compName = $rep->party_name ?: ($rep->customer?->company_name ?: ($rep->customer?->name ?: ''));
+            $statementRows[] = [
+                'sno' => $sno++,
+                'date' => $dateStr,
+                'report_no' => $rep->report_no,
+                'company_name' => $compName,
+                'customer_name' => $rep->customer_name ?: $compName,
+                'sample_name' => $rep->sample_name,
+                'vehicle_no' => $rep->vehicle_no,
+                'params_text' => $paramsSummary,
+                'description' => $desc,
+                'debit' => $debit,
+                'credit' => $credit,
+                'invoice_id' => $inv->id,
+                'report_id' => $rep->id,
+                'status' => $inv->status,
+                'type' => 'report',
+            ];
         }
 
         $raw = DB::table('invoice_items')
@@ -374,14 +502,46 @@ class InvoiceController extends Controller
 
         $gid = $request->input('group_id');
         $cid = $request->input('customer_id');
+        $customer = $cid ? Customer::find($cid) : null;
+        $group = $gid ? CustomerGroup::find($gid) : null;
+
+        $custName = $customer ? ($customer->company_name ?: $customer->name) : ($group ? $group->name : 'Party');
+        $custAddress = $customer ? ($customer->address ?: '') : ($members->pluck('address')->filter()->first() ?: '');
+        $custPhone = $customer ? ($customer->phone ?: '') : '';
+        $custGstin = $customer ? ($customer->gstin ?: '') : '';
+
+        $totalDebit = round($totalDebit, 2);
+        $totalCredit = round($totalCredit, 2);
+        $balance = round($totalDebit - $totalCredit, 2);
+
+        $typesLabel = '';
+        if (!empty($typeIds) && count($grouped) > 0) {
+            $typesLabel = collect($grouped)->pluck('name')->implode(', ');
+        }
+
         return [
             'scope' => $gid ? 'group' : 'party',
-            'group' => $gid ? CustomerGroup::find($gid) : null,
-            'customer' => $cid ? Customer::find($cid) : null,
+            'group' => $group,
+            'customer' => $customer,
+            'customer_name' => $custName,
+            'customer_address' => $custAddress,
+            'customer_phone' => $custPhone,
+            'customer_gstin' => $custGstin,
             'range' => ['from'=>$from, 'to'=>$to],
+            'available_types' => $availableTypes,
+            'selected_type_ids' => $typeIds,
+            'filter_types_label' => $typesLabel,
             'report_count' => count($reportIds),
             'types' => array_values($grouped),
-            'grand_total' => round(collect($grouped)->sum('subtotal'), 2),
+            'statement_rows' => $statementRows,
+            'totals' => [
+                'opening_balance' => $openingBalance,
+                'total_debit' => $totalDebit,
+                'total_credit' => $totalCredit,
+                'balance' => $balance,
+            ],
+            'grand_total' => $totalDebit,
+            'balance' => $balance,
         ];
     }
 
