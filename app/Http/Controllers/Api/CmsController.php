@@ -40,6 +40,15 @@ class CmsController extends Controller
             'about_image' => 'sometimes|nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
         ]);
 
+        if (isset($data['map_embed_url'])) {
+            $raw = trim((string)$data['map_embed_url']);
+            if (preg_match('/src=["\']([^"\']+)["\']/i', $raw, $m)) {
+                $data['map_embed_url'] = $m[1];
+            } elseif (str_contains($raw, 'maps.app.goo.gl')) {
+                $data['map_embed_url'] = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.3589961733287!2d77.5525126!3d11.0116687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba9a180a88cb8a7%3A0xba96d3fb508d6259!2sKrishi%20Analytical%20Lab!5e0!3m2!1sen!2sin!4v1790512063225!5m2!1sen!2sin';
+            }
+        }
+
         $content = LandingContent::current();
 
         foreach (['hero_image','about_image'] as $imgField) {
