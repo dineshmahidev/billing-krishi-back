@@ -1,55 +1,70 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><style>
-@page{size:A4 portrait; margin:148px 14px 62px 14px;}
-*{font-family:Krishi,Helvetica,Arial,sans-serif; box-sizing:border-box;}
-body{font-size:11px; color:#1F2937; margin:0;}
-.header{position:fixed; top:-148px; left:0; right:0; height:136px; border-bottom:3px solid #0B6B43; background:#fff; padding:2px 10px 4px 10px; text-align:center;}
-.header-group{margin:0 auto; border-collapse:collapse;}
-.header-group td{vertical-align:middle; padding:0; border:none;}
-.logo{height:114px; width:114px; object-fit:contain; display:block; margin:0 auto;}
-.logo-kla{font-weight:900; font-size:14.5px; color:#0B6B43; letter-spacing:3px; text-align:center; margin-top:1px; line-height:1;}
-.brand-block{text-align:left; padding-left:20px;}
-.brand-name{font-weight:900; color:#0B6B43; font-size:34px; letter-spacing:0.5px; line-height:1.1; margin:0; text-align:left; text-transform:uppercase;}
-.brand-tagline{font-size:13.5px; color:#1F2937; font-weight:bold; font-style:italic; letter-spacing:0.5px; margin-top:4px; text-align:left;}
-.brand-address{font-size:11px; font-weight:bold; color:#1F2937; margin-top:5px; line-height:1.35; text-align:left;}
-.footer{position:fixed; bottom:-56px; left:0; right:0; height:52px; border-top:2px solid #0B6B43; text-align:center; padding-top:4px; background:#fff;}
-.footer-notes{font-size:7.5px; color:#6B7280; text-align:center; line-height:1.25;}
-.title{background:#EAF7F0; color:#0B6B43; display:inline-block; padding:5px 18px; font-weight:bold; font-size:13px; letter-spacing:1px; margin:6px 0 4px;}
-.head-row{text-align:center;}
-.meta{width:100%; border-collapse:collapse; font-size:10.5px; border:1.5px solid #1F2937; margin-top:6px;}
-.meta td{border:1px solid #1F2937; padding:6px 8px; height:22px;}
-.meta-label{background:#EAF7F0; font-weight:700; width:130px;}
-.items{width:100%; border-collapse:collapse; border:1.5px solid #1F2937; margin-top:14px;}
-.items th{background:#EAF7F0; color:#1F2937; padding:7px; font-size:9.5px; border:1px solid #1F2937; text-transform:uppercase;}
-.items td{border:1px solid #1F2937; padding:7px; height:22px; font-size:10.5px;}
-.items tr.tot td{background:#EAF7F0; font-weight:bold;}
-.badge{font-size:9.5px; font-weight:700;}
-.paid{color:#168B57;}
-.unpaid{color:#DC2626;}
-.partial{color:#B45309;}
-.cards{width:100%; border-collapse:collapse; margin-top:14px;}
-.cards td{border:1.5px solid #1F2937; padding:8px 10px; text-align:center; width:25%;}
-.cards .lbl{background:#EAF7F0; font-size:9.5px; font-weight:700; text-transform:uppercase; color:#6B7280;}
-.cards .val{font-size:15px; font-weight:bold; color:#0B6B43;}
-.grand{width:100%; border-collapse:collapse; margin-top:14px; border:1.5px solid #1F2937;}
-.grand td{border:1px solid #1F2937; padding:8px 10px; font-size:12px;}
-.grand .lbl{background:#F3F4F6; font-weight:700;}
-.grand .val{background:#EAF7F0; color:#0B6B43; font-weight:bold; font-size:14px; text-align:right;}
-.sig-container{width:100%; margin-top:28px; page-break-inside:avoid; clear:both;}
-.signature-area{float:right; width:200px; text-align:center; page-break-inside:avoid;}
-.sig-img{height:64px; width:auto; max-width:170px; object-fit:contain; display:block; margin:0 auto 4px auto;}
-.sig-line{border-top:1.5px solid #1F2937; margin-top:6px; padding-top:5px; font-weight:bold; font-size:11px; color:#1F2937;}
-.sig-sub{font-size:9px; color:#6B7280; margin-top:2px;}
-</style></head><body>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@page {
+  size: A4 portrait;
+  margin: 136px 26px 74px 26px;
+}
+* { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
+body { font-size: 10.5px; color: #1F2937; line-height: 1.38; margin: 0; background: transparent; }
+
+.bg-letterhead {
+  position: fixed;
+  top: -136px;
+  left: -26px;
+  width: 210mm;
+  height: 297mm;
+  z-index: -1000;
+}
+
+.title {
+  background: #EAF7F0;
+  color: #0B6B43;
+  display: inline-block;
+  padding: 4px 16px;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 2px 0 4px 0;
+}
+.head-row { text-align: center; }
+
+.meta { width: 100%; border-collapse: collapse; font-size: 10px; border: 1.5px solid #1F2937; margin-top: 4px; }
+.meta td { border: 1px solid #1F2937; padding: 4.5px 6px; height: 20px; font-weight: 700; color: #1F2937; }
+.meta-label { background: #EAF7F0; font-weight: 700; width: 120px; }
+
+.items { width: 100%; border-collapse: collapse; border: 1.5px solid #1F2937; margin-top: 10px; }
+.items th { background: #EAF7F0; color: #1F2937; padding: 5px; font-size: 9px; border: 1px solid #1F2937; text-transform: uppercase; font-weight: bold; }
+.items td { border: 1px solid #1F2937; padding: 4px 5px; height: 20px; font-size: 9.5px; }
+.items tr.tot td { background: #EAF7F0; font-weight: bold; }
+.badge { font-size: 9px; font-weight: 700; }
+.paid { color: #168B57; }
+.unpaid { color: #DC2626; }
+.partial { color: #B45309; }
+
+.cards { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.cards td { border: 1.5px solid #1F2937; padding: 6px 8px; text-align: center; width: 25%; }
+.cards .lbl { background: #EAF7F0; font-size: 9px; font-weight: 700; text-transform: uppercase; color: #4B5563; }
+.cards .val { font-size: 13px; font-weight: bold; color: #0B6B43; }
+
+.grand { width: 100%; border-collapse: collapse; margin-top: 10px; border: 1.5px solid #1F2937; }
+.grand td { border: 1px solid #1F2937; padding: 6px 8px; font-size: 11px; }
+.grand .lbl { background: #F3F4F6; font-weight: 700; }
+.grand .val { background: #EAF7F0; color: #0B6B43; font-weight: bold; font-size: 12.5px; text-align: right; }
+
+.sig-container { width: 100%; margin-top: 16px; page-break-inside: avoid; clear: both; }
+.signature-area { float: right; width: 180px; text-align: center; page-break-inside: avoid; }
+.sig-img { height: 44px; width: auto; max-width: 150px; object-fit: contain; display: block; margin: 0 auto 3px auto; }
+.sig-line { border-top: 1.5px solid #1F2937; margin-top: 4px; padding-top: 3px; font-weight: bold; font-size: 10px; color: #1F2937; }
+.sig-sub { font-size: 8.5px; color: #6B7280; margin-top: 1px; }
+</style>
+</head>
+<body>
 @php
-  $labName=$lab->lab_name??'KRISHI ANALYTICAL LAB';
-  $tagline=$lab->tagline??'Discovering Solutions, One Test at a Time';
-  $addr=$lab->address??'182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701';
-  $phone='+91 63793 12357, +91 88838 64756';
-  $email=$lab->email??'krishianalyticallab@gmail.com';
-  $website=$lab->website?:'https://krishilab25.in';
-  $websiteLabel=preg_replace('#^https?://#i', '', $website);
-  $gstin=$lab->gstin??'';
-  $logoPath=file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
+  $letterheadPath = file_exists(public_path('letterhead.png')) ? public_path('letterhead.png') : null;
   $fmt = function($v){ $v = round(floatval($v), 2); return (fmod($v, 1) == 0) ? number_format($v, 0) : number_format($v, 2); };
   $scopeName = $data['scope']==='group'
       ? ($data['group']->name ?? 'Group')
@@ -57,37 +72,16 @@ body{font-size:11px; color:#1F2937; margin:0;}
   $title = $data['scope']==='group' ? 'GROUP SUMMARY' : 'PARTY SUMMARY';
   $balance = round($data['totals']['amount'] - $data['totals']['paid_amount'], 2);
 @endphp
-<div class="header">
-  <table class="header-group">
-    <tr>
-      <td style="width: 120px; text-align: center; vertical-align: middle;">
-        @if(file_exists($logoPath))
-          <img src="{{ $logoPath }}" class="logo" alt="logo">
-          <div class="logo-kla">KLA</div>
-        @endif
-      </td>
-      <td class="brand-block" style="text-align: center; vertical-align: middle;">
-        <div class="brand-name">{{ $labName }}</div>
-        <div class="brand-tagline">“{{ $tagline }}”</div>
-        <div class="brand-address">
-          {{ $addr }}@if($gstin) &nbsp;&bull;&nbsp; GSTIN: {{ $gstin }} @endif
-        </div>
-      </td>
-    </tr>
-  </table>
+
+@if($letterheadPath)
+<div class="bg-letterhead">
+  <img src="{{ $letterheadPath }}" style="width: 210mm; height: 297mm; display: block;" alt="letterhead" />
 </div>
-<div class="footer">
-  <div style="font-size:9px; font-weight:bold; color:#111827; line-height:1.3;">
-    Ph: {{ $phone }} &nbsp;&bull;&nbsp; {{ $email }} &nbsp;&bull;&nbsp; {{ $websiteLabel }}
-  </div>
-  <div class="footer-notes" style="margin-top:2px;">
-    This is a computer generated summary statement.
-  </div>
-</div>
+@endif
 
 <div class="head-row">
   <div class="title">{{ $title }}</div>
-  <div style="font-size:9px; color:#6B7280;">Generated: {{ now()->format('d-M-Y H:i') }}</div>
+  <div style="font-size: 8.5px; color: #6B7280;">Generated: {{ now()->format('d-M-Y H:i') }}</div>
 </div>
 
 <table class="meta">
@@ -110,14 +104,14 @@ body{font-size:11px; color:#1F2937; margin:0;}
 
 <table class="items">
   <tr>
-    <th style="width:34px;">S.No</th>
+    <th style="width:30px;">S.No</th>
     <th>Party</th>
-    <th style="width:62px;">Invoices</th>
-    <th style="width:62px;">Paid</th>
-    <th style="width:62px;">Unpaid</th>
-    <th style="width:62px;">Partial</th>
-    <th style="width:96px;">Amount (₹)</th>
-    <th style="width:96px;">Received (₹)</th>
+    <th style="width:55px;">Invoices</th>
+    <th style="width:50px;">Paid</th>
+    <th style="width:50px;">Unpaid</th>
+    <th style="width:50px;">Partial</th>
+    <th style="width:85px;">Amount (₹)</th>
+    <th style="width:85px;">Received (₹)</th>
   </tr>
   @foreach($data['rows'] as $i => $row)
   <tr>
@@ -150,7 +144,7 @@ body{font-size:11px; color:#1F2937; margin:0;}
 <div class="sig-container">
   <div class="signature-area">
     @php $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? '')); $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null; @endphp
-    @if($sigPath)<img src="{{ $sigPath }}" class="sig-img" alt="signature">@else<div style="height:52px;">&nbsp;</div>@endif
+    @if($sigPath)<img src="{{ $sigPath }}" class="sig-img" alt="signature">@else<div style="height:36px;">&nbsp;</div>@endif
     <div class="sig-line">Authorized Signatory</div>
     <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
   </div>
@@ -171,4 +165,5 @@ body{font-size:11px; color:#1F2937; margin:0;}
     });
   }
 </script>
-</body></html>
+</body>
+</html>

@@ -1,60 +1,52 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"></head>
-@php
-  $addr = $lab->address ?? '';
-  $email = $lab->email ?? '';
-  $phone = '+91 63793 12357, +91 88838 64756';
-  $logo = file_exists(public_path('krishi-logo.png')) ? public_path('krishi-logo.png') : public_path('logo-krishi.png');
-@endphp
+<head>
+<meta charset="utf-8">
 <style>
-  * { box-sizing: border-box; }
-  body { font-family: Krishi, DejaVu Sans, sans-serif; font-size: 11px; color: #1F2937; margin: 0; }
-  @page { size: A4; margin: 110px 14mm 60px 14mm; }
+@page {
+  size: A4 portrait;
+  margin: 136px 26px 74px 26px;
+}
+* { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
+body { font-size: 10.5px; color: #1F2937; line-height: 1.38; margin: 0; background: transparent; }
 
-  .header { position: fixed; top: -110px; left: 0; right: 0; height: 96px; background: #fff; border-bottom: 3px solid #0B6B43; padding: 8px 14px; }
-  .header table { width: 100%; border-collapse: collapse; }
-  .header td { vertical-align: middle; }
-  .logo { height: 76px; width: 76px; object-fit: contain; }
-  .brand-name { font-size: 30px; font-weight: bold; color: #0B6B43; text-align: center; letter-spacing: 1px; }
-  .brand-tagline { font-size: 12px; color: #374151; text-align: center; margin-top: 2px; }
+.bg-letterhead {
+  position: fixed;
+  top: -136px;
+  left: -26px;
+  width: 210mm;
+  height: 297mm;
+  z-index: -1000;
+}
 
-  .title { text-align: center; margin: 0 0 4px; }
-  .title .pill { display: inline-block; background: #EAF7F0; color: #0B6B43; border: 1.5px solid #168B57; font-weight: bold; font-size: 15px; letter-spacing: 2px; padding: 7px 26px; border-radius: 4px; text-transform: uppercase; }
-  .ref { text-align: center; font-size: 11px; color: #6B7280; margin: 6px 0 16px; }
-  .ref b { color: #1F2937; font-size: 13px; }
+.title { text-align: center; margin: 0 0 4px; }
+.title .pill { display: inline-block; background: #EAF7F0; color: #0B6B43; border: 1.5px solid #168B57; font-weight: bold; font-size: 14px; letter-spacing: 2px; padding: 6px 24px; border-radius: 4px; text-transform: uppercase; }
+.ref { text-align: center; font-size: 10.5px; color: #6B7280; margin: 4px 0 12px; }
+.ref b { color: #1F2937; font-size: 12px; }
 
-  table.details { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
-  table.details td { border: 1px solid #D1D5DB; padding: 8px 10px; font-size: 11.5px; }
-  table.details td.lbl { background: #EAF7F0; color: #0B6B43; font-weight: bold; width: 145px; }
-  table.details tr:nth-child(even) td.val { background: #F9FAFB; }
+table.details { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+table.details td { border: 1px solid #D1D5DB; padding: 6px 8px; font-size: 10.5px; }
+table.details td.lbl { background: #EAF7F0; color: #0B6B43; font-weight: bold; width: 130px; }
+table.details tr:nth-child(even) td.val { background: #F9FAFB; }
 
-  .message-box { border: 1.5px solid #168B57; background: #F9FAFB; border-radius: 6px; padding: 10px 12px; margin-bottom: 14px; }
-  .message-box .h { font-weight: bold; color: #0B6B43; margin-bottom: 5px; font-size: 11.5px; }
-  .message-box .b { color: #374151; font-size: 11.5px; }
+.message-box { border: 1.5px solid #168B57; background: #F9FAFB; border-radius: 4px; padding: 8px 10px; margin-bottom: 12px; }
+.message-box .h { font-weight: bold; color: #0B6B43; margin-bottom: 4px; font-size: 11px; }
+.message-box .b { color: #374151; font-size: 10.5px; }
 
-  .next { border-top: 1.5px solid #D1D5DB; padding-top: 10px; font-size: 10.5px; color: #374151; }
-  .next b { color: #0B6B43; }
-
-  .footer { position: fixed; bottom: -60px; left: 0; right: 0; height: 60px; border-top: 2.5px solid #168B57; }
-  .footer-address { text-align: center; font-size: 9.5px; color: #374151; padding-top: 7px; font-weight: bold; }
-  .footer-contact { text-align: center; font-size: 9px; color: #6B7280; margin-top: 3px; }
+.next { border-top: 1.5px solid #D1D5DB; padding-top: 8px; font-size: 9.5px; color: #374151; }
+.next b { color: #0B6B43; }
 </style>
+</head>
+<body>
+@php
+  $letterheadPath = file_exists(public_path('letterhead.png')) ? public_path('letterhead.png') : null;
+@endphp
 
-<div class="header">
-  <table>
-    <tr>
-      <td width="100" style="text-align: center;">
-        <img src="{{ $logo }}" class="logo" alt="logo">
-        <div style="font-size: 10px; font-weight: 900; color: #0B6B43; letter-spacing: 2.5px; margin-top: 1px; text-align: center;">KLA</div>
-      </td>
-      <td>
-        <div class="brand-name">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
-        <div class="brand-tagline">{{ $lab->tagline ?? '' }}</div>
-      </td>
-    </tr>
-  </table>
+@if($letterheadPath)
+<div class="bg-letterhead">
+  <img src="{{ $letterheadPath }}" style="width: 210mm; height: 297mm; display: block;" alt="letterhead" />
 </div>
+@endif
 
 <div class="title"><span class="pill">{{ $e->typeLabel() }}</span></div>
 <div class="ref">Reference: <b>{{ $e->ref() }}</b> &nbsp;&bull;&nbsp; Received: {{ $e->created_at?->format('d M Y, h:i A') }}</div>
@@ -76,12 +68,6 @@
 
 <div class="next">
   <b>Next steps:</b> 1. We call you to confirm requirements &nbsp; 2. Sample collection / lab drop-off &nbsp; 3. Report delivered within promised turnaround with softcopy download.
-</div>
-
-<div class="footer">
-  <div style="font-size:9px; font-weight:bold; color:#1F2937; text-align:center; padding-top:6px; line-height:1.3;">
-    {{ $addr ?: '182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701' }} &nbsp;&bull;&nbsp; Ph: {{ $phone ?: '+91 63793 12357' }} &nbsp;&bull;&nbsp; {{ $email ?: 'krishianalyticallab@gmail.com' }} &nbsp;&bull;&nbsp; {{ $lab->website ? preg_replace('#^https?://#i', '', $lab->website) : 'krishilab25.in' }}
-  </div>
 </div>
 </body>
 </html>
