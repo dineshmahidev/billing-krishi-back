@@ -35,6 +35,7 @@ class CmsController extends Controller
             'contact_email' => 'sometimes|nullable|email|max:255',
             'contact_address' => 'sometimes|nullable|string|max:1000',
             'contact_hours' => 'sometimes|nullable|string|max:255',
+            'map_embed_url' => 'sometimes|nullable|string|max:2000',
             'hero_image' => 'sometimes|nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
             'about_image' => 'sometimes|nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
         ]);

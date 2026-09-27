@@ -8,7 +8,7 @@ class LandingContent extends Model
         'hero_badge','hero_title','hero_highlight','hero_desc','hero_image',
         'stat1_value','stat1_label','stat2_value','stat2_label','stat3_value','stat3_label','stat4_value','stat4_label',
         'about_title','about_desc','about_image',
-        'contact_phone','contact_email','contact_address','contact_hours'
+        'contact_phone','contact_email','contact_address','contact_hours','map_embed_url'
     ];
 
     public static function current(): self
@@ -31,6 +31,7 @@ class LandingContent extends Model
             'contact_email' => 'krishianalyticallab@gmail.com',
             'contact_address' => '182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701',
             'contact_hours' => 'Mon - Sat: 9am - 6pm',
+            'map_embed_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.3589961733287!2d77.5525126!3d11.0116687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba9a180a88cb8a7%3A0xba96d3fb508d6259!2sKrishi%20Analytical%20Lab!5e0!3m2!1sen!2sin!4v1790512063225!5m2!1sen!2sin',
         ]);
     }
 }
