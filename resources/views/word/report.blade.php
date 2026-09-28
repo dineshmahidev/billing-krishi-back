@@ -26,8 +26,11 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 @php
   $labName = $lab->lab_name ?? 'KRISHI ANALYTICAL LAB';
   $tagline = $lab->tagline ?? 'Discovering Solutions, One Test at a Time';
-  $address = $lab->address ?? '182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701';
-  $phone = $lab->phone ?? '+91 63793 12357';
+  $address = $lab->address ?? '182-B, Tiruppur Road, Kangeyam - 638701';
+  $phone = '+91 63793 12357, +91 88838 64756';
+  if (!empty($lab->phone)) {
+      $phone = str_contains($lab->phone, '88838') ? $lab->phone : $lab->phone . ', +91 88838 64756';
+  }
   $email = $lab->email ?? 'info@krishianalyticallab.com';
   $reportTitle = $report->reportType->title ?? 'CERTIFICATE OF ANALYSIS';
   $isFeed = in_array($report->reportType->name ?? '', ['Rice Bran','Animal Feed']);
@@ -44,21 +47,28 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 </div>
 <div style="text-align:center;">
   <div class="title">{{ $reportTitle }}</div>
-  <div style="text-align:right; font-size:9pt;">Report No: <strong style="border:1px solid #1F2937; padding:2px 8px; font-family:monospace;">{{ $report->report_no }}</strong></div>
 </div>
 <div class="outer">
-@php $companyW = $report->party_name ?? $report->customer_name ?? ''; $showSpecW = $report->reportType->show_specification ?? true; $customColsW = $report->reportType->custom_columns ?? []; $rowsW = $report->results->filter(fn($r) => $r->enabled !== false)->values(); @endphp
+@php 
+  $companyW = $report->party_name ?? $report->customer_name ?? ($report->customer?->name ?? ''); 
+  $matchedCustW = $report->customer ?: ($report->customer_id ? \App\Models\Customer::find($report->customer_id) : \App\Models\Customer::where('name', $companyW)->orWhere('company_name', $companyW)->first());
+  $customerAddressW = $matchedCustW?->address ?: ($matchedCustW?->city ? $matchedCustW->city . ($matchedCustW?->pincode ? ' - ' . $matchedCustW->pincode : '') : '');
+  $showSpecW = $report->reportType->show_specification ?? true; 
+  $customColsW = $report->reportType->custom_columns ?? []; 
+  $rowsW = $report->results->filter(fn($r) => $r->enabled !== false)->values(); 
+@endphp
 <table class="meta">
-<tr><td class="meta-label">Sample Date</td><td>{{ $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '' }}&nbsp;</td><td class="meta-label">COA Date</td><td>{{ $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : '' }}&nbsp;</td></tr>
-<tr><td class="meta-label">Party Name</td><td>{{ $companyW }}&nbsp;</td><td class="meta-label">Sample Name</td><td>{{ $report->sample_name }}&nbsp;</td></tr>
-<tr><td class="meta-label">Vehicle No</td><td>{{ $report->vehicle_no }}&nbsp;</td><td class="meta-label">Bill No</td><td>{{ $report->bill_no }}&nbsp;</td></tr>
+<tr><td class="meta-label">Report No</td><td><strong>{{ $report->report_no }}</strong>&nbsp;</td><td class="meta-label">Report Date</td><td><strong>{{ $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : ($report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '') }}</strong>&nbsp;</td></tr>
+<tr><td class="meta-label">Customer</td><td>{{ $companyW }}&nbsp;</td><td class="meta-label">Sample Date</td><td>{{ $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '' }}&nbsp;</td></tr>
+<tr><td class="meta-label">Address</td><td>{{ $customerAddressW ?: '—' }}&nbsp;</td><td class="meta-label">Bill No</td><td>{{ $report->bill_no }}&nbsp;</td></tr>
+<tr><td class="meta-label">Nature of Sample</td><td>{{ $report->nature_of_sample ?: ($report->sample_name ?: 'Sample') }}&nbsp;</td><td class="meta-label">Vehicle No</td><td>{{ $report->vehicle_no }}&nbsp;</td></tr>
 <tr><td class="meta-label">Bags / Tons</td><td>{{ $report->bags_tons }}&nbsp;</td><td class="meta-label">Buyer</td><td>{{ $report->buyer }}&nbsp;</td></tr>
 <tr><td class="meta-label">Seller</td><td colspan="3">{{ $report->seller }}&nbsp;</td></tr>
 </table>
 
-<table class="results"><tr><th style="width:40px;">S.No</th><th>Parameters</th><th style="width:110px;">Result</th>@if($showSpecW)<th>Specification</th>@endif @foreach($customColsW as $col)<th>{{ $col }}</th>@endforeach</tr>
+<table class="results"><tr><th style="width:40px;">S.No</th><th>Parameter</th><th style="width:110px;">Result</th>@if($showSpecW)<th>Specification</th>@endif @foreach($customColsW as $col)<th>{{ $col }}</th>@endforeach</tr>
 @foreach($rowsW as $idx => $res)
-<tr><td style="text-align:center;">{{ $idx+1 }}</td><td><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif</td><td style="text-align:center; font-weight:700;">{{ $res->result }}&nbsp;</td>@if($showSpecW)<td>{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>@endif @foreach($customColsW as $col)<td>&nbsp;</td>@endforeach</tr>
+<tr><td style="text-align:center;">{{ $idx+1 }}</td><td><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif</td><td style="text-align:center; font-weight:700;">{{ $res->result }}&nbsp;</td>@if($showSpecW)<td>{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>@endif @foreach($customColsW as $col) @php $cVal = is_array($res->custom_values) ? ($res->custom_values[$col] ?? '') : ''; @endphp <td>{{ $cVal !== '' ? $cVal : '&nbsp;' }}</td> @endforeach</tr>
 @endforeach
 @for($i = count($rowsW); $i < 8; $i++)<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>@if($showSpecW)<td>&nbsp;</td>@endif @foreach($customColsW as $col)<td>&nbsp;</td>@endforeach</tr>@endfor
 </table>

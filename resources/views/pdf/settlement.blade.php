@@ -5,138 +5,398 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 136px 26px 74px 26px;
+  margin: 14px 22px 56px 22px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
-body { font-size: 10.5px; color: #1F2937; line-height: 1.38; margin: 0; background: transparent; }
+body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; background: #ffffff; }
 
-.bg-letterhead {
-  position: fixed;
-  top: -136px;
-  left: -26px;
-  width: 210mm;
-  height: 297mm;
-  z-index: -1000;
+/* Header Section */
+.header-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 6px;
 }
-
-.title {
-  background: #EAF7F0;
+.header-table td {
+  vertical-align: middle;
+  border: none;
+  padding: 0;
+}
+.logo-box {
+  width: 110px;
+  text-align: left;
+  vertical-align: middle;
+}
+.logo-img {
+  height: 90px;
+  width: 90px;
+  object-fit: contain;
+  display: block;
+}
+.logo-sub-text {
+  font-size: 15px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 4px;
+  text-align: center;
+  width: 90px;
+  margin-top: 2px;
+  line-height: 1;
+}
+.brand-center-box {
+  text-align: center;
+  padding: 0 10px;
+}
+.company-name {
+  font-size: 29px;
+  font-weight: 900;
   color: #0B6B43;
-  display: inline-block;
-  padding: 4px 16px;
-  font-weight: bold;
-  font-size: 12px;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  margin: 2px 0 4px 0;
+  margin: 0;
+  line-height: 1.15;
+}
+.company-tagline {
+  font-size: 13.5px;
+  font-style: italic;
+  font-weight: 700;
+  color: #1F2937;
+  letter-spacing: 0.4px;
+  margin-top: 4px;
 }
 
-.meta-table { width: 100%; border-collapse: collapse; margin: 2px 0 6px 0; font-size: 10px; border: 1.5px solid #1F2937; }
-.meta-table td { padding: 4.5px 6px; border: 1px solid #1F2937; vertical-align: top; font-weight: 700; color: #1F2937; height: 20px; }
-.meta-label { background: #EAF7F0; font-weight: bold; width: 105px; }
+.right-balance-box {
+  width: 110px;
+}
 
-.stmt-table { width: 100%; border-collapse: collapse; margin-top: 2px; }
-.stmt-table th { border-bottom: 1.5px solid #1F2937; padding: 4px 6px; font-size: 9.5px; font-weight: bold; text-align: left; background: #EAF7F0; }
-.stmt-table td { padding: 3px 5px; font-size: 9.5px; vertical-align: top; border: none; }
-.stmt-table tr:nth-child(even) td { background: #F9FAFB; }
-.stmt-table .sno { width: 24px; text-align: left; }
-.stmt-table .desc { text-align: left; }
-.stmt-table .debit { width: 80px; text-align: right; }
-.stmt-table .credit { width: 80px; text-align: right; }
+/* Pure Clean Bold Black SETTLEMENT STATEMENT Title */
+.report-title-container {
+  text-align: center;
+  margin: 8px 0 6px 0;
+}
+.report-main-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.2;
+}
 
-.totals-section { width: 100%; border-top: 1.5px solid #1F2937; margin-top: 4px; padding-top: 3px; }
-.totals-table { width: 100%; border-collapse: collapse; }
-.totals-table td { padding: 2px 5px; font-size: 9.5px; font-weight: bold; border: none; }
-.totals-table .lbl { text-align: left; padding-left: 24px; }
-.totals-table .val-d { width: 80px; text-align: right; }
-.totals-table .val-c { width: 80px; text-align: right; }
+/* Top Meta Bar */
+.top-meta-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6px 0 6px 0;
+  font-size: 11px;
+}
+.top-meta-table td {
+  border: none;
+  padding: 2px 0;
+}
 
-.bottom-container { width: 100%; margin-top: 14px; page-break-inside: avoid; clear: both; }
-.bottom-table { width: 100%; border-collapse: collapse; }
-.bottom-table td { vertical-align: bottom; border: none; padding: 0; }
+/* Customer & Statement Details 2-Column Section (Clean Borderless) */
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 6px;
+  font-size: 10.5px;
+}
+.details-table td {
+  vertical-align: top;
+  border: none;
+  padding: 2.5px 2px;
+}
+.lbl-col {
+  width: 125px;
+  color: #000000;
+  font-weight: 600;
+}
+.sep-col {
+  width: 10px;
+  text-align: center;
+  font-weight: 600;
+  color: #000000;
+}
+.val-col {
+  color: #000000;
+  font-weight: 700;
+}
 
-.bal-box { border: 1.5px solid #D946EF; background: #fff; display: inline-block; }
-.bal-lbl { border-right: 1.5px solid #D946EF; padding: 3px 6px; font-size: 10px; font-weight: bold; color: #C026D3; }
-.bal-val { padding: 3px 8px; font-size: 10px; font-weight: bold; color: #C026D3; }
+/* Statement Table */
+.stmt-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+  border: 1.5px solid #000000;
+}
+.stmt-table th {
+  background: #ffffff;
+  color: #000000;
+  padding: 5.5px 6px;
+  font-size: 10.5px;
+  font-weight: 900;
+  text-align: left;
+  border: 1px solid #000000;
+  text-transform: uppercase;
+}
+.stmt-table td {
+  border: 1px solid #000000;
+  padding: 4.5px 6px;
+  font-size: 10px;
+  vertical-align: middle;
+}
 
-.sig-block { text-align: center; width: 180px; margin-left: auto; }
-.sig-for { color: #0B6B43; font-weight: bold; font-size: 9.5px; margin-bottom: 3px; }
-.sig-img { height: 42px; width: auto; max-width: 150px; object-fit: contain; display: block; margin: 0 auto 2px auto; }
-.sig-signer { font-weight: bold; font-size: 9.5px; color: #111827; }
-.sig-sub { font-size: 8px; color: #4B5563; }
+.totals-section {
+  width: 100%;
+  margin-top: 8px;
+}
+.totals-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #000000;
+}
+.totals-table td {
+  border: 1px solid #000000;
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: bold;
+}
+.totals-table .lbl {
+  text-align: left;
+  background: #F9FAFB;
+}
+
+.bottom-container {
+  width: 100%;
+  margin-top: 14px;
+  page-break-inside: avoid;
+  clear: both;
+}
+.bottom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.bottom-table td {
+  vertical-align: middle;
+  border: none;
+  padding: 0;
+}
+.bal-box {
+  border: 1.5px solid #000000;
+  background: #ffffff;
+  display: inline-block;
+}
+.bal-lbl {
+  border-right: 1.5px solid #000000;
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  background: #F9FAFB;
+}
+.bal-val {
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #0B6B43;
+}
+
+/* Signatory Section */
+.sig-box {
+  float: right;
+  width: 200px;
+  text-align: center;
+}
+.sig-img {
+  height: 48px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 3px auto;
+}
+.sig-name {
+  font-weight: bold;
+  font-size: 11px;
+  color: #000000;
+}
+.sig-title {
+  font-size: 10px;
+  color: #374151;
+  margin-top: 1px;
+}
+
+/* Static Bottom Pinned Footer */
+.footer-pinned-container {
+  position: fixed;
+  bottom: -50px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-top: 1px solid #000000;
+  padding-top: 4px;
+  text-align: center;
+}
+.footer-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+.footer-table td {
+  text-align: center;
+  border: none;
+  padding: 1px 0;
+  vertical-align: middle;
+}
+.footer-line-1 {
+  font-size: 9.5px;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+  line-height: 1.3;
+}
+.footer-line-2 {
+  font-size: 9.5px;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+  line-height: 1.3;
+}
+.footer-line-3 {
+  font-size: 8.5px;
+  color: #1F2937;
+  text-align: center;
+  line-height: 1.25;
+}
+.rupee {
+  font-family: 'DejaVu Sans', sans-serif;
+  font-weight: normal;
+}
 </style>
 </head>
 <body>
 @php
-  $letterheadPath = public_path('letterhead.png');
-  $hasLetterhead = file_exists($letterheadPath);
-  $fmt = function($v){ $v = round(floatval($v), 2); return number_format($v, 2); };
+  $logoPath = file_exists(public_path('krishi-transparent.png')) 
+      ? public_path('krishi-transparent.png') 
+      : (file_exists(public_path('krishi-logo.png')) ? public_path('krishi-logo.png') : public_path('logo-krishi.png'));
   $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? ''));
   $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null;
-
-  $custName = $data['customer_name'] ?? 'Party';
+  
+  $fmt = function($v){ $v = round(floatval($v), 2); return number_format($v, 2); };
+  $custName = $data['customer_name'] ?? 'Customer';
   $custAddr = $data['customer_address'] ?? '';
   $fromFormatted = \Carbon\Carbon::parse($data['range']['from'])->format('d-M-Y');
   $toFormatted = \Carbon\Carbon::parse($data['range']['to'])->format('d-M-Y');
+  
+  $phone = '+91 63793 12357, +91 88838 64756';
+  if (!empty($lab->phone)) {
+      $phone = str_contains($lab->phone, '88838') ? $lab->phone : $lab->phone . ', +91 88838 64756';
+  }
+  $email = $lab->email ?: 'krishianalyticallab@gmail.com';
+  $website = $lab->website ?: 'www.krishilab25.in';
+  $websiteClean = preg_replace('#^https?://#i', '', $website);
 @endphp
 
-@if($hasLetterhead)
-  <div class="bg-letterhead">
-    <img src="{{ $letterheadPath }}" style="width: 210mm; height: 297mm; display: block;" alt="letterhead">
-  </div>
-@endif
-
-<div style="text-align:center;">
-  <div class="title">CUSTOMER - ACCOUNT STATEMENT</div>
-</div>
-
-<table class="meta-table">
+<!-- Header: Left Logo + KAL | Center Company Name + Tagline -->
+<table class="header-table">
   <tr>
-    <td class="meta-label">Customer / Party</td>
-    <td>
-      <div><strong>{{ $custName }}</strong></div>
-      @if($custAddr)<div style="font-size:9px; color:#4B5563; margin-top:1px; font-weight:normal;">{!! nl2br(e($custAddr)) !!}</div>@endif
+    <td class="logo-box">
+      @if(file_exists($logoPath))
+        <img src="{{ $logoPath }}" class="logo-img" alt="KAL Logo">
+        <div class="logo-sub-text">KAL</div>
+      @endif
     </td>
-    <td class="meta-label">Duration</td>
-    <td style="width:130px;"><strong>{{ $fromFormatted }} to {{ $toFormatted }}</strong></td>
+    <td class="brand-center-box">
+      <div class="company-name">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
+      <div class="company-tagline">“{{ $lab->tagline ?? 'Discovering Solutions, One Test at a Time' }}”</div>
+    </td>
+    <td class="right-balance-box"></td>
   </tr>
-  @if(!empty($data['filter_types_label']))
-  <tr>
-    <td class="meta-label">Report Type</td>
-    <td colspan="3"><span style="color:#0B6B43; font-weight:bold;">{{ $data['filter_types_label'] }}</span></td>
-  </tr>
-  @endif
 </table>
 
+<!-- Pure Clean Bold Black SETTLEMENT STATEMENT Title -->
+<div class="report-title-container">
+  <div class="report-main-title">CUSTOMER - ACCOUNT STATEMENT</div>
+</div>
+
+<!-- Customer & Statement Details (Two Columns Key-Value - NO BOX) -->
+<table class="details-table">
+  <tr>
+    <!-- Left Column -->
+    <td style="width: 55%; padding-right: 8px;">
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td class="lbl-col">Customer</td>
+          <td class="sep-col">:</td>
+          <td class="val-col">
+            {{ $custName }}
+          </td>
+        </tr>
+        @if(!empty($custAddr))
+        <tr>
+          <td class="lbl-col">Address</td>
+          <td class="sep-col">:</td>
+          <td class="val-col">{{ $custAddr }}</td>
+        </tr>
+        @endif
+        @if(!empty($data['filter_types_label']))
+        <tr>
+          <td class="lbl-col">Report Type</td>
+          <td class="sep-col">:</td>
+          <td class="val-col" style="color: #0B6B43;">{{ $data['filter_types_label'] }}</td>
+        </tr>
+        @endif
+      </table>
+    </td>
+
+    <!-- Right Column -->
+    <td style="width: 45%; padding-left: 8px;">
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td class="lbl-col" style="width: 90px;">Period</td>
+          <td class="sep-col">:</td>
+          <td class="val-col">{{ $fromFormatted }} to {{ $toFormatted }}</td>
+        </tr>
+        <tr>
+          <td class="lbl-col" style="width: 90px;">Statement Date</td>
+          <td class="sep-col">:</td>
+          <td class="val-col">{{ \Carbon\Carbon::now()->format('d-M-Y') }}</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<!-- Statement Items Table -->
 <table class="stmt-table">
   <thead>
     <tr>
-      <th class="sno">S.No</th>
-      <th class="desc">Date &amp; Test Parameters / Description</th>
-      <th class="debit">Debit (₹)</th>
-      <th class="credit">Credit (₹)</th>
+      <th style="width: 34px; text-align: center;">S.No</th>
+      <th>Date &amp; Test Parameters / Description</th>
+      <th style="width: 85px; text-align: right;">Debit (<span class="rupee">&#8377;</span>)</th>
+      <th style="width: 85px; text-align: right;">Credit (<span class="rupee">&#8377;</span>)</th>
     </tr>
   </thead>
   <tbody>
     @foreach($data['statement_rows'] as $row)
       <tr>
-        <td class="sno">{{ $row['sno'] }}.</td>
-        <td class="desc">
+        <td style="text-align: center;">{{ $row['sno'] }}.</td>
+        <td>
           @if($row['type'] === 'ob')
             <strong>O/B (Opening Balance)</strong>
           @else
-            <span style="font-weight:bold; color:#0B6B43; margin-right:4px;">{{ $row['date'] }}</span>
+            <span style="font-weight: bold; color: #0B6B43; margin-right: 4px;">{{ $row['date'] }}</span>
             @if(!empty($row['company_name']))
-              <strong style="color:#111827; font-size:9.5px; margin-right:4px;">[{{ $row['company_name'] }}]</strong>
+              <strong style="color: #000000; font-size: 9.5px; margin-right: 4px;">[{{ $row['company_name'] }}]</strong>
             @endif
             <span>{{ $row['params_text'] }}</span>
             @if(!empty($row['vehicle_no']))
-              <span style="color:#6B7280; font-size:8.5px;">({{ $row['vehicle_no'] }})</span>
+              <span style="color: #4B5563; font-size: 8.5px;">({{ $row['vehicle_no'] }})</span>
             @endif
           @endif
         </td>
-        <td class="debit">{{ $fmt($row['debit']) }}</td>
-        <td class="credit">{{ $fmt($row['credit']) }}</td>
+        <td style="text-align: right;">{{ $fmt($row['debit']) }}</td>
+        <td style="text-align: right;">{{ $fmt($row['credit']) }}</td>
       </tr>
     @endforeach
   </tbody>
@@ -146,13 +406,12 @@ body { font-size: 10.5px; color: #1F2937; line-height: 1.38; margin: 0; backgrou
   <table class="totals-table">
     <tr>
       <td class="lbl">Net Total</td>
-      <td class="val-d">{{ $fmt($data['totals']['total_debit']) }}</td>
-      <td class="val-c">{{ $fmt($data['totals']['total_credit']) }}</td>
+      <td style="width: 85px; text-align: right;">{{ $fmt($data['totals']['total_debit']) }}</td>
+      <td style="width: 85px; text-align: right;">{{ $fmt($data['totals']['total_credit']) }}</td>
     </tr>
     <tr>
       <td class="lbl">Balance Outstanding</td>
-      <td class="val-d" style="color:#0B6B43; font-size:10.5px;">₹ {{ $fmt($data['totals']['balance']) }}</td>
-      <td class="val-c"></td>
+      <td colspan="2" style="text-align: right; color: #0B6B43; font-size: 11.5px; font-weight: 900;"><span class="rupee">&#8377;</span> {{ $fmt($data['totals']['balance']) }}</td>
     </tr>
   </table>
 </div>
@@ -160,22 +419,42 @@ body { font-size: 10.5px; color: #1F2937; line-height: 1.38; margin: 0; backgrou
 <div class="bottom-container">
   <table class="bottom-table">
     <tr>
-      <td style="width:55%;">
+      <td style="width: 55%;">
         <div class="bal-box">
-          <span class="bal-lbl">Balance Rs</span><span class="bal-val">₹ {{ $fmt($data['totals']['balance']) }}/-</span>
+          <span class="bal-lbl">Balance Rs</span><span class="bal-val"><span class="rupee">&#8377;</span> {{ $fmt($data['totals']['balance']) }}/-</span>
         </div>
       </td>
-      <td style="width:45%; text-align:right;">
-        <div class="sig-block">
-          <div class="sig-for">For KRISHI ANALYTICAL LAB</div>
+      <td style="width: 45%; text-align: right;">
+        <div class="sig-box">
           @if($sigPath)
-            <img src="{{ $sigPath }}" class="sig-img" alt="signature">
+            <img src="{{ $sigPath }}" class="sig-img" alt="Signature">
           @else
-            <div style="height:42px;">&nbsp;</div>
+            <div style="height: 48px;">&nbsp;</div>
           @endif
-          <div class="sig-signer">Authorized Signatory</div>
-          <div class="sig-sub">(Authorised Signatory)</div>
+          <div class="sig-name">Authorized Signatory</div>
+          <div class="sig-title">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
         </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Static Pinned Bottom Footer -->
+<div class="footer-pinned-container">
+  <table class="footer-table">
+    <tr>
+      <td class="footer-line-1">
+        Address: {{ $lab->address ?? '182-B, Tiruppur Road, Kangeyam - 638701, Tamil Nadu, India.' }}
+      </td>
+    </tr>
+    <tr>
+      <td class="footer-line-2">
+        Ph: {{ $phone }} &nbsp;&bull;&nbsp; Email: {{ $email }} &nbsp;&bull;&nbsp; Web: {{ $websiteClean }}
+      </td>
+    </tr>
+    <tr>
+      <td class="footer-line-3">
+        Note: This is a computer-generated account statement.
       </td>
     </tr>
   </table>
@@ -186,12 +465,12 @@ body { font-size: 10.5px; color: #1F2937; line-height: 1.38; margin: 0; backgrou
     $pdf->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
       if ($pageCount > 1) {
         $text = "Page " . $pageNumber . " of " . $pageCount;
-        $size = 7.5;
+        $size = 8;
         $font = $fontMetrics->getFont("Helvetica");
         $width = $fontMetrics->getTextWidth($text, $font, $size);
         $x = ($canvas->get_width() - $width) / 2;
-        $y = $canvas->get_height() - 14;
-        $canvas->text($x, $y, $text, $font, $size, array(0.42, 0.45, 0.5));
+        $y = $canvas->get_height() - 8;
+        $canvas->text($x, $y, $text, $font, $size, array(0.12, 0.16, 0.22));
       }
     });
   }

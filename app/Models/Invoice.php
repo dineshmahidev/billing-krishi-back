@@ -34,7 +34,7 @@ class Invoice extends Model
             $order++;
             $item = $existing->get($res->parameter_id);
             $rate = $item ? floatval($item->rate) : floatval($res->parameter->price ?? 0);
-            $qty = $item ? max(1, (int)$item->qty) : 1;
+            $qty = $item ? max(0, (int)$item->qty) : 1;
             InvoiceItem::create([
                 'invoice_id' => $this->id,
                 'parameter_id' => $res->parameter_id,

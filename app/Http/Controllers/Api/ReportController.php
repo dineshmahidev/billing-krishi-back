@@ -61,6 +61,7 @@ class ReportController extends Controller
             'coa_date'=>'nullable|date',
             'party_name'=>'nullable|string',
             'customer_name'=>'nullable|string',
+            'address'=>'nullable|string',
             'sample_name'=>'nullable|string',
             'nature_of_sample'=>'nullable|string',
             'vehicle_no'=>'nullable|string',
@@ -73,6 +74,7 @@ class ReportController extends Controller
             'results.*.parameter_id'=>'required|integer',
             'results.*.result'=>'nullable|string',
             'results.*.specification'=>'nullable|string',
+            'results.*.custom_values'=>'nullable|array',
             'results.*.enabled'=>'sometimes|nullable|boolean',
         ]);
         // Scoped existence checks (raw exists: rules bypass demo isolation)
@@ -93,13 +95,19 @@ class ReportController extends Controller
         }
         // Auto-create customer/company if new name entered (selectable + manually enterable) and capture customer_id for auto-fetch
         $customerId = null;
+        $addressVal = !empty($data['address']) ? trim($data['address']) : null;
         foreach (['party_name','customer_name'] as $field) {
             if (!empty($data[$field])) {
                 $name = trim($data[$field]);
                 if ($name) {
-                    $customer = \App\Models\Customer::where('name', $name)->first();
+                    $customer = \App\Models\Customer::where('name', $name)->orWhere('company_name', $name)->first();
                     if (!$customer) {
-                        try { $customer = \App\Models\Customer::create(['name' => $name, 'company_name' => $name]); } catch (\Throwable $e) {}
+                        try { $customer = \App\Models\Customer::create(['name' => $name, 'company_name' => $name, 'address' => $addressVal]); } catch (\Throwable $e) {}
+                    } elseif ($addressVal && empty($customer->address)) {
+                        try { $customer->update(['address' => $addressVal]); } catch (\Throwable $e) {}
+                    } elseif (empty($addressVal) && !empty($customer->address)) {
+                        $addressVal = $customer->address;
+                        $data['address'] = $customer->address;
                     }
                     if ($customer && !$customerId) $customerId = $customer->id;
                 }
@@ -115,6 +123,7 @@ class ReportController extends Controller
                 'coa_date'=>$data['coa_date'] ?? now()->toDateString(),
                 'party_name'=>$data['party_name'] ?? null,
                 'customer_name'=>$data['customer_name'] ?? null,
+                'address'=>$data['address'] ?? null,
                 'sample_name'=>$data['sample_name'] ?? null,
                 'nature_of_sample'=>$data['nature_of_sample'] ?? null,
                 'vehicle_no'=>$data['vehicle_no'] ?? null,
@@ -134,6 +143,7 @@ class ReportController extends Controller
                     'parameter_id'=>$r['parameter_id'],
                     'result'=> $r['result'] ?? '-',
                     'specification'=> $r['specification'] ?? $param->specification ?? '',
+                    'custom_values'=> !empty($r['custom_values']) ? $r['custom_values'] : null,
                     'enabled'=> array_key_exists('enabled', $r) ? (bool)($r['enabled'] ?? true) : true,
                     'display_order'=> $i+1,
                 ]);
@@ -177,6 +187,7 @@ class ReportController extends Controller
             'coa_date'=>'nullable|date',
             'party_name'=>'nullable|string',
             'customer_name'=>'nullable|string',
+            'address'=>'sometimes|nullable|string',
             'sample_name'=>'nullable|string',
             'nature_of_sample'=>'nullable|string',
             'vehicle_no'=>'nullable|string',
@@ -189,6 +200,7 @@ class ReportController extends Controller
             'results.*.parameter_id'=>'required_with:results|exists:parameters,id',
             'results.*.result'=>'nullable|string',
             'results.*.specification'=>'nullable|string',
+            'results.*.custom_values'=>'nullable|array',
             'results.*.enabled'=>'sometimes|nullable|boolean',
         ]);
         if (array_key_exists('report_no', $data) && trim((string)$data['report_no']) === '') {
@@ -206,15 +218,19 @@ class ReportController extends Controller
                         'parameter_id'=>$r['parameter_id'],
                         'result'=> $r['result'] ?? '-',
                         'specification'=> $r['specification'] ?? $param->specification ?? '',
+                        'custom_values'=> !empty($r['custom_values']) ? $r['custom_values'] : null,
                         'enabled'=> array_key_exists('enabled', $r) ? (bool)($r['enabled'] ?? true) : true,
                         'display_order'=> $i+1,
                     ]);
                 }
             }
         });
-        // Keep invoice lines + totals in sync with enabled parameters (edited rates kept)
+        // Keep invoice metadata + lines + totals in sync with enabled parameters (edited rates kept)
         $invoice = Invoice::where('report_id', $report->id)->first();
         if ($invoice) {
+            $invoice->party_name = $report->party_name;
+            $invoice->customer_name = $report->customer_name;
+            $invoice->save();
             $invoice->syncItems($report);
             $invoice->recalcTotals();
         }
@@ -251,7 +267,7 @@ class ReportController extends Controller
         // Keep unauthenticated fallback to avoid blocking direct window.open during transition.
         $user = $this->resolveUser($request);
         // if (!$user) return response()->json(['message' => 'Unauthenticated'], 401);
-        $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
+        $report = Report::with(['reportType','creator','customer.group','results.parameter'])->findOrFail($id);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
         PdfFont::apply($pdf);
@@ -263,7 +279,7 @@ class ReportController extends Controller
     public function downloadPdf(Request $request, $id)
     {
         $user = $this->resolveUser($request);
-        $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
+        $report = Report::with(['reportType','creator','customer.group','results.parameter'])->findOrFail($id);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.report', compact('report','lab'));
         PdfFont::apply($pdf);
@@ -275,7 +291,7 @@ class ReportController extends Controller
     public function word(Request $request, $id)
     {
         $user = $this->resolveUser($request);
-        $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
+        $report = Report::with(['reportType','creator','customer.group','results.parameter'])->findOrFail($id);
         $lab = LabSetting::current();
         $html = view('word.report', compact('report','lab'))->render();
         $filename = $this->wordFilename($report);
@@ -288,7 +304,7 @@ class ReportController extends Controller
     public function downloadWord(Request $request, $id)
     {
         $user = $this->resolveUser($request);
-        $report = Report::with(['reportType','creator','results.parameter'])->findOrFail($id);
+        $report = Report::with(['reportType','creator','customer.group','results.parameter'])->findOrFail($id);
         $lab = LabSetting::current();
         $html = view('word.report', compact('report','lab'))->render();
         $filename = $this->wordFilename($report);
@@ -301,7 +317,7 @@ class ReportController extends Controller
     private function findOrFailByNo(string $reportNo): Report
     {
         $no = trim($reportNo);
-        $report = Report::with(['reportType','creator','results.parameter'])
+        $report = Report::with(['reportType','creator','customer.group','results.parameter'])
             ->where('report_no', $no)
             ->orWhere('report_no', strtoupper($no))
             ->first();
@@ -310,7 +326,7 @@ class ReportController extends Controller
             $digits = preg_replace('/\D+/', '', $no);
             if ($digits !== '') {
                 $padded = 'KAL-'.str_pad($digits, 4, '0', STR_PAD_LEFT);
-                $report = Report::with(['reportType','creator','results.parameter'])
+                $report = Report::with(['reportType','creator','customer.group','results.parameter'])
                     ->where('report_no', $padded)
                     ->orWhere('report_no', 'like', 'KAL-'.$digits)
                     ->first();

@@ -5,98 +5,160 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 18px 24px 20px 24px;
+  margin: 12px 20px 48px 20px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
-body { font-size: 10px; color: #111827; line-height: 1.35; margin: 0; background: #ffffff; }
+body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; background: #ffffff; }
 
-/* Header */
+/* Header Section */
 .header-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 .header-table td {
   vertical-align: middle;
   border: none;
   padding: 0;
 }
+.logo-box {
+  width: 110px;
+  text-align: left;
+  vertical-align: middle;
+}
 .logo-img {
-  height: 65px;
-  width: auto;
-  max-width: 90px;
+  height: 85px;
+  width: 85px;
   object-fit: contain;
   display: block;
 }
+.logo-sub-text {
+  font-size: 14px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 4px;
+  text-align: center;
+  width: 85px;
+  margin-top: 1px;
+  line-height: 1;
+}
+.brand-center-box {
+  text-align: center;
+  padding: 0 10px;
+}
 .company-name {
-  font-size: 18px;
+  font-size: 28px;
   font-weight: 900;
   color: #0B6B43;
   letter-spacing: 0.8px;
   text-transform: uppercase;
+  margin: 0;
+  line-height: 1.15;
+}
+.company-tagline {
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 700;
+  color: #1F2937;
+  letter-spacing: 0.4px;
+  margin-top: 3px;
+}
+
+.right-balance-box {
+  width: 110px;
+}
+
+/* Pure Clean Bold Black CERTIFICATE OF ANALYSIS Title - No shades / No box */
+.report-title-container {
   text-align: center;
-  margin-bottom: 4px;
+  margin: 6px 0 4px 0;
 }
 .report-main-title {
-  font-size: 14px;
-  font-weight: 800;
-  color: #1F2937;
-  letter-spacing: 1.5px;
+  font-size: 21px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  text-align: center;
+  margin: 0;
+  line-height: 1.2;
 }
 
 /* Top Meta Bar */
 .top-meta-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 10px 0 6px 0;
-  font-size: 10px;
+  margin: 4px 0 6px 0;
+  font-size: 11.5px;
+  font-weight: bold;
 }
 .top-meta-table td {
   border: none;
-  padding: 1.5px 0;
+  padding: 1px 0;
+  font-weight: bold;
+  color: #000000;
 }
 
 /* Customer & Sample Details 2-Column Section */
 .details-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 8px;
-  font-size: 9.5px;
+  margin-bottom: 6px;
+  table-layout: fixed;
 }
 .details-table td {
   vertical-align: top;
   border: none;
-  padding: 2.5px 2px;
+  padding: 0;
+}
+.inner-meta-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.inner-meta-table td {
+  border: none;
+  padding: 3px 0;
+  vertical-align: top;
+  font-size: 11.5px;
+  font-weight: bold;
+  color: #000000;
+  line-height: 1.35;
 }
 .lbl-col {
-  width: 145px;
-  color: #1F2937;
-  font-weight: 600;
+  width: 122px;
+  white-space: nowrap;
+  font-weight: bold;
+  color: #000000;
+  font-size: 11.5px;
 }
 .sep-col {
-  width: 12px;
+  width: 14px;
   text-align: center;
-  font-weight: 600;
-  color: #1F2937;
+  white-space: nowrap;
+  font-weight: bold;
+  color: #000000;
+  font-size: 11.5px;
 }
 .val-col {
-  color: #111827;
-  font-weight: 700;
-  font-style: italic;
+  font-weight: bold;
+  color: #000000;
+  font-size: 11.5px;
+  word-wrap: break-word;
 }
 
-/* Section Title */
-.section-title {
+/* Pure Clean Bold Black TEST RESULTS Section Title */
+.section-title-container {
   text-align: center;
-  font-size: 11px;
+  margin: 10px 0 12px 0;
+}
+.section-title {
+  font-size: 19px;
   font-weight: 900;
-  letter-spacing: 1.5px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: #111827;
-  margin: 6px 0 4px 0;
-  padding: 2px 0;
+  color: #000000;
+  margin: 0;
+  line-height: 1.2;
 }
 
 /* Test Results Table */
@@ -104,54 +166,50 @@ body { font-size: 10px; color: #111827; line-height: 1.35; margin: 0; background
   width: 100%;
   border-collapse: collapse;
   margin-top: 2px;
-  border: 1px solid #111827;
+  border: 1.5px solid #000000;
 }
 .results-table th {
   background: #ffffff;
-  color: #111827;
-  padding: 4.5px 5px;
-  font-size: 9.5px;
-  font-weight: 800;
+  color: #000000;
+  padding: 5.5px 6px;
+  font-size: 10.5px;
+  font-weight: 900;
   text-align: left;
-  border: 1px solid #111827;
+  border: 1px solid #000000;
+  text-transform: uppercase;
 }
 .results-table td {
-  padding: 4px 5px;
-  font-size: 9.5px;
-  border: 1px solid #111827;
+  padding: 4.5px 6px;
+  font-size: 10.5px;
+  border: 1px solid #000000;
   vertical-align: middle;
-  color: #111827;
-}
-.results-table tr.category-row td {
-  font-weight: 800;
-  background: #ffffff;
-  padding: 3.5px 5px;
+  color: #000000;
 }
 
 /* Note and End of Report */
 .customer-info-note {
-  font-size: 8.5px;
+  text-align: center;
+  font-size: 9.5px;
   font-weight: normal;
-  color: #374151;
-  margin-top: 4px;
+  color: #1F2937;
+  margin-top: 6px;
 }
 .customer-info-note em {
   font-weight: bold;
-  font-style: italic;
 }
 .end-report-banner {
   text-align: center;
-  font-size: 9.5px;
-  font-weight: 700;
+  font-size: 10.5px;
+  font-weight: 800;
   letter-spacing: 1.5px;
-  margin: 10px 0 6px 0;
-  color: #111827;
+  margin: 8px 0 5px 0;
+  color: #000000;
 }
 
 /* Signatory Section */
 .sig-wrapper {
   width: 100%;
-  margin-top: 14px;
+  margin-top: 10px;
   page-break-inside: avoid;
   clear: both;
 }
@@ -170,32 +228,56 @@ body { font-size: 10px; color: #111827; line-height: 1.35; margin: 0; background
 }
 .sig-name {
   font-weight: bold;
-  font-size: 10px;
-  color: #1F2937;
+  font-size: 11px;
+  color: #000000;
 }
 .sig-title {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: #0284C7;
+  font-size: 10px;
+  color: #374151;
   margin-top: 1px;
 }
 
-/* Footer Section */
-.footer-disclaimer-container {
+/* Static Bottom Pinned Footer */
+.footer-pinned-container {
   position: fixed;
-  bottom: 0;
+  bottom: -42px;
   left: 0;
   right: 0;
-  border-top: 1px solid #111827;
-  padding-top: 4px;
-  font-size: 7.5px;
-  color: #374151;
-  line-height: 1.25;
+  width: 100%;
+  border-top: 1px solid #000000;
+  padding-top: 3px;
+  text-align: center;
 }
-.footer-lab-address {
+.footer-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+.footer-table td {
+  text-align: center;
+  border: none;
+  padding: 1px 0;
+  vertical-align: middle;
+}
+.footer-line-1 {
+  font-size: 9.5px;
   font-weight: bold;
-  color: #111827;
-  margin-bottom: 2px;
+  color: #000000;
+  text-align: center;
+  line-height: 1.3;
+}
+.footer-line-2 {
+  font-size: 9.5px;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+  line-height: 1.3;
+}
+.footer-line-3 {
+  font-size: 8.5px;
+  color: #1F2937;
+  text-align: center;
+  line-height: 1.25;
 }
 </style>
 </head>
@@ -208,116 +290,141 @@ body { font-size: 10px; color: #111827; line-height: 1.35; margin: 0; background
   $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null;
   
   $customerName = $report->party_name ?: ($report->customer_name ?: ($report->customer?->company_name ?: ($report->customer?->name ?: '—')));
-  $customerAddress = $report->customer?->address ?: ($report->customer?->city ? $report->customer->city . ($report->customer?->pincode ? ' - ' . $report->customer->pincode : '') : 'Kangeyam, Tamil Nadu');
-  $sampleDateFormatted = $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d M Y') : \Carbon\Carbon::parse($report->created_at)->format('d M Y');
-  $coaDateFormatted = $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d M Y') : $sampleDateFormatted;
+  $matchedCustomer = $report->customer ?: ($report->customer_id ? \App\Models\Customer::find($report->customer_id) : \App\Models\Customer::where('name', $customerName)->orWhere('company_name', $customerName)->first());
+  $customerAddress = $report->address ?: ($matchedCustomer?->address ?: ($matchedCustomer?->city ? $matchedCustomer->city . ($matchedCustomer?->pincode ? ' - ' . $matchedCustomer->pincode : '') : ''));
+  
+  $sampleDateFormatted = $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : ($report->created_at ? \Carbon\Carbon::parse($report->created_at)->format('d-M-Y') : '—');
+  $coaDateFormatted = $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : $sampleDateFormatted;
+  
+  $showSpec = $report->reportType->show_specification ?? true;
+  $customCols = $report->reportType->custom_columns ?? [];
+  $quantityLabel = $report->reportType?->quantity_label ?: 'Quantity (Bags / Tons)';
+  
+  $phone = '+91 63793 12357, +91 88838 64756';
+  if (!empty($lab->phone)) {
+      $phone = str_contains($lab->phone, '88838') ? $lab->phone : $lab->phone . ', +91 88838 64756';
+  }
+  $email = $lab->email ?: 'krishianalyticallab@gmail.com';
+  $website = $lab->website ?: 'www.krishilab25.in';
+  $websiteClean = preg_replace('#^https?://#i', '', $website);
   
   $rows = $report->results->filter(fn($r) => $r->enabled !== false && $r->parameter && $r->parameter->active)->values();
 @endphp
 
-<!-- Header -->
+<!-- Header: Left Logo + KAL | Center Company Name + Tagline -->
 <table class="header-table">
   <tr>
-    <td style="width: 85px; text-align: left;">
+    <td class="logo-box">
       @if(file_exists($logoPath))
         <img src="{{ $logoPath }}" class="logo-img" alt="KAL Logo">
+        <div class="logo-sub-text">KAL</div>
       @endif
     </td>
-    <td style="text-align: center;">
+    <td class="brand-center-box">
       <div class="company-name">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
-      <div class="report-main-title">TEST REPORT</div>
+      <div class="company-tagline">“{{ $lab->tagline ?? 'Discovering Solutions, One Test at a Time' }}”</div>
     </td>
-    <td style="width: 85px; text-align: right;">
-      <!-- No badge as requested -->
-      &nbsp;
-    </td>
+    <td class="right-balance-box"></td>
   </tr>
 </table>
 
-<!-- Top Meta Bar (Report No, Page, Report Date) -->
+<!-- Pure Clean Bold Black CERTIFICATE OF ANALYSIS Title -->
+<div class="report-title-container">
+  <div class="report-main-title">CERTIFICATE OF ANALYSIS</div>
+</div>
+
+<!-- Top Meta Bar (Report No opposite Report Date with bottom margin) -->
 <table class="top-meta-table">
   <tr>
-    <td style="text-align: left; width: 60%;">
-      Report No &nbsp;: &nbsp;<strong>{{ $report->report_no }}</strong>
+    <td style="text-align: left; width: 50%;">
+      Report No &nbsp;: &nbsp;{{ $report->report_no }}
     </td>
-    <td style="text-align: right; width: 40%;">
-      Report Date &nbsp;: &nbsp;<strong>{{ $coaDateFormatted }}</strong>
+    <td style="text-align: right; width: 50%;">
+      Report Date &nbsp;: &nbsp;{{ $coaDateFormatted }}
     </td>
   </tr>
 </table>
 
-<!-- Customer & Sample Details (Two Columns Key-Value) -->
+<!-- Customer & Sample Details (Equal 50/50 Columns Key-Value - Straight Alignment) -->
 <table class="details-table">
   <tr>
-    <!-- Left Column -->
-    <td style="width: 54%; padding-right: 10px;">
-      <table style="width: 100%; border-collapse: collapse;">
+    <!-- Left Column (50%) -->
+    <td style="width: 50%; padding-right: 12px; vertical-align: top;">
+      <table class="inner-meta-table">
+        <colgroup>
+          <col style="width: 122px;">
+          <col style="width: 14px;">
+          <col>
+        </colgroup>
         <tr>
-          <td class="lbl-col">Customer Name</td>
+          <td class="lbl-col">Customer</td>
           <td class="sep-col">:</td>
-          <td class="val-col">M/s. {{ $customerName }}</td>
+          <td class="val-col">
+            {{ $customerName }}
+            @if($report->customer?->group?->name)
+              <span style="font-weight: bold; font-size: 10px; color: #374151;">({{ $report->customer->group->name }})</span>
+            @endif
+          </td>
         </tr>
         <tr>
-          <td class="lbl-col">Customer Address</td>
+          <td class="lbl-col">Address</td>
           <td class="sep-col">:</td>
-          <td class="val-col">{{ $customerAddress }}</td>
+          <td class="val-col">{{ $customerAddress ?: '—' }}</td>
         </tr>
         <tr>
-          <td class="lbl-col">Sample Name/Description</td>
+          <td class="lbl-col">Nature of Sample</td>
           <td class="sep-col">:</td>
-          <td class="val-col">{{ $report->sample_name ?: ($report->reportType?->name ?: 'Sample') }}</td>
+          <td class="val-col">{{ $report->nature_of_sample ?: ($report->sample_name ?: ($report->reportType?->name ?: 'Sample')) }}</td>
         </tr>
+        @if(!empty($report->bill_no))
         <tr>
-          <td class="lbl-col">Sample Condition</td>
+          <td class="lbl-col">Bill No</td>
           <td class="sep-col">:</td>
-          <td class="val-col">{{ $report->nature_of_sample ?: 'Fit for Analysis' }}</td>
+          <td class="val-col">{{ $report->bill_no }}</td>
         </tr>
+        @endif
+        @if(!empty($report->vehicle_no))
         <tr>
-          <td class="lbl-col">Reference</td>
+          <td class="lbl-col">Vehicle No</td>
           <td class="sep-col">:</td>
-          <td class="val-col">{{ $report->bill_no ? 'Bill No: ' . $report->bill_no : 'Test Request Form' }}</td>
+          <td class="val-col">{{ $report->vehicle_no }}</td>
         </tr>
-        <tr>
-          <td class="lbl-col">Sample Identification</td>
-          <td class="sep-col">:</td>
-          <td class="val-col">{{ $report->vehicle_no ? 'Vehicle No: ' . $report->vehicle_no : 'NA' }}</td>
-        </tr>
-        <tr>
-          <td class="lbl-col">Sampling Details</td>
-          <td class="sep-col">:</td>
-          <td class="val-col">Sample not drawn by Laboratory</td>
-        </tr>
+        @endif
       </table>
     </td>
     
-    <!-- Right Column -->
-    <td style="width: 46%; padding-left: 6px;">
-      <table style="width: 100%; border-collapse: collapse;">
+    <!-- Right Column (50%) -->
+    <td style="width: 50%; padding-left: 12px; vertical-align: top;">
+      <table class="inner-meta-table">
+        <colgroup>
+          <col style="width: 122px;">
+          <col style="width: 14px;">
+          <col>
+        </colgroup>
+        @if(!empty($report->bags_tons))
         <tr>
-          <td class="lbl-col" style="width: 120px;">Sample Quantity</td>
+          <td class="lbl-col">{{ $quantityLabel }}</td>
           <td class="sep-col">:</td>
-          <td class="val-col">{{ $report->bags_tons ?: '1 Sample' }}</td>
+          <td class="val-col">{{ $report->bags_tons }}</td>
         </tr>
+        @endif
         <tr>
-          <td class="lbl-col" style="width: 120px;">Sample Received on</td>
+          <td class="lbl-col">Sample Date</td>
           <td class="sep-col">:</td>
           <td class="val-col">{{ $sampleDateFormatted }}</td>
         </tr>
+        @if(!empty($report->buyer))
         <tr>
-          <td class="lbl-col" style="width: 120px;">Test Started on</td>
+          <td class="lbl-col">Buyer</td>
           <td class="sep-col">:</td>
-          <td class="val-col">{{ $sampleDateFormatted }}</td>
+          <td class="val-col">{{ $report->buyer }}</td>
         </tr>
+        @endif
+        @if(!empty($report->seller))
         <tr>
-          <td class="lbl-col" style="width: 120px;">Test Completed on</td>
+          <td class="lbl-col">Seller</td>
           <td class="sep-col">:</td>
-          <td class="val-col">{{ $coaDateFormatted }}</td>
-        </tr>
-        @if($report->buyer || $report->seller)
-        <tr>
-          <td class="lbl-col" style="width: 120px;">Buyer / Seller</td>
-          <td class="sep-col">:</td>
-          <td class="val-col">{{ trim(($report->buyer ? 'Buyer: '.$report->buyer : '') . ($report->seller ? ' / Seller: '.$report->seller : '')) }}</td>
+          <td class="val-col">{{ $report->seller }}</td>
         </tr>
         @endif
       </table>
@@ -325,49 +432,58 @@ body { font-size: 10px; color: #111827; line-height: 1.35; margin: 0; background
   </tr>
 </table>
 
-<!-- Section Title -->
-<div class="section-title">TEST RESULTS</div>
+<!-- Pure Clean Bold Black TEST RESULTS Section Title -->
+<div class="section-title-container">
+  <div class="section-title">TEST RESULTS</div>
+</div>
 
 <!-- Results Table -->
 <table class="results-table">
   <thead>
     <tr>
       <th style="width: 36px; text-align: center;">S.No</th>
-      <th style="width: 220px; text-align: left;">Parameter</th>
-      <th style="text-align: left;">Test Method</th>
-      <th style="width: 75px; text-align: center;">Unit</th>
-      <th style="width: 85px; text-align: center;">Results</th>
+      <th style="text-align: left;">Parameter</th>
+      @if($showSpec)
+      <th style="width: 180px; text-align: left;">Specification</th>
+      @endif
+      @foreach($customCols as $col)
+      <th style="text-align: left;">{{ $col }}</th>
+      @endforeach
+      <th style="width: 110px; text-align: center;">Result</th>
     </tr>
   </thead>
   <tbody>
-    <tr class="category-row">
-      <td colspan="5" style="border: 1px solid #111827; background: #ffffff;">
-        {{ $report->reportType?->name ? $report->reportType->name . ' - Chemical' : 'Chemical' }}
-      </td>
-    </tr>
     @foreach($rows as $idx => $res)
     @php
       $param = $res->parameter;
-      $method = $res->specification ?: ($param->specification ?: ($param->name === 'Free Fatty Acid' ? 'FSSAI / IS 548 (Part 1) - 2021' : ($param->name === 'Oil Content' ? 'IS 548 (Part 1/ Section 2) - 2021' : 'IS / Standard Method')));
-      $unit = $param->unit ?: ($param->short_code === 'FFA' || $param->short_code === 'OC' ? '%' : '--');
+      $spec = $res->specification ?: ($param->specification ?: '—');
+      $resultVal = ($res->result !== null && $res->result !== '') ? $res->result : '—';
     @endphp
     <tr>
       <td style="text-align: center;">{{ $idx + 1 }}</td>
       <td><strong>{{ $param->name ?? 'Parameter' }}</strong></td>
-      <td>{{ $method }}</td>
-      <td style="text-align: center;">{{ $unit }}</td>
-      <td style="text-align: center; font-weight: bold; font-size: 10.5px;">
-        {{ ($res->result !== null && $res->result !== '') ? $res->result : '—' }}
+      @if($showSpec)
+      <td>{{ $spec }}</td>
+      @endif
+      @foreach($customCols as $col)
+      @php
+        $cVal = is_array($res->custom_values) ? ($res->custom_values[$col] ?? '') : '';
+      @endphp
+      <td>{{ $cVal !== '' ? $cVal : '—' }}</td>
+      @endforeach
+      <td style="text-align: center; font-weight: bold; font-size: 11px;">
+        {{ $resultVal }}
       </td>
     </tr>
     @endforeach
   </tbody>
 </table>
 
-<!-- Under Table Notes -->
-<div class="customer-info-note">
-  Note: <em>Information provided by the customer is indicated in Bold &amp; Italics.</em>
+@if(!empty($report->remarks))
+<div style="margin: 8px 0 6px 0; padding: 4px 8px; background-color: #F9FAFB; border-left: 3px solid #0B6B43; font-size: 10.5px; line-height: 1.4;">
+  <strong style="color: #0B6B43;">Remarks / Notes:</strong> <span style="font-weight: 600; color: #111827;">{{ $report->remarks }}</span>
 </div>
+@endif
 
 <div class="end-report-banner">
   /************* End of the Report *************/
@@ -377,37 +493,48 @@ body { font-size: 10px; color: #111827; line-height: 1.35; margin: 0; background
 <div class="sig-wrapper">
   <div class="sig-box">
     @if($sigPath)
-      <img src="{{ $sigPath }}" class="sig-img" alt="Authorized Signature">
+      <img src="{{ $sigPath }}" class="sig-img" alt="Signature">
     @else
       <div style="height: 48px;">&nbsp;</div>
     @endif
-    <div class="sig-name">R. Iyappan</div>
-    <div class="sig-title">Authorized Signatory-Chemical</div>
+    <div class="sig-name">Authorized Signatory</div>
+    <div class="sig-title">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
   </div>
 </div>
 
-<!-- Footer / Disclaimer -->
-<div class="footer-disclaimer-container">
-  <div class="footer-lab-address">
-    Laboratory Address: {{ $lab->address ?? '182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701, Tamil Nadu, India.' }}
-    @if(!empty($lab->email)) &nbsp;&bull;&nbsp; Email: {{ $lab->email }} @endif
-    @if(!empty($lab->phone)) &nbsp;&bull;&nbsp; Ph: {{ $lab->phone }} @endif
-  </div>
-  <div>
-    Note: Test results relate only to the items tested. Test Report shall not be reproduced in full or part without the approval of the laboratory. Any corrections shall invalidate this test report. Unless otherwise agreed with customer, remnant non-perishable samples are disposed of 15 days after receipt, while perishable and environmental samples are discarded immediately upon test completion. Samples are not drawn by laboratory unless otherwise stated. A satisfactory test report in no way implies that a product so tested is approved by any agency.
-  </div>
+<!-- Static Pinned Bottom Footer (All 3 lines fully displayed and centered) -->
+<div class="footer-pinned-container">
+  <table class="footer-table">
+    <tr>
+      <td class="footer-line-1">
+        Address: {{ $lab->address ?? '182-B, Tiruppur Road, Kangeyam - 638701, Tamil Nadu, India.' }}
+      </td>
+    </tr>
+    <tr>
+      <td class="footer-line-2">
+        Ph: {{ $phone }} &nbsp;&bull;&nbsp; Email: {{ $email }} &nbsp;&bull;&nbsp; Web: {{ $websiteClean }}
+      </td>
+    </tr>
+    <tr>
+      <td class="footer-line-3">
+        Note: Test results relate only to the items tested. Test Report shall not be reproduced in full or part without the approval of the laboratory. Any corrections shall invalidate this test report.
+      </td>
+    </tr>
+  </table>
 </div>
 
 <script type="text/php">
   if (isset($pdf)) {
     $pdf->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
-      $text = "Page " . $pageNumber . " of " . $pageCount;
-      $size = 8;
-      $font = $fontMetrics->getFont("Helvetica");
-      $width = $fontMetrics->getTextWidth($text, $font, $size);
-      $x = $canvas->get_width() - $width - 24;
-      $y = 48;
-      $canvas->text($x, $y, $text, $font, $size, array(0.12, 0.16, 0.22));
+      if ($pageCount > 1) {
+        $text = "Page " . $pageNumber . " of " . $pageCount;
+        $size = 8;
+        $font = $fontMetrics->getFont("Helvetica");
+        $width = $fontMetrics->getTextWidth($text, $font, $size);
+        $x = ($canvas->get_width() - $width) / 2;
+        $y = $canvas->get_height() - 8;
+        $canvas->text($x, $y, $text, $font, $size, array(0.12, 0.16, 0.22));
+      }
     });
   }
 </script>

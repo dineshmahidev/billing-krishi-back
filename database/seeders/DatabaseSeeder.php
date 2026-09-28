@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         LabSetting::firstOrCreate(['lab_name'=>'KRISHI ANALYTICAL LAB'], [
             'tagline'=>'Discovering Solutions, One Test at a Time',
             'address'=>'182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701, Tiruppur Dist, Tamil Nadu',
-            'phone'=>'+91 63793 12357',
+            'phone'=>'+91 63793 12357, +91 88838 64756',
             'email'=>'info@krishianalyticallab.com',
         ]);
 

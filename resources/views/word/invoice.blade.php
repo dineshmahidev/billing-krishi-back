@@ -29,8 +29,11 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 @php
   $labName = $lab->lab_name ?? 'KRISHI ANALYTICAL LAB';
   $tagline = $lab->tagline ?? 'Discovering Solutions, One Test at a Time';
-  $address = $lab->address ?? '182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701';
-  $phone = $lab->phone ?? '+91 63793 12357';
+  $address = $lab->address ?? '182-B, Tiruppur Road, Kangeyam - 638701';
+  $phone = '+91 63793 12357, +91 88838 64756';
+  if (!empty($lab->phone)) {
+      $phone = str_contains($lab->phone, '88838') ? $lab->phone : $lab->phone . ', +91 88838 64756';
+  }
   $email = $lab->email ?? 'info@krishianalyticallab.com';
   $gstin = $lab->gstin ?? '33AAAFK8921B1Z2';
   $logoW = file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
@@ -55,7 +58,7 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 @php $companyI = $invoice->party_name ?? $invoice->customer_name ?? $report->party_name ?? $report->customer_name ?? ''; @endphp
 <table class="meta">
 <tr><td class="meta-label">Sample Date</td><td>{{ $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '' }}&nbsp;</td><td class="meta-label">COA Date</td><td>{{ $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : '' }}&nbsp;</td></tr>
-<tr><td class="meta-label">Party Name</td><td><strong>{{ $companyI }}</strong></td><td class="meta-label">Sample Name</td><td>{{ $report->sample_name }}&nbsp;</td></tr>
+<tr><td class="meta-label">Customer</td><td><strong>{{ $companyI }}</strong></td><td class="meta-label">Sample Name</td><td>{{ $report->sample_name }}&nbsp;</td></tr>
 <tr><td class="meta-label">Vehicle No</td><td>{{ $report->vehicle_no }}&nbsp;</td><td class="meta-label">Bill No</td><td>{{ $report->bill_no }}&nbsp;</td></tr>
 <tr><td class="meta-label">Bags / Tons</td><td>{{ $report->bags_tons }}&nbsp;</td><td class="meta-label">Buyer</td><td>{{ $report->buyer }}&nbsp;</td></tr>
 <tr><td class="meta-label">Seller</td><td>{{ $report->seller }}&nbsp;</td><td class="meta-label">Payment</td><td>{{ ucfirst($invoice->status) }}</td></tr>
@@ -63,16 +66,35 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 </table>
 
 <table class="items">
-<tr><th style="width:40px;">S.No</th><th>Test Parameter</th><th style="width:55px;">Qty</th><th style="width:90px;">HSN</th><th style="width:100px;">Rate (₹)</th><th style="width:110px;">Amount (₹)</th></tr>
-@php $invItems = $invoice->items->sortBy('display_order')->values(); @endphp
-@if($invItems->count())
-@foreach($invItems as $i => $it)
-<tr><td style="text-align:center;">{{ $i+1 }}</td><td><strong>{{ $it->name }}</strong>@if($it->unit) <span style="color:#6B7280;">({{ $it->unit }})</span>@endif</td><td style="text-align:center;">{{ intval($it->qty) }}</td><td style="text-align:center;">{{ $it->hsn_code ?? '-' }}</td><td style="text-align:right;">{{ $fmt($it->rate) }}</td><td style="text-align:right;">{{ $fmt($it->amount) }}</td></tr>
+<tr><th style="width:40px;">S.No</th><th>Parameter</th><th style="width:55px;">Qty</th><th style="width:100px;">Rate (₹)</th><th style="width:110px;">Amount (₹)</th></tr>
+@php 
+  $allInvoiceItems = $invoice->items;
+  if ($allInvoiceItems->count() === 0) {
+    $invItems = $report->results->filter(fn($r) => $r->enabled !== false && $r->parameter && $r->parameter->active)
+      ->map(function($res) {
+        return (object)[
+          'name' => $res->parameter->name,
+          'unit' => $res->parameter->unit,
+          'qty' => 1,
+          'rate' => floatval($res->parameter->price ?? 0),
+          'amount' => floatval($res->parameter->price ?? 0),
+        ];
+      });
+  } else {
+    $invItems = $allInvoiceItems->sortBy('display_order');
+  }
+
+  // Hide rows where rate is 0 or qty is 0
+  $filteredItems = $invItems->filter(function($it) {
+    return floatval($it->rate) > 0 && intval($it->qty) > 0;
+  })->values();
+@endphp
+@if($filteredItems->count())
+@foreach($filteredItems as $i => $it)
+<tr><td style="text-align:center;">{{ $i+1 }}</td><td><strong>{{ $it->name }}</strong>@if($it->unit) <span style="color:#6B7280;">({{ $it->unit }})</span>@endif</td><td style="text-align:center;">{{ intval($it->qty) }}</td><td style="text-align:right;">{{ $fmt($it->rate) }}</td><td style="text-align:right;">{{ $fmt($it->amount) }}</td></tr>
 @endforeach
 @else
-@foreach($report->results->filter(fn($r) => $r->enabled !== false)->values() as $i => $res)
-<tr><td style="text-align:center;">{{ $i+1 }}</td><td><strong>{{ $res->parameter->name }}</strong>@if($res->parameter->unit) <span style="color:#6B7280;">({{ $res->parameter->unit }})</span>@endif</td><td style="text-align:center;">1</td><td style="text-align:center;">{{ $res->parameter->hsn_code ?? '-' }}</td><td style="text-align:right;">{{ $fmt($res->parameter->price ?? 0) }}</td><td style="text-align:right;">{{ $fmt($res->parameter->price ?? 0) }}</td></tr>
-@endforeach
+<tr><td colspan="5" style="text-align:center; color:#6B7280; padding:8px;">No billable items</td></tr>
 @endif
 </table>
 

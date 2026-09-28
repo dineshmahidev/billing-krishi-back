@@ -16,10 +16,19 @@ class InvoiceController extends Controller
 {
     private function resolveUser(Request $request) {
         $user = $request->user();
-        if ($user) return $user;
+        if ($user) {
+            \Illuminate\Support\Facades\Auth::setUser($user);
+            return $user;
+        }
         $token = $request->bearerToken() ?? $request->query('token');
         if ($token) {
-            try { $at = \Laravel\Sanctum\PersonalAccessToken::findToken($token); if ($at && $at->tokenable) return $at->tokenable; } catch (\Throwable $e) {}
+            try {
+                $at = \Laravel\Sanctum\PersonalAccessToken::findToken($token);
+                if ($at && $at->tokenable) {
+                    \Illuminate\Support\Facades\Auth::setUser($at->tokenable);
+                    return $at->tokenable;
+                }
+            } catch (\Throwable $e) {}
         }
         return null;
     }
@@ -53,33 +62,66 @@ class InvoiceController extends Controller
         return response()->json(array_merge($paginated->toArray(), ['stats'=>$stats]));
     }
 
-    public function show($reportId) {
-        $report = Report::with(['reportType','results.parameter'])->findOrFail($reportId);
-        $invoice = Invoice::with('items')->where('report_id', $report->id)->first();
-        if (!$invoice) return response()->json(['message'=>'Invoice not found - generate report first'], 404);
-        if ($invoice->items->isEmpty()) { $invoice->syncItems($report); $invoice->recalcTotals(); $invoice->refresh()->load('items'); }
+    public function show(Request $request, $reportId) {
+        $this->resolveUser($request);
+        $report = Report::with(['reportType','results.parameter','customer'])->findOrFail($reportId);
+        $invoice = $this->invoiceFor($report);
         return response()->json($invoice);
     }
 
-    // Admin: edit invoice line rates & quantities (parameter rows stay static / follow report)
+    // Edit invoice line rates & quantities
     public function updateItems(Request $request, $reportId) {
-        if (!$request->user()->isAdmin()) return response()->json(['message'=>'Admin only'],403);
+        $user = $this->resolveUser($request);
+        if ($user && method_exists($user, 'isAdmin') && !$user->isAdmin() && method_exists($user, 'hasPermission') && !$user->hasPermission('invoices')) {
+            return response()->json(['message'=>'Admin or Invoice permission required'], 403);
+        }
         $report = Report::with(['results.parameter'])->findOrFail($reportId);
         $invoice = Invoice::where('report_id',$report->id)->first() ?? $this->ensureInvoice($report);
+        
         $data = $request->validate([
             'items'=>'required|array|min:1',
-            'items.*.parameter_id'=>'required|integer|exists:parameters,id',
+            'items.*.id'=>'nullable|integer',
+            'items.*.parameter_id'=>'nullable|integer',
+            'items.*.name'=>'nullable|string',
             'items.*.rate'=>'required|numeric|min:0|max:9999999',
-            'items.*.qty'=>'required|integer|min:1|max:99999',
+            'items.*.qty'=>'required|integer|min:0|max:99999',
         ]);
-        $invoice->syncItems($report);
+
+        if ($invoice->items()->count() === 0) {
+            $invoice->syncItems($report);
+        }
+
         foreach ($data['items'] as $in) {
-            $item = $invoice->items()->where('parameter_id', $in['parameter_id'])->first();
-            if (!$item) continue;
-            $item->rate = round(floatval($in['rate']), 2);
-            $item->qty = (int)$in['qty'];
-            $item->amount = round($item->rate * $item->qty, 2);
-            $item->save();
+            $item = null;
+            if (!empty($in['id'])) {
+                $item = $invoice->items()->where('id', $in['id'])->first();
+            }
+            if (!$item && !empty($in['parameter_id'])) {
+                $item = $invoice->items()->where('parameter_id', $in['parameter_id'])->first();
+            }
+            if ($item) {
+                $rate = round(floatval($in['rate']), 2);
+                $qty = max(0, (int)$in['qty']);
+                $item->rate = $rate;
+                $item->qty = $qty;
+                $item->amount = round($rate * $qty, 2);
+                $item->save();
+            } else if (!empty($in['parameter_id'])) {
+                $param = \App\Models\Parameter::find($in['parameter_id']);
+                $rate = round(floatval($in['rate']), 2);
+                $qty = max(0, (int)$in['qty']);
+                \App\Models\InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'parameter_id' => $in['parameter_id'],
+                    'name' => $param ? $param->name : ($in['name'] ?? 'Test'),
+                    'unit' => $param ? $param->unit : null,
+                    'hsn_code' => $param ? $param->hsn_code : null,
+                    'rate' => $rate,
+                    'qty' => $qty,
+                    'amount' => round($rate * $qty, 2),
+                    'display_order' => $invoice->items()->count() + 1,
+                ]);
+            }
         }
         $invoice->recalcTotals();
         return response()->json($invoice->fresh('items'));
@@ -94,7 +136,10 @@ class InvoiceController extends Controller
     }
 
     public function toggleGst(Request $request, $reportId) {
-        if (!$request->user()->isAdmin()) return response()->json(['message'=>'Admin only'],403);
+        $user = $this->resolveUser($request);
+        if ($user && method_exists($user, 'isAdmin') && !$user->isAdmin() && method_exists($user, 'hasPermission') && !$user->hasPermission('invoices')) {
+            return response()->json(['message'=>'Admin only'], 403);
+        }
         $data = $request->validate(['gst_enabled'=>'required|boolean', 'gst_percent'=>'sometimes|numeric|min:0|max:100']);
         $invoice = Invoice::where('report_id',$reportId)->firstOrFail();
         $invoice->gst_enabled = $data['gst_enabled'];
@@ -107,24 +152,36 @@ class InvoiceController extends Controller
 
     public function pdf(Request $request, $reportId) {
         $this->resolveUser($request);
-        $report = Report::with(['reportType','results.parameter'])->findOrFail($reportId);
+        $report = Report::with(['reportType','results.parameter','customer'])->findOrFail($reportId);
         $invoice = $this->invoiceFor($report);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.invoice', compact('report','invoice','lab'));
         PdfFont::apply($pdf);
         $pdf->setPaper('A4','portrait');
-        return $pdf->stream($invoice->invoice_no.'.pdf');
+        return response($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$invoice->invoice_no.'.pdf"',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
     }
 
     public function downloadPdf(Request $request, $reportId) {
         $this->resolveUser($request);
-        $report = Report::with(['reportType','results.parameter'])->findOrFail($reportId);
+        $report = Report::with(['reportType','results.parameter','customer'])->findOrFail($reportId);
         $invoice = $this->invoiceFor($report);
         $lab = LabSetting::current();
         $pdf = Pdf::loadView('pdf.invoice', compact('report','invoice','lab'));
         PdfFont::apply($pdf);
         $pdf->setPaper('A4','portrait');
-        return $pdf->download($invoice->invoice_no.'.pdf');
+        return response($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="'.$invoice->invoice_no.'.pdf"',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
     }
 
     public function word(Request $request, $reportId)
@@ -554,7 +611,25 @@ class InvoiceController extends Controller
 
     private function ensureInvoice(Report $report): Invoice {
         $existing = Invoice::where('report_id',$report->id)->first();
-        if ($existing) { if ($existing->items()->count() === 0) { $existing->syncItems($report); $existing->recalcTotals(); } return $existing; }
+        if ($existing) {
+            $updated = false;
+            if ($report->party_name && $existing->party_name !== $report->party_name) {
+                $existing->party_name = $report->party_name;
+                $updated = true;
+            }
+            if ($report->customer_name && $existing->customer_name !== $report->customer_name) {
+                $existing->customer_name = $report->customer_name;
+                $updated = true;
+            }
+            if ($updated) {
+                $existing->save();
+            }
+            if ($existing->items()->count() === 0) {
+                $existing->syncItems($report);
+                $existing->recalcTotals();
+            }
+            return $existing;
+        }
         $lab = LabSetting::current();
         $subtotal = $report->results->filter(fn($r) => $r->enabled !== false)->sum(fn($r) => floatval($r->parameter->price ?? 0));
         $gstEnabled = (bool)($lab->gst_enabled ?? true);

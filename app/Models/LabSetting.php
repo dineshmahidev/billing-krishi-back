@@ -15,8 +15,8 @@ class LabSetting extends Model
         return self::first() ?? self::create([
             'lab_name'=>'KRISHI ANALYTICAL LAB',
             'tagline'=>'Discovering Solutions, One Test at a Time',
-            'address'=>'182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701',
-            'phone'=>'+91 63793 12357',
+            'address'=>'182-B, Tiruppur Road, Kangeyam - 638701, Tamil Nadu, India.',
+            'phone'=>'+91 63793 12357, +91 88838 64756',
             'email'=>'krishianalyticallab@gmail.com',
             'website'=>'https://krishilab25.in',
         ]);
