@@ -27,10 +27,23 @@ class ReportTypeController extends Controller
             'active'=>'boolean',
             'show_specification'=>'boolean',
             'custom_columns'=>'nullable|array',
-            'custom_columns.*'=>'string|max:50'
+            'custom_columns.*'=>'string|max:50',
+            'table_columns'=>'nullable|array',
         ]);
         if (empty($data['quantity_label'])) {
             $data['quantity_label'] = 'Quantity';
+        }
+        // Keep custom_columns in sync with table_columns if passed
+        if (!empty($data['table_columns'])) {
+            $customs = [];
+            foreach ($data['table_columns'] as $tc) {
+                if (($tc['type'] ?? '') === 'custom' || (!in_array($tc['key'] ?? '', ['s_no','parameter','specification','result']))) {
+                    if (!empty($tc['label'])) $customs[] = $tc['label'];
+                }
+            }
+            if (!isset($data['custom_columns']) || empty($data['custom_columns'])) {
+                $data['custom_columns'] = $customs;
+            }
         }
         $type = ReportType::create($data);
         return response()->json($type, 201);
@@ -54,10 +67,20 @@ class ReportTypeController extends Controller
             'active'=>'boolean',
             'show_specification'=>'boolean',
             'custom_columns'=>'nullable|array',
-            'custom_columns.*'=>'string|max:50'
+            'custom_columns.*'=>'string|max:50',
+            'table_columns'=>'nullable|array',
         ]);
         if (array_key_exists('quantity_label', $data) && empty($data['quantity_label'])) {
             $data['quantity_label'] = 'Quantity';
+        }
+        if (!empty($data['table_columns'])) {
+            $customs = [];
+            foreach ($data['table_columns'] as $tc) {
+                if (($tc['type'] ?? '') === 'custom' || (!in_array($tc['key'] ?? '', ['s_no','parameter','specification','result']))) {
+                    if (!empty($tc['label'])) $customs[] = $tc['label'];
+                }
+            }
+            $data['custom_columns'] = $customs;
         }
         $type->update($data);
         return response()->json($type);

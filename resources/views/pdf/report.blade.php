@@ -47,13 +47,13 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   padding: 0 10px;
 }
 .company-name {
-  font-size: 28px;
+  font-size: 34px;
   font-weight: 900;
   color: #0B6B43;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   margin: 0;
-  line-height: 1.15;
+  line-height: 1.12;
 }
 .company-tagline {
   font-size: 13px;
@@ -113,48 +113,51 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
 .inner-meta-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
 }
 .inner-meta-table td {
   border: none;
-  padding: 3px 0;
+  padding: 2.5px 0;
   vertical-align: top;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: bold;
   color: #000000;
   line-height: 1.35;
 }
 .lbl-col {
-  width: 122px;
+  width: 110px;
+  max-width: 110px;
   white-space: nowrap;
   font-weight: bold;
   color: #000000;
-  font-size: 11.5px;
+  font-size: 11px;
 }
 .sep-col {
-  width: 14px;
-  text-align: center;
+  width: 8px;
+  max-width: 8px;
+  text-align: left;
   white-space: nowrap;
   font-weight: bold;
   color: #000000;
-  font-size: 11.5px;
+  font-size: 11px;
+  padding: 2.5px 0;
 }
 .val-col {
   font-weight: bold;
   color: #000000;
-  font-size: 11.5px;
+  font-size: 11px;
   word-wrap: break-word;
+  padding-left: 3px;
 }
 
 /* Pure Clean Bold Black TEST RESULTS Section Title */
 .section-title-container {
   text-align: center;
-  margin: 10px 0 12px 0;
+  margin: 14px 0 16px 0;
 }
 .section-title {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 900;
-  letter-spacing: 2.5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: #000000;
   margin: 0;
@@ -165,7 +168,7 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
 .results-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 2px;
+  margin-top: 4px;
   border: 1.5px solid #000000;
 }
 .results-table th {
@@ -328,9 +331,9 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   </tr>
 </table>
 
-<!-- Pure Clean Bold Black CERTIFICATE OF ANALYSIS Title -->
+<!-- Pure Clean Bold Black TEST REPORT Title -->
 <div class="report-title-container">
-  <div class="report-main-title">CERTIFICATE OF ANALYSIS</div>
+  <div class="report-main-title">TEST REPORT</div>
 </div>
 
 <!-- Top Meta Bar (Report No opposite Report Date with bottom margin) -->
@@ -345,20 +348,15 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   </tr>
 </table>
 
-<!-- Customer & Sample Details (Equal 50/50 Columns Key-Value - Straight Alignment) -->
+<!-- Customer & Sample Details (Balanced 55/45 Columns Key-Value - Straight Vertical Colon Alignment) -->
 <table class="details-table">
   <tr>
-    <!-- Left Column (50%) -->
-    <td style="width: 50%; padding-right: 12px; vertical-align: top;">
+    <!-- Left Column (55%) -->
+    <td style="width: 55%; padding-right: 16px; vertical-align: top;">
       <table class="inner-meta-table">
-        <colgroup>
-          <col style="width: 122px;">
-          <col style="width: 14px;">
-          <col>
-        </colgroup>
         <tr>
-          <td class="lbl-col">Customer</td>
-          <td class="sep-col">:</td>
+          <td width="112" class="lbl-col">Party / Customer</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">
             {{ $customerName }}
             @if($report->customer?->group?->name)
@@ -367,63 +365,65 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
           </td>
         </tr>
         <tr>
-          <td class="lbl-col">Address</td>
-          <td class="sep-col">:</td>
+          <td width="112" class="lbl-col">Address</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $customerAddress ?: '—' }}</td>
         </tr>
+        @if(!empty($report->sample_name))
         <tr>
-          <td class="lbl-col">Nature of Sample</td>
-          <td class="sep-col">:</td>
+          <td width="112" class="lbl-col">Sample Name</td>
+          <td width="8" class="sep-col">:</td>
+          <td class="val-col">{{ $report->sample_name }}</td>
+        </tr>
+        @endif
+        <tr>
+          <td width="112" class="lbl-col">Nature of Sample</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->nature_of_sample ?: ($report->sample_name ?: ($report->reportType?->name ?: 'Sample')) }}</td>
         </tr>
         @if(!empty($report->bill_no))
         <tr>
-          <td class="lbl-col">Bill No</td>
-          <td class="sep-col">:</td>
+          <td width="112" class="lbl-col">Bill No</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->bill_no }}</td>
         </tr>
         @endif
         @if(!empty($report->vehicle_no))
         <tr>
-          <td class="lbl-col">Vehicle No</td>
-          <td class="sep-col">:</td>
+          <td width="112" class="lbl-col">Vehicle No</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->vehicle_no }}</td>
         </tr>
         @endif
       </table>
     </td>
     
-    <!-- Right Column (50%) -->
-    <td style="width: 50%; padding-left: 12px; vertical-align: top;">
+    <!-- Right Column (45%) -->
+    <td style="width: 45%; padding-left: 8px; vertical-align: top;">
       <table class="inner-meta-table">
-        <colgroup>
-          <col style="width: 122px;">
-          <col style="width: 14px;">
-          <col>
-        </colgroup>
         @if(!empty($report->bags_tons))
         <tr>
-          <td class="lbl-col">{{ $quantityLabel }}</td>
-          <td class="sep-col">:</td>
+          <td width="125" class="lbl-col">{{ $quantityLabel }}</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->bags_tons }}</td>
         </tr>
         @endif
         <tr>
-          <td class="lbl-col">Sample Date</td>
-          <td class="sep-col">:</td>
+          <td width="125" class="lbl-col">Sample Date</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $sampleDateFormatted }}</td>
         </tr>
         @if(!empty($report->buyer))
         <tr>
-          <td class="lbl-col">Buyer</td>
-          <td class="sep-col">:</td>
+          <td width="125" class="lbl-col">Buyer</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->buyer }}</td>
         </tr>
         @endif
         @if(!empty($report->seller))
         <tr>
-          <td class="lbl-col">Seller</td>
-          <td class="sep-col">:</td>
+          <td width="125" class="lbl-col">Seller</td>
+          <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->seller }}</td>
         </tr>
         @endif
@@ -437,19 +437,39 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   <div class="section-title">TEST RESULTS</div>
 </div>
 
+@php
+  $tableCols = $report->reportType?->table_columns;
+  if (!is_array($tableCols) || empty($tableCols)) {
+    $tableCols = [
+      ['key' => 's_no', 'label' => 'S.No', 'visible' => true, 'type' => 'system'],
+      ['key' => 'parameter', 'label' => 'Parameter', 'visible' => true, 'type' => 'system'],
+    ];
+    if ($showSpec) {
+      $tableCols[] = ['key' => 'specification', 'label' => 'Specification', 'visible' => true, 'type' => 'system'];
+    }
+    foreach ($customCols as $cIdx => $cName) {
+      $tableCols[] = ['key' => 'custom_' . $cIdx, 'label' => $cName, 'visible' => true, 'type' => 'custom'];
+    }
+    $tableCols[] = ['key' => 'result', 'label' => 'Result', 'visible' => true, 'type' => 'system'];
+  }
+  $activeTableCols = array_values(array_filter($tableCols, fn($c) => ($c['visible'] ?? true) !== false));
+@endphp
+
 <!-- Results Table -->
 <table class="results-table">
   <thead>
     <tr>
-      <th style="width: 36px; text-align: center;">S.No</th>
-      <th style="text-align: left;">Parameter</th>
-      @if($showSpec)
-      <th style="width: 180px; text-align: left;">Specification</th>
-      @endif
-      @foreach($customCols as $col)
-      <th style="text-align: left;">{{ $col }}</th>
+      @foreach($activeTableCols as $col)
+        @php
+          $ckey = $col['key'] ?? '';
+          $clabel = $col['label'] ?? '';
+          $isSno = ($ckey === 's_no');
+          $isResult = ($ckey === 'result');
+        @endphp
+        <th style="{{ $isSno ? 'width: 36px; text-align: center;' : ($isResult ? 'width: 110px; text-align: center;' : 'text-align: left;') }}">
+          {{ $clabel }}
+        </th>
       @endforeach
-      <th style="width: 110px; text-align: center;">Result</th>
     </tr>
   </thead>
   <tbody>
@@ -460,20 +480,31 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
       $resultVal = ($res->result !== null && $res->result !== '') ? $res->result : '—';
     @endphp
     <tr>
-      <td style="text-align: center;">{{ $idx + 1 }}</td>
-      <td><strong>{{ $param->name ?? 'Parameter' }}</strong></td>
-      @if($showSpec)
-      <td>{{ $spec }}</td>
-      @endif
-      @foreach($customCols as $col)
-      @php
-        $cVal = is_array($res->custom_values) ? ($res->custom_values[$col] ?? '') : '';
-      @endphp
-      <td>{{ $cVal !== '' ? $cVal : '—' }}</td>
+      @foreach($activeTableCols as $col)
+        @php
+          $ckey = $col['key'] ?? '';
+          $clabel = $col['label'] ?? '';
+        @endphp
+        @if($ckey === 's_no')
+          <td style="text-align: center;">{{ $idx + 1 }}</td>
+        @elseif($ckey === 'parameter')
+          <td><strong>{{ $param->name ?? 'Parameter' }}</strong></td>
+        @elseif($ckey === 'specification')
+          <td>{{ $spec }}</td>
+        @elseif($ckey === 'result')
+          <td style="text-align: center; font-weight: bold; font-size: 11px;">
+            {{ $resultVal }}
+          </td>
+        @else
+          @php
+            $cVal = '';
+            if (is_array($res->custom_values)) {
+              $cVal = $res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '');
+            }
+          @endphp
+          <td>{{ $cVal !== '' ? $cVal : '—' }}</td>
+        @endif
       @endforeach
-      <td style="text-align: center; font-weight: bold; font-size: 11px;">
-        {{ $resultVal }}
-      </td>
     </tr>
     @endforeach
   </tbody>

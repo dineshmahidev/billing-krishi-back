@@ -32,7 +32,7 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
       $phone = str_contains($lab->phone, '88838') ? $lab->phone : $lab->phone . ', +91 88838 64756';
   }
   $email = $lab->email ?? 'info@krishianalyticallab.com';
-  $reportTitle = $report->reportType->title ?? 'CERTIFICATE OF ANALYSIS';
+  $reportTitle = $report->reportType->title ?? 'TEST REPORT';
   $isFeed = in_array($report->reportType->name ?? '', ['Rice Bran','Animal Feed']);
   $logoW = file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
 @endphp
@@ -56,6 +56,22 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
   $showSpecW = $report->reportType->show_specification ?? true; 
   $customColsW = $report->reportType->custom_columns ?? []; 
   $rowsW = $report->results->filter(fn($r) => $r->enabled !== false)->values(); 
+  
+  $tableColsW = $report->reportType?->table_columns;
+  if (!is_array($tableColsW) || empty($tableColsW)) {
+    $tableColsW = [
+      ['key' => 's_no', 'label' => 'S.No', 'visible' => true, 'type' => 'system'],
+      ['key' => 'parameter', 'label' => 'Parameter', 'visible' => true, 'type' => 'system'],
+    ];
+    if ($showSpecW) {
+      $tableColsW[] = ['key' => 'specification', 'label' => 'Specification', 'visible' => true, 'type' => 'system'];
+    }
+    foreach ($customColsW as $cIdx => $cName) {
+      $tableColsW[] = ['key' => 'custom_' . $cIdx, 'label' => $cName, 'visible' => true, 'type' => 'custom'];
+    }
+    $tableColsW[] = ['key' => 'result', 'label' => 'Result', 'visible' => true, 'type' => 'system'];
+  }
+  $activeTableColsW = array_values(array_filter($tableColsW, fn($c) => ($c['visible'] ?? true) !== false));
 @endphp
 <table class="meta">
 <tr><td class="meta-label">Report No</td><td><strong>{{ $report->report_no }}</strong>&nbsp;</td><td class="meta-label">Report Date</td><td><strong>{{ $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : ($report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '') }}</strong>&nbsp;</td></tr>
@@ -66,11 +82,45 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; marg
 <tr><td class="meta-label">Seller</td><td colspan="3">{{ $report->seller }}&nbsp;</td></tr>
 </table>
 
-<table class="results"><tr><th style="width:40px;">S.No</th><th>Parameter</th><th style="width:110px;">Result</th>@if($showSpecW)<th>Specification</th>@endif @foreach($customColsW as $col)<th>{{ $col }}</th>@endforeach</tr>
+<table class="results">
+<tr>
+  @foreach($activeTableColsW as $col)
+    @php
+      $ckey = $col['key'] ?? '';
+      $clabel = $col['label'] ?? '';
+    @endphp
+    <th style="{{ $ckey === 's_no' ? 'width:40px;' : ($ckey === 'result' ? 'width:110px;' : '') }}">{{ $clabel }}</th>
+  @endforeach
+</tr>
 @foreach($rowsW as $idx => $res)
-<tr><td style="text-align:center;">{{ $idx+1 }}</td><td><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif</td><td style="text-align:center; font-weight:700;">{{ $res->result }}&nbsp;</td>@if($showSpecW)<td>{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>@endif @foreach($customColsW as $col) @php $cVal = is_array($res->custom_values) ? ($res->custom_values[$col] ?? '') : ''; @endphp <td>{{ $cVal !== '' ? $cVal : '&nbsp;' }}</td> @endforeach</tr>
+<tr>
+  @foreach($activeTableColsW as $col)
+    @php
+      $ckey = $col['key'] ?? '';
+      $clabel = $col['label'] ?? '';
+    @endphp
+    @if($ckey === 's_no')
+      <td style="text-align:center;">{{ $idx+1 }}</td>
+    @elseif($ckey === 'parameter')
+      <td><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif</td>
+    @elseif($ckey === 'specification')
+      <td>{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>
+    @elseif($ckey === 'result')
+      <td style="text-align:center; font-weight:700;">{{ $res->result }}&nbsp;</td>
+    @else
+      @php $cVal = is_array($res->custom_values) ? ($res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '')) : ''; @endphp
+      <td>{{ $cVal !== '' ? $cVal : '&nbsp;' }}</td>
+    @endif
+  @endforeach
+</tr>
 @endforeach
-@for($i = count($rowsW); $i < 8; $i++)<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>@if($showSpecW)<td>&nbsp;</td>@endif @foreach($customColsW as $col)<td>&nbsp;</td>@endforeach</tr>@endfor
+@for($i = count($rowsW); $i < 8; $i++)
+<tr>
+  @foreach($activeTableColsW as $col)
+    <td>&nbsp;</td>
+  @endforeach
+</tr>
+@endfor
 </table>
 </div>
 
