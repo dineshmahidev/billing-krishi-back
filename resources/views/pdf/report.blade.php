@@ -784,7 +784,6 @@ body {
     @endif
     <div class="checked-by-line"></div>
     <div class="checked-by-name">Checked By</div>
-    <div class="checked-by-title">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
   </div>
 </div>
 
