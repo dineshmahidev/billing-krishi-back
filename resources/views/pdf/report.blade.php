@@ -409,10 +409,10 @@ body {
   $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? ''));
   $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null;
   
-  $checkedByRel = preg_replace('~^storage/~', '', (string)($lab->seal_path ?? ($lab->tested_by_signature_path ?? ($lab->tested_by_path ?? ''))));
+  $checkedByRel = preg_replace('~^storage/~', '', (string)($lab->seal_path ?? ($lab->tested_by_signature_path ?? ($lab->signature_path_2 ?? ''))));
   $checkedByPath = $checkedByRel !== '' && file_exists($cbAbs = storage_path('app/public/'.$checkedByRel))
       ? $cbAbs
-      : (file_exists(public_path('checked-by.png')) ? public_path('checked-by.png') : (file_exists(public_path('tested-by.png')) ? public_path('tested-by.png') : null));
+      : (file_exists(public_path('checked-by.png')) ? public_path('checked-by.png') : (file_exists(public_path('test-seal.png')) ? public_path('test-seal.png') : null));
   
   $customerName = $report->party_name ?: ($report->customer_name ?: ($report->customer?->company_name ?: ($report->customer?->name ?: '—')));
   $matchedCustomer = $report->customer ?: ($report->customer_id ? \App\Models\Customer::find($report->customer_id) : \App\Models\Customer::where('name', $customerName)->orWhere('company_name', $customerName)->first());
@@ -438,14 +438,14 @@ body {
 
 <!-- 1. Header: Grouped Centered Logo + Vertical Green Line + Company Name & Tagline -->
 <div class="header-wrapper">
-  <table class="header-group-table" align="center" style="margin: 0 auto; border-collapse: collapse;">
+  <table class="header-group-table" align="center" style="margin: 0 auto; position: relative; left: -25px; border-collapse: collapse;">
     <tr>
-      <td style="vertical-align: middle; text-align: center; padding-right: 16px; border: none;">
+      <td style="vertical-align: middle; text-align: center; padding-left: 36px; padding-right: 8px; border: none;">
         @if(file_exists($logoPath))
           <img src="{{ $logoPath }}" class="logo-img" alt="Logo">
         @endif
       </td>
-      <td style="vertical-align: middle; text-align: center; padding: 0 16px; width: 4px; border: none;">
+      <td style="vertical-align: middle; text-align: center; padding: 0 8px; width: 4px; border: none;">
         <div class="header-green-bar"></div>
       </td>
       <td style="vertical-align: middle; text-align: center; padding-left: 0; border: none;">
@@ -523,8 +523,8 @@ body {
             </table>
           </td>
           
-          <!-- Right Column (50%) -->
-          <td style="width: 50%; padding-left: 14px; vertical-align: top;">
+          <!-- Right Column (shifted right by 2 more tabs) -->
+          <td style="width: 50%; padding-left: 145px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
                 <col style="width: 96px;">
@@ -657,8 +657,11 @@ body {
           @php
             $ckey = $col['key'] ?? '';
             $clabel = strtoupper($col['label'] ?? '');
+            $isSno = ($ckey === 's_no');
+            $isSpec = ($ckey === 'specification');
+            $isResult = ($ckey === 'result');
             $w = $colPercentWidths[$ckey] ?? 'auto';
-            $align = $col['align'] ?? (($ckey === 'parameter') ? 'left' : 'center');
+            $align = ($isSno || $isSpec || $isResult) ? 'center' : 'left';
           @endphp
           <th style="width: {{ $w }}; text-align: {{ $align }};">
             {{ $clabel }}
@@ -694,14 +697,10 @@ body {
             @php
               $cVal = '';
               if (is_array($res->custom_values)) {
-                $cVal = $res->custom_values[$clabel] 
-                     ?? ($res->custom_values[strtoupper($clabel)] 
-                     ?? ($res->custom_values[strtolower($clabel)] 
-                     ?? ($res->custom_values[$ckey] 
-                     ?? ($res->custom_values[str_replace('custom_', '', $ckey)] ?? ''))));
+                $cVal = $res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '');
               }
             @endphp
-            <td style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">{{ ($cVal !== '' && $cVal !== null) ? $cVal : '-' }}</td>
+            <td style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">{{ $cVal !== '' ? $cVal : '-' }}</td>
           @endif
         @endforeach
       </tr>
@@ -758,7 +757,7 @@ body {
   ************* End of the Report *************
 </div>
 
-<!-- 7. Signatory & Checked By Section (Left & Right Opposite) -->
+<!-- 7. Signatory & Checked By Section -->
 <div class="checked-by-wrapper">
   <div class="checked-by-box">
     @if($checkedByPath)
@@ -776,7 +775,7 @@ body {
     @if($sigPath)
       <img src="{{ $sigPath }}" class="sig-img" alt="Signature">
     @else
-      <div style="height: 56px;">&nbsp;</div>
+      <div style="height: 48px;">&nbsp;</div>
     @endif
     <div class="sig-line"></div>
     <div class="sig-name">Authorized Signatory</div>
