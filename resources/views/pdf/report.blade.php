@@ -77,7 +77,7 @@ body {
 }
 .company-name {
   font-family: 'Arial', 'Helvetica', sans-serif;
-  font-size: 38px;
+  font-size: 40px;
   font-weight: 900;
   color: #0B6B43;
   letter-spacing: 1px;
@@ -89,7 +89,7 @@ body {
 }
 .company-tagline {
   font-family: 'Arial', 'Helvetica', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-style: italic;
   font-weight: 800;
   color: #1F2937;
@@ -103,7 +103,7 @@ body {
 .section-badge-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 12px 0 9px 0;
+  margin: 11px 0 8px 0;
 }
 .section-badge-table td {
   vertical-align: middle;
@@ -126,8 +126,8 @@ body {
   background-color: #EAF7F0;
   color: #0B6B43;
   border: 1.5px solid #86C1A4;
-  padding: 6px 32px;
-  font-size: 17.5px;
+  padding: 6px 34px;
+  font-size: 18.5px;
   font-weight: 900;
   letter-spacing: 2.5px;
   border-radius: 7px;
@@ -167,31 +167,31 @@ body {
   border: none;
   padding: 2.5px 0;
   vertical-align: top;
-  font-size: 13px;
+  font-size: 13.5px;
   line-height: 1.3;
 }
 .lbl-col {
   white-space: nowrap;
   font-weight: 700;
   color: #374151;
-  font-size: 13px;
+  font-size: 13.5px;
 }
 .val-col {
   font-weight: 900;
   color: #000000;
-  font-size: 14px;
+  font-size: 14.5px;
   word-wrap: break-word;
   padding-left: 0;
 }
 .colon-sep {
   font-weight: 900;
   color: #1F2937;
-  font-size: 13px;
+  font-size: 13.5px;
   margin-right: 4px;
   display: inline;
 }
 
-/* 4. Results Table (Light Green Header, 4x Large Commanding Text, 100% Width) */
+/* 4. Results Table (Light Green Header, Large Commanding Text, 100% Width) */
 .results-table-wrapper {
   width: 100%;
   margin: 6px 0 8px 0;
@@ -209,7 +209,7 @@ body {
   background: #EAF7F0;
   color: #0B6B43;
   padding: 8px 10px;
-  font-size: 15.5px;
+  font-size: 16.5px;
   font-weight: 900;
   text-align: left;
   border: none;
@@ -224,7 +224,7 @@ body {
 }
 .results-table td {
   padding: 8px 10px;
-  font-size: 15px;
+  font-size: 16px;
   border: none;
   border-bottom: 1px solid #D1E7DD;
   border-right: 1px solid #D1E7DD;
@@ -245,7 +245,7 @@ body {
 /* 5. End of Report Banner */
 .end-report-banner {
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 900;
   letter-spacing: 1.8px;
   margin: 6px 0 4px 0;
@@ -636,13 +636,13 @@ body {
             $w = $colPercentWidths[$ckey] ?? 'auto';
           @endphp
           @if($ckey === 's_no')
-            <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 900; color: #111827;">{{ $idx + 1 }}</td>
+            <td style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 900; color: #111827;">{{ $idx + 1 }}</td>
           @elseif($ckey === 'specification')
-            <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 800; color: #111827;">{{ $spec }}</td>
+            <td style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">{{ $spec }}</td>
           @elseif($ckey === 'parameter')
-            <td style="width: {{ $w }}; text-align: left; font-size: 15.5px; font-weight: 900; color: #000000;">{{ $param->name ?? 'Parameter' }}</td>
+            <td style="width: {{ $w }}; text-align: left; font-size: 16px; font-weight: 900; color: #000000;">{{ $param->name ?? 'Parameter' }}</td>
           @elseif($ckey === 'result')
-            <td style="width: {{ $w }}; text-align: center; font-size: 16.5px; font-weight: 900; color: #000000;">
+            <td style="width: {{ $w }}; text-align: center; font-size: 17px; font-weight: 900; color: #000000;">
               {{ $resultVal }}
             </td>
           @else
@@ -652,7 +652,7 @@ body {
                 $cVal = $res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '');
               }
             @endphp
-            <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 800; color: #111827;">{{ $cVal !== '' ? $cVal : '-' }}</td>
+            <td style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">{{ $cVal !== '' ? $cVal : '-' }}</td>
           @endif
         @endforeach
       </tr>
@@ -688,8 +688,8 @@ body {
 
 @if(!empty($remarksFormatted))
 <div class="remarks-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
-  <div style="font-weight: 800; font-size: 11px; color: #111827; margin-bottom: 2px;">Remarks:</div>
-  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 26px; padding-right: 12px; text-align: justify;">
+  <div style="font-weight: 800; font-size: 12px; color: #111827; margin-bottom: 2px;">Remarks:</div>
+  <div style="font-size: 11.5px; color: #1F2937; line-height: 1.45; padding-left: 8px; padding-right: 8px; text-align: justify;">
     {!! $remarksFormatted !!}
   </div>
 </div>
@@ -697,8 +697,8 @@ body {
 
 @if(!empty($notesFormatted))
 <div class="notes-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
-  <div style="font-weight: 800; font-size: 11px; color: #111827; margin-bottom: 2px;">Notes:</div>
-  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 26px; padding-right: 12px; text-align: justify;">
+  <div style="font-weight: 800; font-size: 12px; color: #111827; margin-bottom: 2px;">Notes:</div>
+  <div style="font-size: 11.5px; color: #1F2937; line-height: 1.45; padding-left: 8px; padding-right: 8px; text-align: justify;">
     {!! $notesFormatted !!}
   </div>
 </div>
