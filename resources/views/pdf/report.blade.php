@@ -5,7 +5,7 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 14px 28px 75px 28px;
+  margin: 12px 22px 70px 22px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
 body {
@@ -430,9 +430,15 @@ body {
           <td style="width: 50%; padding-right: 14px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
-                <col style="width: 114px;">
+                <col style="width: 125px;">
                 <col style="width: auto;">
               </colgroup>
+              @if(!empty($report->report_no))
+              <tr>
+                <td class="lbl-col">Report No</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->report_no }}</td>
+              </tr>
+              @endif
               @if(!empty($customerName) && $customerName !== '—')
               <tr>
                 <td class="lbl-col">Customer</td>
@@ -480,7 +486,7 @@ body {
           <td style="width: 50%; padding-left: 14px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
-                <col style="width: 90px;">
+                <col style="width: 95px;">
                 <col style="width: auto;">
               </colgroup>
               @if(!empty($coaDateFormatted) && $coaDateFormatted !== '—')
@@ -489,16 +495,16 @@ body {
                 <td class="val-col"><span class="colon-sep">:</span>{{ $coaDateFormatted }}</td>
               </tr>
               @endif
-              @if(!empty($report->report_no))
-              <tr>
-                <td class="lbl-col">Report No</td>
-                <td class="val-col"><span class="colon-sep">:</span>{{ $report->report_no }}</td>
-              </tr>
-              @endif
               @if(!empty($report->bags_tons))
               <tr>
                 <td class="lbl-col">{{ $quantityLabel }}</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $report->bags_tons }}</td>
+              </tr>
+              @endif
+              @if(!empty($report->sample_date))
+              <tr>
+                <td class="lbl-col">Sample Date</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $sampleDateFormatted }}</td>
               </tr>
               @endif
               @if(!empty($report->buyer))
@@ -553,41 +559,34 @@ body {
   $customColsList = array_filter($activeTableCols, fn($c) => ($c['type'] ?? '') === 'custom' || str_starts_with($c['key'] ?? '', 'custom_'));
   $customCount = count($customColsList);
 
-  $rawWeights = [];
+  $colPercentWidths = [];
   foreach ($activeTableCols as $c) {
     $ckey = $c['key'] ?? '';
     if (!empty($c['width'])) {
-      $wNum = floatval(preg_replace('/[^0-9.]/', '', (string)$c['width']));
-      if ($wNum > 0) {
-        $rawWeights[$ckey] = $wNum;
-        continue;
+      $wStr = trim((string)$c['width']);
+      if (is_numeric($wStr)) {
+        $wStr = $wStr . '%';
       }
+      $colPercentWidths[$ckey] = $wStr;
+      continue;
     }
 
     if ($ckey === 's_no') {
-      $rawWeights[$ckey] = 8;
+      $colPercentWidths[$ckey] = '8%';
     } elseif ($ckey === 'result') {
-      $rawWeights[$ckey] = 18;
+      $colPercentWidths[$ckey] = '18%';
     } elseif ($ckey === 'specification') {
-      $rawWeights[$ckey] = 22;
+      $colPercentWidths[$ckey] = '24%';
     } elseif ($ckey === 'parameter') {
       if ($customCount > 0) {
-        $rawWeights[$ckey] = 34;
+        $colPercentWidths[$ckey] = '32%';
       } elseif (!$hasSpec) {
-        $rawWeights[$ckey] = 74;
+        $colPercentWidths[$ckey] = '74%';
       } else {
-        $rawWeights[$ckey] = 52;
+        $colPercentWidths[$ckey] = '50%';
       }
     } else {
-      $rawWeights[$ckey] = 18 / max(1, $customCount);
-    }
-  }
-
-  $totalWeight = array_sum($rawWeights);
-  $colPercentWidths = [];
-  if ($totalWeight > 0) {
-    foreach ($rawWeights as $ckey => $val) {
-      $colPercentWidths[$ckey] = round(($val / $totalWeight) * 100, 1) . '%';
+      $colPercentWidths[$ckey] = round(18 / max(1, $customCount)) . '%';
     }
   }
 @endphp
@@ -639,18 +638,11 @@ body {
           @if($ckey === 's_no')
             <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 900; color: #111827;">{{ $idx + 1 }}</td>
           @elseif($ckey === 'specification')
-            <td style="width: {{ $w }}; text-align: center; font-size: 14.5px; font-weight: 800; color: #111827;">{{ $spec }}</td>
+            <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 800; color: #111827;">{{ $spec }}</td>
           @elseif($ckey === 'parameter')
-            <td style="width: {{ $w }}; text-align: left; font-size: 15px; font-weight: 900; color: #000000;">{{ $param->name ?? 'Parameter' }}</td>
+            <td style="width: {{ $w }}; text-align: left; font-size: 15.5px; font-weight: 900; color: #000000;">{{ $param->name ?? 'Parameter' }}</td>
           @elseif($ckey === 'result')
-            @php
-              $isAlphaResult = preg_match('/[a-zA-Z]/', (string)$resultVal);
-              $resLen = strlen(trim((string)$resultVal));
-              $resultFontSize = $isAlphaResult ? ($resLen > 7 ? '13.5px' : '14.5px') : '15px';
-              $resultFontWeight = $isAlphaResult ? '800' : '900';
-              $resultColor = $isAlphaResult ? '#111827' : '#000000';
-            @endphp
-            <td style="width: {{ $w }}; text-align: center; font-size: {{ $resultFontSize }}; font-weight: {{ $resultFontWeight }}; color: {{ $resultColor }};">
+            <td style="width: {{ $w }}; text-align: center; font-size: 16.5px; font-weight: 900; color: #000000;">
               {{ $resultVal }}
             </td>
           @else
@@ -697,7 +689,7 @@ body {
 @if(!empty($remarksFormatted))
 <div class="remarks-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
   <div style="font-weight: 800; font-size: 11px; color: #111827; margin-bottom: 2px;">Remarks:</div>
-  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 8px; padding-right: 8px; text-align: justify;">
+  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 26px; padding-right: 12px; text-align: justify;">
     {!! $remarksFormatted !!}
   </div>
 </div>
@@ -706,7 +698,7 @@ body {
 @if(!empty($notesFormatted))
 <div class="notes-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
   <div style="font-weight: 800; font-size: 11px; color: #111827; margin-bottom: 2px;">Notes:</div>
-  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 8px; padding-right: 8px; text-align: justify;">
+  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 26px; padding-right: 12px; text-align: justify;">
     {!! $notesFormatted !!}
   </div>
 </div>
