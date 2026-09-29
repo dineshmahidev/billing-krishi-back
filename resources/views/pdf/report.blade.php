@@ -5,105 +5,153 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 12px 20px 48px 20px;
+  margin: 12px 22px 70px 22px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
-body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; background: #ffffff; }
+body {
+  font-size: 11px;
+  color: #111827;
+  line-height: 1.35;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+}
 
-/* Header Section */
-.header-table {
+/* Watermark Background (Huge Centered Light Logo, Fixed Non-Wrapping Overlay with Highest z-index) */
+.watermark-container {
+  position: fixed;
+  top: 240px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 9999;
+  opacity: 0.048;
+  pointer-events: none;
+}
+.watermark-img {
+  width: 480px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* 1. Centered Grouped Header Section (Arial Bold, 2x Prominence) */
+.header-wrapper {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 6px;
+  padding-top: 0;
+}
+.header-group-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+.header-group-table td {
+  vertical-align: middle;
+  border: none;
+}
+.logo-img {
+  height: 110px;
+  width: 110px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+.logo-sub-text {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 6px;
+  text-align: center;
+  width: 110px;
+  margin-top: 3px;
+  line-height: 1;
+}
+.header-green-bar {
+  width: 3px;
+  height: 96px;
+  background-color: #0B6B43;
+  margin: 0 auto;
+}
+.company-name {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-size: 38px;
+  font-weight: 900;
+  color: #0B6B43;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.05;
+  text-align: center;
+  white-space: nowrap;
+}
+.company-tagline {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 800;
+  color: #1F2937;
+  letter-spacing: 0.4px;
+  margin-top: 5px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* 2. Section Badges with Clean Seamless Flanking Lines & Smooth Light Green Pill */
+.section-badge-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 4px;
+  margin: 12px 0 9px 0;
 }
-.header-table td {
+.section-badge-table td {
   vertical-align: middle;
   border: none;
   padding: 0;
 }
-.logo-box {
-  width: 110px;
-  text-align: left;
-  vertical-align: middle;
-}
-.logo-img {
-  height: 85px;
-  width: 85px;
-  object-fit: contain;
-  display: block;
-}
-.logo-sub-text {
-  font-size: 14px;
-  font-weight: 900;
-  color: #000000;
-  letter-spacing: 4px;
-  text-align: center;
-  width: 85px;
-  margin-top: 1px;
-  line-height: 1;
-}
-.brand-center-box {
-  text-align: center;
-  padding: 0 10px;
-}
-.company-name {
-  font-size: 34px;
-  font-weight: 900;
-  color: #0B6B43;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  margin: 0;
-  line-height: 1.12;
-}
-.company-tagline {
-  font-size: 13px;
-  font-style: italic;
-  font-weight: 700;
-  color: #1F2937;
-  letter-spacing: 0.4px;
-  margin-top: 3px;
-}
-
-.right-balance-box {
-  width: 110px;
-}
-
-/* Pure Clean Bold Black CERTIFICATE OF ANALYSIS Title - No shades / No box */
-.report-title-container {
-  text-align: center;
-  margin: 6px 0 4px 0;
-}
-.report-main-title {
-  font-size: 21px;
-  font-weight: 900;
-  color: #000000;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin: 0;
-  line-height: 1.2;
-}
-
-/* Top Meta Bar */
-.top-meta-table {
+.badge-line {
+  border-bottom: 1.2px solid #86C1A4;
+  height: 1px;
   width: 100%;
-  border-collapse: collapse;
-  margin: 3px 0 5px 0;
-  font-size: 11px;
-  font-weight: bold;
 }
-.top-meta-table td {
-  border: none;
-  padding: 1px 0;
-  font-weight: bold;
-  color: #000000;
+.badge-pill-cell {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  padding: 0 4px;
+}
+.badge-pill {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  background-color: #EAF7F0;
+  color: #0B6B43;
+  border: 1.5px solid #86C1A4;
+  padding: 6px 32px;
+  font-size: 17.5px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  border-radius: 7px;
+  text-transform: uppercase;
+  display: inline-block;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
-/* Customer & Sample Details 2-Column Section */
+/* 3. Customer & Sample Details Card (Centered Columns & Balanced Margins, Pixel-Perfect Alignment) */
+.details-outer-box {
+  margin: 0 auto 8px auto;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1.5px solid #86C1A4;
+  border-radius: 6px;
+  background-color: #F8FDF9;
+}
 .details-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 5px;
   table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0 auto;
 }
 .details-table td {
   vertical-align: top;
@@ -112,144 +160,152 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
 }
 .inner-meta-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 .inner-meta-table td {
   border: none;
-  padding: 2px 0;
+  padding: 2.5px 0;
   vertical-align: top;
-  font-size: 10.5px;
-  font-weight: bold;
-  color: #000000;
+  font-size: 13px;
   line-height: 1.3;
 }
 .lbl-col {
-  width: 95px;
-  max-width: 95px;
   white-space: nowrap;
-  font-weight: bold;
-  color: #000000;
-  font-size: 10.5px;
-}
-.sep-col {
-  width: 8px;
-  max-width: 8px;
-  text-align: left;
-  white-space: nowrap;
-  font-weight: bold;
-  color: #000000;
-  font-size: 10.5px;
-  padding: 2px 0;
+  font-weight: 700;
+  color: #374151;
+  font-size: 13px;
 }
 .val-col {
-  font-weight: bold;
-  color: #000000;
-  font-size: 10.5px;
-  word-wrap: break-word;
-  padding-left: 2px;
-}
-
-/* Pure Clean Bold Black TEST RESULTS Section Title */
-.section-title-container {
-  text-align: center;
-  margin: 10px 0 12px 0;
-}
-.section-title {
-  font-size: 17px;
   font-weight: 900;
-  letter-spacing: 2px;
-  text-transform: uppercase;
   color: #000000;
-  margin: 0;
-  line-height: 1.2;
+  font-size: 14px;
+  word-wrap: break-word;
+  padding-left: 0;
+}
+.colon-sep {
+  font-weight: 900;
+  color: #1F2937;
+  font-size: 13px;
+  margin-right: 4px;
+  display: inline;
 }
 
-/* Test Results Table - Snug Fit to Content */
+/* 4. Results Table (Light Green Header, 4x Large Commanding Text, 100% Width) */
+.results-table-wrapper {
+  width: 100%;
+  margin: 6px 0 8px 0;
+}
 .results-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 3px;
-  border: 1.2px solid #000000;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1.5px solid #86C1A4;
+  border-radius: 6px;
+  overflow: hidden;
 }
 .results-table th {
-  background: #ffffff;
-  color: #000000;
-  padding: 4px 5px;
-  font-size: 10px;
+  background: #EAF7F0;
+  color: #0B6B43;
+  padding: 8px 10px;
+  font-size: 15.5px;
   font-weight: 900;
   text-align: left;
-  border: 1px solid #000000;
+  border: none;
+  border-bottom: 1.5px solid #86C1A4;
+  border-right: 1px solid #C4E2D3;
   text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+}
+.results-table th:last-child {
+  border-right: none;
 }
 .results-table td {
-  padding: 3.5px 5px;
-  font-size: 10px;
-  border: 1px solid #000000;
+  padding: 8px 10px;
+  font-size: 15px;
+  border: none;
+  border-bottom: 1px solid #D1E7DD;
+  border-right: 1px solid #D1E7DD;
   vertical-align: middle;
-  color: #000000;
+  color: #111827;
+  line-height: 1.3;
+}
+.results-table td:last-child {
+  border-right: none;
+}
+.results-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.results-table tbody tr:nth-child(even) {
+  background-color: #F8FDF9;
 }
 
-/* Note and End of Report */
-.customer-info-note {
-  text-align: center;
-  font-size: 9.5px;
-  font-weight: normal;
-  color: #1F2937;
-  margin-top: 6px;
-}
-.customer-info-note em {
-  font-weight: bold;
-}
+/* 5. End of Report Banner */
 .end-report-banner {
   text-align: center;
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  margin: 8px 0 5px 0;
-  color: #000000;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+  margin: 6px 0 4px 0;
+  color: #0B6B43;
 }
 
-/* Signatory Section */
+/* 6. Signatory Section (Fixed Bottom Right - Above Footer Box with Bottom Margin) */
 .sig-wrapper {
-  width: 100%;
-  margin-top: 10px;
-  page-break-inside: avoid;
-  clear: both;
+  position: fixed;
+  bottom: 80px;
+  right: 0px;
+  width: 220px;
+  z-index: 10;
 }
 .sig-box {
-  float: right;
-  width: 200px;
+  width: 220px;
   text-align: center;
 }
 .sig-img {
-  height: 48px;
+  height: 42px;
   width: auto;
-  max-width: 160px;
+  max-width: 150px;
   object-fit: contain;
   display: block;
-  margin: 0 auto 3px auto;
+  margin: 0 auto 2px auto;
+}
+.sig-line {
+  border-top: 1.5px solid #9CA3AF;
+  width: 150px;
+  margin: 2px auto 3px auto;
 }
 .sig-name {
-  font-weight: bold;
-  font-size: 11px;
-  color: #000000;
+  font-weight: 900;
+  font-size: 13px;
+  color: #111827;
 }
 .sig-title {
-  font-size: 10px;
-  color: #374151;
+  font-weight: 800;
+  font-size: 10.5px;
+  color: #0B6B43;
   margin-top: 1px;
+  text-transform: uppercase;
 }
 
-/* Static Bottom Pinned Footer */
+/* 7. Static Bottom Pinned Footer with Horizontal Box & Outside Note */
 .footer-pinned-container {
   position: fixed;
-  bottom: -42px;
+  bottom: 0px;
   left: 0;
   right: 0;
   width: 100%;
-  border-top: 1px solid #000000;
-  padding-top: 3px;
   text-align: center;
+}
+.footer-box {
+  width: 100%;
+  border: 1.2px solid #000000;
+  border-radius: 6px;
+  background: transparent;
+  padding: 4px 6px;
+  margin: 0;
 }
 .footer-table {
   width: 100%;
@@ -263,28 +319,45 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   vertical-align: middle;
 }
 .footer-line-1 {
-  font-size: 9.5px;
-  font-weight: bold;
-  color: #000000;
-  text-align: center;
-  line-height: 1.3;
-}
-.footer-line-2 {
-  font-size: 9.5px;
-  font-weight: bold;
-  color: #000000;
-  text-align: center;
-  line-height: 1.3;
-}
-.footer-line-3 {
-  font-size: 8.5px;
-  color: #1F2937;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #111827;
   text-align: center;
   line-height: 1.25;
+}
+.footer-line-2 {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #0B6B43;
+  text-align: center;
+  line-height: 1.25;
+}
+.footer-note {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #374151;
+  text-align: center;
+  line-height: 1.2;
+  margin-top: 3px;
 }
 </style>
 </head>
 <body>
+@php
+  $watermarkPath = file_exists(public_path('krishi-transparent.png'))
+      ? public_path('krishi-transparent.png')
+      : (file_exists(public_path('krishi-logo.png')) ? public_path('krishi-logo.png') : public_path('logo-krishi.png'));
+@endphp
+
+<!-- Watermark Background Logo (Centered with Light Visibility) -->
+@if(file_exists($watermarkPath))
+<div class="watermark-container">
+  <img src="{{ $watermarkPath }}" class="watermark-img" alt="Watermark">
+</div>
+@endif
 @php
   $logoPath = file_exists(public_path('krishi-pdf-logo.png'))
       ? public_path('krishi-pdf-logo.png')
@@ -303,7 +376,7 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   
   $showSpec = $report->reportType->show_specification ?? true;
   $customCols = $report->reportType->custom_columns ?? [];
-  $quantityLabel = $report->reportType?->quantity_label ?: 'Quantity (Bags / Tons)';
+  $quantityLabel = $report->reportType?->quantity_label ?: 'Tons / Bags';
   
   $phone = '+91 63793 12357, +91 88838 64756';
   if (!empty($lab->phone)) {
@@ -316,226 +389,327 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   $rows = $report->results->filter(fn($r) => $r->enabled !== false && $r->parameter && $r->parameter->active)->values();
 @endphp
 
-<!-- Header: Left Logo + KAL | Center Company Name + Tagline -->
-<table class="header-table">
-  <tr>
-    <td class="logo-box">
-      @if(file_exists($logoPath))
-        <img src="{{ $logoPath }}" class="logo-img" alt="KAL Logo">
-        <div class="logo-sub-text">KAL</div>
-      @endif
-    </td>
-    <td class="brand-center-box">
-      <div class="company-name">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
-      <div class="company-tagline">“{{ $lab->tagline ?? 'Discovering Solutions, One Test at a Time' }}”</div>
-    </td>
-    <td class="right-balance-box"></td>
-  </tr>
-</table>
-
-<!-- Pure Clean Bold Black TEST REPORT Title -->
-<div class="report-title-container">
-  <div class="report-main-title">TEST REPORT</div>
+<!-- 1. Header: Grouped Centered Logo + Vertical Green Line + Company Name & Tagline -->
+<div class="header-wrapper">
+  <table class="header-group-table" align="center" style="margin: 0 auto; border-collapse: collapse;">
+    <tr>
+      <td style="vertical-align: middle; text-align: center; padding-right: 16px; border: none;">
+        @if(file_exists($logoPath))
+          <img src="{{ $logoPath }}" class="logo-img" alt="Logo">
+        @endif
+      </td>
+      <td style="vertical-align: middle; text-align: center; padding: 0 16px; width: 4px; border: none;">
+        <div class="header-green-bar"></div>
+      </td>
+      <td style="vertical-align: middle; text-align: center; padding-left: 0; border: none;">
+        <div class="company-name">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
+        <div class="company-tagline">“{{ $lab->tagline ?? 'Discovering Solutions, One Test at a Time' }}”</div>
+      </td>
+    </tr>
+  </table>
 </div>
 
-<!-- Top Meta Bar (Report No opposite Report Date with bottom margin) -->
-<table class="top-meta-table">
+<!-- 2. Section 1 Badge: TEST REPORT with Smooth Border-Radius Pill -->
+<table class="section-badge-table" align="center">
   <tr>
-    <td style="text-align: left; width: 50%;">
-      Report No &nbsp;: &nbsp;{{ $report->report_no }}
+    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+    <td class="badge-pill-cell">
+      <div class="badge-pill">TEST REPORT</div>
     </td>
-    <td style="text-align: right; width: 50%;">
-      Report Date &nbsp;: &nbsp;{{ $coaDateFormatted }}
-    </td>
+    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
   </tr>
 </table>
 
-<!-- Customer & Sample Details (Snug 50/50 Columns Key-Value - Straight Vertical Colon Alignment) -->
-<table class="details-table">
+<!-- 3. Customer & Sample Details Card (Centered Columns & Balanced Margins) -->
+<table class="details-outer-box" align="center">
   <tr>
-    <!-- Left Column (50%) -->
-    <td style="width: 50%; padding-right: 12px; vertical-align: top;">
-      <table class="inner-meta-table">
+    <td style="padding: 12px 18px; border: none; vertical-align: top;">
+      <table class="details-table" align="center">
         <tr>
-          <td width="95" class="lbl-col">Party / Customer</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">
-            {{ $customerName }}
-            @if($report->customer?->group?->name)
-              <span style="font-weight: bold; font-size: 10px; color: #374151;">({{ $report->customer->group->name }})</span>
-            @endif
+          <!-- Left Column (50%) -->
+          <td style="width: 50%; padding-right: 14px; vertical-align: top;">
+            <table class="inner-meta-table">
+              <colgroup>
+                <col style="width: 125px;">
+                <col style="width: auto;">
+              </colgroup>
+              @if(!empty($report->report_no))
+              <tr>
+                <td class="lbl-col">Report No</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->report_no }}</td>
+              </tr>
+              @endif
+              @if(!empty($customerName) && $customerName !== '—')
+              <tr>
+                <td class="lbl-col">Customer</td>
+                <td class="val-col">
+                  <span class="colon-sep">:</span>{{ $customerName }}
+                  @if($report->customer?->group?->name)
+                    <span style="font-weight: bold; font-size: 11.5px; color: #4B5563;">({{ $report->customer->group->name }})</span>
+                  @endif
+                </td>
+              </tr>
+              @endif
+              @if(!empty($customerAddress) && $customerAddress !== '—')
+              <tr>
+                <td class="lbl-col">Address</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $customerAddress }}</td>
+              </tr>
+              @endif
+              @if(!empty($report->nature_of_sample))
+              <tr>
+                <td class="lbl-col">Nature of Sample</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->nature_of_sample }}</td>
+              </tr>
+              @elseif(!empty($report->reportType?->name))
+              <tr>
+                <td class="lbl-col">Nature of Sample</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->reportType->name }}</td>
+              </tr>
+              @endif
+              @if(!empty($report->bill_no))
+              <tr>
+                <td class="lbl-col">Bill No</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->bill_no }}</td>
+              </tr>
+              @endif
+              @if(!empty($report->vehicle_no))
+              <tr>
+                <td class="lbl-col">Vehicle No</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->vehicle_no }}</td>
+              </tr>
+              @endif
+            </table>
+          </td>
+          
+          <!-- Right Column (50%) -->
+          <td style="width: 50%; padding-left: 14px; vertical-align: top;">
+            <table class="inner-meta-table">
+              <colgroup>
+                <col style="width: 95px;">
+                <col style="width: auto;">
+              </colgroup>
+              @if(!empty($coaDateFormatted) && $coaDateFormatted !== '—')
+              <tr>
+                <td class="lbl-col">Report Date</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $coaDateFormatted }}</td>
+              </tr>
+              @endif
+              @if(!empty($report->bags_tons))
+              <tr>
+                <td class="lbl-col">{{ $quantityLabel }}</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->bags_tons }}</td>
+              </tr>
+              @endif
+              @if(!empty($report->sample_date))
+              <tr>
+                <td class="lbl-col">Sample Date</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $sampleDateFormatted }}</td>
+              </tr>
+              @endif
+              @if(!empty($report->buyer))
+              <tr>
+                <td class="lbl-col">Buyer</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->buyer }}</td>
+              </tr>
+              @endif
+              @if(!empty($report->seller))
+              <tr>
+                <td class="lbl-col">Seller</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->seller }}</td>
+              </tr>
+              @endif
+            </table>
           </td>
         </tr>
-        <tr>
-          <td width="95" class="lbl-col">Address</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $customerAddress ?: '—' }}</td>
-        </tr>
-        @if(!empty($report->sample_name))
-        <tr>
-          <td width="95" class="lbl-col">Sample Name</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $report->sample_name }}</td>
-        </tr>
-        @endif
-        <tr>
-          <td width="95" class="lbl-col">Nature of Sample</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $report->nature_of_sample ?: ($report->sample_name ?: ($report->reportType?->name ?: 'Sample')) }}</td>
-        </tr>
-        @if(!empty($report->bill_no))
-        <tr>
-          <td width="95" class="lbl-col">Bill No</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $report->bill_no }}</td>
-        </tr>
-        @endif
-        @if(!empty($report->vehicle_no))
-        <tr>
-          <td width="95" class="lbl-col">Vehicle No</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $report->vehicle_no }}</td>
-        </tr>
-        @endif
-      </table>
-    </td>
-    
-    <!-- Right Column (50%) -->
-    <td style="width: 50%; padding-left: 12px; vertical-align: top;">
-      <table class="inner-meta-table">
-        @if(!empty($report->bags_tons))
-        <tr>
-          <td width="95" class="lbl-col">{{ $quantityLabel }}</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $report->bags_tons }}</td>
-        </tr>
-        @endif
-        <tr>
-          <td width="95" class="lbl-col">Sample Date</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $sampleDateFormatted }}</td>
-        </tr>
-        @if(!empty($report->buyer))
-        <tr>
-          <td width="95" class="lbl-col">Buyer</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $report->buyer }}</td>
-        </tr>
-        @endif
-        @if(!empty($report->seller))
-        <tr>
-          <td width="95" class="lbl-col">Seller</td>
-          <td width="8" class="sep-col">:</td>
-          <td class="val-col">{{ $report->seller }}</td>
-        </tr>
-        @endif
       </table>
     </td>
   </tr>
 </table>
 
-<!-- Pure Clean Bold Black TEST RESULTS Section Title -->
-<div class="section-title-container">
-  <div class="section-title">TEST RESULTS</div>
-</div>
+<!-- 4. Section 2 Badge: TEST RESULTS with Smooth Border-Radius Pill -->
+<table class="section-badge-table" align="center">
+  <tr>
+    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+    <td class="badge-pill-cell">
+      <div class="badge-pill">TEST RESULTS</div>
+    </td>
+    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+  </tr>
+</table>
 
 @php
   $tableCols = $report->reportType?->table_columns;
   if (!is_array($tableCols) || empty($tableCols)) {
     $tableCols = [
-      ['key' => 's_no', 'label' => 'S.No', 'visible' => true, 'type' => 'system'],
-      ['key' => 'parameter', 'label' => 'Parameter', 'visible' => true, 'type' => 'system'],
+      ['key' => 's_no', 'label' => 'S.NO', 'visible' => true, 'type' => 'system'],
     ];
     if ($showSpec) {
-      $tableCols[] = ['key' => 'specification', 'label' => 'Specification', 'visible' => true, 'type' => 'system'];
+      $tableCols[] = ['key' => 'specification', 'label' => 'SPECIFICATION', 'visible' => true, 'type' => 'system'];
     }
+    $tableCols[] = ['key' => 'parameter', 'label' => 'PARAMETER', 'visible' => true, 'type' => 'system'];
     foreach ($customCols as $cIdx => $cName) {
       $tableCols[] = ['key' => 'custom_' . $cIdx, 'label' => $cName, 'visible' => true, 'type' => 'custom'];
     }
-    $tableCols[] = ['key' => 'result', 'label' => 'Result', 'visible' => true, 'type' => 'system'];
+    $tableCols[] = ['key' => 'result', 'label' => 'RESULT', 'visible' => true, 'type' => 'system'];
   }
   $activeTableCols = array_values(array_filter($tableCols, fn($c) => ($c['visible'] ?? true) !== false));
+
+  $hasSpec = in_array('specification', array_column($activeTableCols, 'key'));
+  $customColsList = array_filter($activeTableCols, fn($c) => ($c['type'] ?? '') === 'custom' || str_starts_with($c['key'] ?? '', 'custom_'));
+  $customCount = count($customColsList);
+
+  $colPercentWidths = [];
+  foreach ($activeTableCols as $c) {
+    $ckey = $c['key'] ?? '';
+    if (!empty($c['width'])) {
+      $wStr = trim((string)$c['width']);
+      if (is_numeric($wStr)) {
+        $wStr = $wStr . '%';
+      }
+      $colPercentWidths[$ckey] = $wStr;
+      continue;
+    }
+
+    if ($ckey === 's_no') {
+      $colPercentWidths[$ckey] = '8%';
+    } elseif ($ckey === 'result') {
+      $colPercentWidths[$ckey] = '18%';
+    } elseif ($ckey === 'specification') {
+      $colPercentWidths[$ckey] = '24%';
+    } elseif ($ckey === 'parameter') {
+      if ($customCount > 0) {
+        $colPercentWidths[$ckey] = '32%';
+      } elseif (!$hasSpec) {
+        $colPercentWidths[$ckey] = '74%';
+      } else {
+        $colPercentWidths[$ckey] = '50%';
+      }
+    } else {
+      $colPercentWidths[$ckey] = round(18 / max(1, $customCount)) . '%';
+    }
+  }
 @endphp
 
-<!-- Results Table -->
-<table class="results-table">
-  <thead>
-    <tr>
+<!-- 5. Results Table (3x Bigger, 100% Width, Clear & Perfectly Aligned with DB Column Width Priority) -->
+<div class="results-table-wrapper">
+  <table class="results-table" align="center">
+    <colgroup>
       @foreach($activeTableCols as $col)
         @php
           $ckey = $col['key'] ?? '';
-          $clabel = $col['label'] ?? '';
-          $isSno = ($ckey === 's_no');
-          $isResult = ($ckey === 'result');
-          $isSpec = ($ckey === 'specification');
-          $isCustom = str_starts_with($ckey, 'custom_');
-
-          $thStyle = 'text-align: left;';
-          if ($isSno) {
-            $thStyle = 'width: 38px; text-align: center;';
-          } elseif ($isResult) {
-            $thStyle = 'width: 22%; text-align: center;';
-          } elseif ($isSpec) {
-            $thStyle = 'width: 26%; text-align: left;';
-          } elseif ($isCustom) {
-            $thStyle = 'width: 18%; text-align: left;';
-          }
+          $w = $colPercentWidths[$ckey] ?? 'auto';
         @endphp
-        <th style="{{ $thStyle }}">
-          {{ $clabel }}
-        </th>
+        <col style="width: {{ $w }};">
       @endforeach
-    </tr>
-  </thead>
-  <tbody>
-    @foreach($rows as $idx => $res)
-    @php
-      $param = $res->parameter;
-      $spec = $res->specification ?: ($param->specification ?: '—');
-      $resultVal = ($res->result !== null && $res->result !== '') ? $res->result : '—';
-    @endphp
-    <tr>
-      @foreach($activeTableCols as $col)
-        @php
-          $ckey = $col['key'] ?? '';
-          $clabel = $col['label'] ?? '';
-        @endphp
-        @if($ckey === 's_no')
-          <td style="text-align: center;">{{ $idx + 1 }}</td>
-        @elseif($ckey === 'parameter')
-          <td><strong>{{ $param->name ?? 'Parameter' }}</strong></td>
-        @elseif($ckey === 'specification')
-          <td>{{ $spec }}</td>
-        @elseif($ckey === 'result')
-          <td style="text-align: center; font-weight: bold; font-size: 11px;">
-            {{ $resultVal }}
-          </td>
-        @else
+    </colgroup>
+    <thead>
+      <tr>
+        @foreach($activeTableCols as $col)
           @php
-            $cVal = '';
-            if (is_array($res->custom_values)) {
-              $cVal = $res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '');
-            }
+            $ckey = $col['key'] ?? '';
+            $clabel = strtoupper($col['label'] ?? '');
+            $isSno = ($ckey === 's_no');
+            $isSpec = ($ckey === 'specification');
+            $isResult = ($ckey === 'result');
+            $w = $colPercentWidths[$ckey] ?? 'auto';
+            $align = ($isSno || $isSpec || $isResult) ? 'center' : 'left';
           @endphp
-          <td>{{ $cVal !== '' ? $cVal : '—' }}</td>
-        @endif
+          <th style="width: {{ $w }}; text-align: {{ $align }};">
+            {{ $clabel }}
+          </th>
+        @endforeach
+      </tr>
+    </thead>
+    <tbody>
+      @foreach($rows as $idx => $res)
+      @php
+        $param = $res->parameter;
+        $spec = $res->specification ?: ($param->specification ?: '-');
+        $resultVal = ($res->result !== null && $res->result !== '') ? $res->result : '-';
+      @endphp
+      <tr>
+        @foreach($activeTableCols as $col)
+          @php
+            $ckey = $col['key'] ?? '';
+            $clabel = $col['label'] ?? '';
+            $w = $colPercentWidths[$ckey] ?? 'auto';
+          @endphp
+          @if($ckey === 's_no')
+            <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 900; color: #111827;">{{ $idx + 1 }}</td>
+          @elseif($ckey === 'specification')
+            <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 800; color: #111827;">{{ $spec }}</td>
+          @elseif($ckey === 'parameter')
+            <td style="width: {{ $w }}; text-align: left; font-size: 15.5px; font-weight: 900; color: #000000;">{{ $param->name ?? 'Parameter' }}</td>
+          @elseif($ckey === 'result')
+            <td style="width: {{ $w }}; text-align: center; font-size: 16.5px; font-weight: 900; color: #000000;">
+              {{ $resultVal }}
+            </td>
+          @else
+            @php
+              $cVal = '';
+              if (is_array($res->custom_values)) {
+                $cVal = $res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '');
+              }
+            @endphp
+            <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 800; color: #111827;">{{ $cVal !== '' ? $cVal : '-' }}</td>
+          @endif
+        @endforeach
+      </tr>
       @endforeach
-    </tr>
-    @endforeach
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
 
-@if(!empty($report->remarks))
-<div style="margin: 8px 0 6px 0; padding: 4px 8px; background-color: #F9FAFB; border-left: 3px solid #0B6B43; font-size: 10.5px; line-height: 1.4;">
-  <strong style="color: #0B6B43;">Remarks / Notes:</strong> <span style="font-weight: 600; color: #111827;">{{ $report->remarks }}</span>
+@php
+  $remarksVisible = in_array('remarks', $report->reportType?->visible_fields ?? []);
+  $remarksRaw = trim((string)($report->remarks ?? ''));
+  
+  if ($remarksRaw !== '') {
+      // Convert markdown **bold** to <strong>bold</strong>
+      $remarksFormatted = preg_replace('/\*\*(.*?)\*\*/', '<strong style="color: #000000; font-weight: 900;">$1</strong>', e($remarksRaw));
+      
+      // Auto-highlight key results (2, Pass, Fail) with thick bold font
+      $keywords = ['2', 'Pass', 'Fail', 'PASS', 'FAIL'];
+      foreach ($keywords as $kw) {
+          $remarksFormatted = preg_replace('/\b(' . preg_quote($kw, '/') . ')\b(?=[^<]*>|[^<]*$)/', '<strong style="color: #000000; font-weight: 900;">$1</strong>', $remarksFormatted);
+      }
+  } else {
+      $remarksFormatted = '';
+  }
+
+  $notesVisible = in_array('notes', $report->reportType?->visible_fields ?? []);
+  $notesRaw = trim((string)($report->notes ?? ''));
+  if ($notesRaw === '' && !empty($report->reportType?->default_notes)) {
+      $notesRaw = trim((string)$report->reportType->default_notes);
+  }
+  $notesFormatted = $notesRaw !== '' ? nl2br(e($notesRaw)) : '';
+@endphp
+
+@if(!empty($remarksFormatted))
+<div class="remarks-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
+  <div style="font-weight: 800; font-size: 11px; color: #111827; margin-bottom: 2px;">Remarks:</div>
+  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 26px; padding-right: 12px; text-align: justify;">
+    {!! $remarksFormatted !!}
+  </div>
 </div>
 @endif
 
+@if(!empty($notesFormatted))
+<div class="notes-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
+  <div style="font-weight: 800; font-size: 11px; color: #111827; margin-bottom: 2px;">Notes:</div>
+  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 26px; padding-right: 12px; text-align: justify;">
+    {!! $notesFormatted !!}
+  </div>
+</div>
+@endif
+
+<!-- 6. End of Report Banner -->
 <div class="end-report-banner">
-  /************* End of the Report *************/
+  ************* End of the Report *************
 </div>
 
-<!-- Signatory Block -->
+<!-- 7. Signatory Section -->
 <div class="sig-wrapper">
   <div class="sig-box">
     @if($sigPath)
@@ -543,30 +717,31 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
     @else
       <div style="height: 48px;">&nbsp;</div>
     @endif
+    <div class="sig-line"></div>
     <div class="sig-name">Authorized Signatory</div>
     <div class="sig-title">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
   </div>
 </div>
 
-<!-- Static Pinned Bottom Footer (All 3 lines fully displayed and centered) -->
+<!-- 8. Static Pinned Bottom Footer with Horizontal Box & Outside Note -->
 <div class="footer-pinned-container">
-  <table class="footer-table">
-    <tr>
-      <td class="footer-line-1">
-        Address: {{ $lab->address ?? '182-B, Tiruppur Road, Kangeyam - 638701, Tamil Nadu, India.' }}
-      </td>
-    </tr>
-    <tr>
-      <td class="footer-line-2">
-        Ph: {{ $phone }} &nbsp;&bull;&nbsp; Email: {{ $email }} &nbsp;&bull;&nbsp; Web: {{ $websiteClean }}
-      </td>
-    </tr>
-    <tr>
-      <td class="footer-line-3">
-        Note: Test results relate only to the items tested. Test Report shall not be reproduced in full or part without the approval of the laboratory. Any corrections shall invalidate this test report.
-      </td>
-    </tr>
-  </table>
+  <div class="footer-box">
+    <table class="footer-table">
+      <tr>
+        <td class="footer-line-1">
+          <strong>Address:</strong> {{ $lab->address ?? '103-B, Tiruppur Road, Kangeyam - 638701, Tamil Nadu, India.' }}
+        </td>
+      </tr>
+      <tr>
+        <td class="footer-line-2">
+          Ph: {{ $phone }} &nbsp;&bull;&nbsp; Email: {{ $email }} &nbsp;&bull;&nbsp; Web: {{ $websiteClean }}
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer-note">
+    Note: Test results relate only to the items tested. Test Report shall not be reproduced in full or part without the approval of the laboratory.
+  </div>
 </div>
 
 <script type="text/php">

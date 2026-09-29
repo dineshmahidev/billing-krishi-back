@@ -39,6 +39,22 @@ class PdfFont
             if (!$ok) $allOk = false;
         }
 
+        // Register Lucida font for dynamic data values
+        $lucidaDest = $dir.'/lucida-console.ttf';
+        if (!file_exists($lucidaDest)) @copy('C:/Windows/Fonts/lucon.ttf', $lucidaDest);
+        if (file_exists($lucidaDest)) {
+            $pdf->getDomPDF()->getFontMetrics()->registerFont([
+                'family' => 'LucidaFax',
+                'weight' => 'normal',
+                'style'  => 'normal',
+            ], 'file://'.str_replace('\\', '/', $lucidaDest));
+            $pdf->getDomPDF()->getFontMetrics()->registerFont([
+                'family' => 'LucidaFax',
+                'weight' => 'bold',
+                'style'  => 'normal',
+            ], 'file://'.str_replace('\\', '/', $lucidaDest));
+        }
+
         // Note: font subsetting stays OFF - tested, it drops ₹ glyph (CIDToGID -> 0).
         // Full embed (~1.6MB) renders all symbols correctly.
         if ($allOk) self::$registered = true;
