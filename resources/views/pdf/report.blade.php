@@ -5,7 +5,7 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 12px 22px 70px 22px;
+  margin: 14px 28px 75px 28px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
 body {
@@ -430,7 +430,7 @@ body {
           <td style="width: 50%; padding-right: 14px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
-                <col style="width: 125px;">
+                <col style="width: 114px;">
                 <col style="width: auto;">
               </colgroup>
               @if(!empty($customerName) && $customerName !== '—')
@@ -480,7 +480,7 @@ body {
           <td style="width: 50%; padding-left: 14px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
-                <col style="width: 105px;">
+                <col style="width: 90px;">
                 <col style="width: auto;">
               </colgroup>
               @if(!empty($coaDateFormatted) && $coaDateFormatted !== '—')
@@ -553,34 +553,41 @@ body {
   $customColsList = array_filter($activeTableCols, fn($c) => ($c['type'] ?? '') === 'custom' || str_starts_with($c['key'] ?? '', 'custom_'));
   $customCount = count($customColsList);
 
-  $colPercentWidths = [];
+  $rawWeights = [];
   foreach ($activeTableCols as $c) {
     $ckey = $c['key'] ?? '';
     if (!empty($c['width'])) {
-      $wStr = trim((string)$c['width']);
-      if (is_numeric($wStr)) {
-        $wStr = $wStr . '%';
+      $wNum = floatval(preg_replace('/[^0-9.]/', '', (string)$c['width']));
+      if ($wNum > 0) {
+        $rawWeights[$ckey] = $wNum;
+        continue;
       }
-      $colPercentWidths[$ckey] = $wStr;
-      continue;
     }
 
     if ($ckey === 's_no') {
-      $colPercentWidths[$ckey] = '8%';
+      $rawWeights[$ckey] = 8;
     } elseif ($ckey === 'result') {
-      $colPercentWidths[$ckey] = '18%';
+      $rawWeights[$ckey] = 18;
     } elseif ($ckey === 'specification') {
-      $colPercentWidths[$ckey] = '24%';
+      $rawWeights[$ckey] = 22;
     } elseif ($ckey === 'parameter') {
       if ($customCount > 0) {
-        $colPercentWidths[$ckey] = '32%';
+        $rawWeights[$ckey] = 34;
       } elseif (!$hasSpec) {
-        $colPercentWidths[$ckey] = '74%';
+        $rawWeights[$ckey] = 74;
       } else {
-        $colPercentWidths[$ckey] = '50%';
+        $rawWeights[$ckey] = 52;
       }
     } else {
-      $colPercentWidths[$ckey] = round(18 / max(1, $customCount)) . '%';
+      $rawWeights[$ckey] = 18 / max(1, $customCount);
+    }
+  }
+
+  $totalWeight = array_sum($rawWeights);
+  $colPercentWidths = [];
+  if ($totalWeight > 0) {
+    foreach ($rawWeights as $ckey => $val) {
+      $colPercentWidths[$ckey] = round(($val / $totalWeight) * 100, 1) . '%';
     }
   }
 @endphp
@@ -690,7 +697,7 @@ body {
 @if(!empty($remarksFormatted))
 <div class="remarks-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
   <div style="font-weight: 800; font-size: 11px; color: #111827; margin-bottom: 2px;">Remarks:</div>
-  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 26px; padding-right: 12px; text-align: justify;">
+  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 8px; padding-right: 8px; text-align: justify;">
     {!! $remarksFormatted !!}
   </div>
 </div>
@@ -699,7 +706,7 @@ body {
 @if(!empty($notesFormatted))
 <div class="notes-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
   <div style="font-weight: 800; font-size: 11px; color: #111827; margin-bottom: 2px;">Notes:</div>
-  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 26px; padding-right: 12px; text-align: justify;">
+  <div style="font-size: 10.5px; color: #1F2937; line-height: 1.45; padding-left: 8px; padding-right: 8px; text-align: justify;">
     {!! $notesFormatted !!}
   </div>
 </div>
