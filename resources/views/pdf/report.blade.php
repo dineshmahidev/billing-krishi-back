@@ -433,12 +433,6 @@ body {
                 <col style="width: 125px;">
                 <col style="width: auto;">
               </colgroup>
-              @if(!empty($report->report_no))
-              <tr>
-                <td class="lbl-col">Report No</td>
-                <td class="val-col"><span class="colon-sep">:</span>{{ $report->report_no }}</td>
-              </tr>
-              @endif
               @if(!empty($customerName) && $customerName !== '—')
               <tr>
                 <td class="lbl-col">Customer</td>
@@ -486,7 +480,7 @@ body {
           <td style="width: 50%; padding-left: 14px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
-                <col style="width: 95px;">
+                <col style="width: 105px;">
                 <col style="width: auto;">
               </colgroup>
               @if(!empty($coaDateFormatted) && $coaDateFormatted !== '—')
@@ -495,16 +489,16 @@ body {
                 <td class="val-col"><span class="colon-sep">:</span>{{ $coaDateFormatted }}</td>
               </tr>
               @endif
+              @if(!empty($report->report_no))
+              <tr>
+                <td class="lbl-col">Report No</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->report_no }}</td>
+              </tr>
+              @endif
               @if(!empty($report->bags_tons))
               <tr>
                 <td class="lbl-col">{{ $quantityLabel }}</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $report->bags_tons }}</td>
-              </tr>
-              @endif
-              @if(!empty($report->sample_date))
-              <tr>
-                <td class="lbl-col">Sample Date</td>
-                <td class="val-col"><span class="colon-sep">:</span>{{ $sampleDateFormatted }}</td>
               </tr>
               @endif
               @if(!empty($report->buyer))
@@ -638,11 +632,18 @@ body {
           @if($ckey === 's_no')
             <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 900; color: #111827;">{{ $idx + 1 }}</td>
           @elseif($ckey === 'specification')
-            <td style="width: {{ $w }}; text-align: center; font-size: 15px; font-weight: 800; color: #111827;">{{ $spec }}</td>
+            <td style="width: {{ $w }}; text-align: center; font-size: 14.5px; font-weight: 800; color: #111827;">{{ $spec }}</td>
           @elseif($ckey === 'parameter')
-            <td style="width: {{ $w }}; text-align: left; font-size: 15.5px; font-weight: 900; color: #000000;">{{ $param->name ?? 'Parameter' }}</td>
+            <td style="width: {{ $w }}; text-align: left; font-size: 15px; font-weight: 900; color: #000000;">{{ $param->name ?? 'Parameter' }}</td>
           @elseif($ckey === 'result')
-            <td style="width: {{ $w }}; text-align: center; font-size: 16.5px; font-weight: 900; color: #000000;">
+            @php
+              $isAlphaResult = preg_match('/[a-zA-Z]/', (string)$resultVal);
+              $resLen = strlen(trim((string)$resultVal));
+              $resultFontSize = $isAlphaResult ? ($resLen > 7 ? '13.5px' : '14.5px') : '15px';
+              $resultFontWeight = $isAlphaResult ? '800' : '900';
+              $resultColor = $isAlphaResult ? '#111827' : '#000000';
+            @endphp
+            <td style="width: {{ $w }}; text-align: center; font-size: {{ $resultFontSize }}; font-weight: {{ $resultFontWeight }}; color: {{ $resultColor }};">
               {{ $resultVal }}
             </td>
           @else
