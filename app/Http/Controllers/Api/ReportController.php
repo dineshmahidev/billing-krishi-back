@@ -263,6 +263,8 @@ class ReportController extends Controller
 
     public function pdf(Request $request, $id)
     {
+        @ini_set('max_execution_time', '120');
+        @set_time_limit(120);
         // Allow PDF via header token OR ?token= query param for direct browser open.
         // Keep unauthenticated fallback to avoid blocking direct window.open during transition.
         $user = $this->resolveUser($request);
@@ -278,6 +280,8 @@ class ReportController extends Controller
 
     public function downloadPdf(Request $request, $id)
     {
+        @ini_set('max_execution_time', '120');
+        @set_time_limit(120);
         $user = $this->resolveUser($request);
         $report = Report::with(['reportType','creator','customer.group','results.parameter'])->findOrFail($id);
         $lab = LabSetting::current();

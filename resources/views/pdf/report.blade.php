@@ -87,8 +87,8 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
 .top-meta-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 4px 0 6px 0;
-  font-size: 11.5px;
+  margin: 3px 0 5px 0;
+  font-size: 11px;
   font-weight: bold;
 }
 .top-meta-table td {
@@ -102,7 +102,7 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
 .details-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   table-layout: fixed;
 }
 .details-table td {
@@ -116,20 +116,20 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
 }
 .inner-meta-table td {
   border: none;
-  padding: 2.5px 0;
+  padding: 2px 0;
   vertical-align: top;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: bold;
   color: #000000;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 .lbl-col {
-  width: 110px;
-  max-width: 110px;
+  width: 95px;
+  max-width: 95px;
   white-space: nowrap;
   font-weight: bold;
   color: #000000;
-  font-size: 11px;
+  font-size: 10.5px;
 }
 .sep-col {
   width: 8px;
@@ -138,24 +138,24 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   white-space: nowrap;
   font-weight: bold;
   color: #000000;
-  font-size: 11px;
-  padding: 2.5px 0;
+  font-size: 10.5px;
+  padding: 2px 0;
 }
 .val-col {
   font-weight: bold;
   color: #000000;
-  font-size: 11px;
+  font-size: 10.5px;
   word-wrap: break-word;
-  padding-left: 3px;
+  padding-left: 2px;
 }
 
 /* Pure Clean Bold Black TEST RESULTS Section Title */
 .section-title-container {
   text-align: center;
-  margin: 14px 0 16px 0;
+  margin: 10px 0 12px 0;
 }
 .section-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 900;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -164,26 +164,26 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   line-height: 1.2;
 }
 
-/* Test Results Table */
+/* Test Results Table - Snug Fit to Content */
 .results-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 4px;
-  border: 1.5px solid #000000;
+  margin-top: 3px;
+  border: 1.2px solid #000000;
 }
 .results-table th {
   background: #ffffff;
   color: #000000;
-  padding: 5.5px 6px;
-  font-size: 10.5px;
+  padding: 4px 5px;
+  font-size: 10px;
   font-weight: 900;
   text-align: left;
   border: 1px solid #000000;
   text-transform: uppercase;
 }
 .results-table td {
-  padding: 4.5px 6px;
-  font-size: 10.5px;
+  padding: 3.5px 5px;
+  font-size: 10px;
   border: 1px solid #000000;
   vertical-align: middle;
   color: #000000;
@@ -286,9 +286,11 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
 </head>
 <body>
 @php
-  $logoPath = file_exists(public_path('krishi-transparent.png')) 
-      ? public_path('krishi-transparent.png') 
-      : (file_exists(public_path('krishi-logo.png')) ? public_path('krishi-logo.png') : public_path('logo-krishi.png'));
+  $logoPath = file_exists(public_path('krishi-pdf-logo.png'))
+      ? public_path('krishi-pdf-logo.png')
+      : (file_exists(public_path('krishi-transparent.png'))
+          ? public_path('krishi-transparent.png')
+          : (file_exists(public_path('krishi-logo.png')) ? public_path('krishi-logo.png') : public_path('logo-krishi.png')));
   $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? ''));
   $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null;
   
@@ -348,14 +350,14 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
   </tr>
 </table>
 
-<!-- Customer & Sample Details (Balanced 55/45 Columns Key-Value - Straight Vertical Colon Alignment) -->
+<!-- Customer & Sample Details (Snug 50/50 Columns Key-Value - Straight Vertical Colon Alignment) -->
 <table class="details-table">
   <tr>
-    <!-- Left Column (55%) -->
-    <td style="width: 55%; padding-right: 16px; vertical-align: top;">
+    <!-- Left Column (50%) -->
+    <td style="width: 50%; padding-right: 12px; vertical-align: top;">
       <table class="inner-meta-table">
         <tr>
-          <td width="112" class="lbl-col">Party / Customer</td>
+          <td width="95" class="lbl-col">Party / Customer</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">
             {{ $customerName }}
@@ -365,32 +367,32 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
           </td>
         </tr>
         <tr>
-          <td width="112" class="lbl-col">Address</td>
+          <td width="95" class="lbl-col">Address</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $customerAddress ?: '—' }}</td>
         </tr>
         @if(!empty($report->sample_name))
         <tr>
-          <td width="112" class="lbl-col">Sample Name</td>
+          <td width="95" class="lbl-col">Sample Name</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->sample_name }}</td>
         </tr>
         @endif
         <tr>
-          <td width="112" class="lbl-col">Nature of Sample</td>
+          <td width="95" class="lbl-col">Nature of Sample</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->nature_of_sample ?: ($report->sample_name ?: ($report->reportType?->name ?: 'Sample')) }}</td>
         </tr>
         @if(!empty($report->bill_no))
         <tr>
-          <td width="112" class="lbl-col">Bill No</td>
+          <td width="95" class="lbl-col">Bill No</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->bill_no }}</td>
         </tr>
         @endif
         @if(!empty($report->vehicle_no))
         <tr>
-          <td width="112" class="lbl-col">Vehicle No</td>
+          <td width="95" class="lbl-col">Vehicle No</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->vehicle_no }}</td>
         </tr>
@@ -398,31 +400,31 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
       </table>
     </td>
     
-    <!-- Right Column (45%) -->
-    <td style="width: 45%; padding-left: 8px; vertical-align: top;">
+    <!-- Right Column (50%) -->
+    <td style="width: 50%; padding-left: 12px; vertical-align: top;">
       <table class="inner-meta-table">
         @if(!empty($report->bags_tons))
         <tr>
-          <td width="125" class="lbl-col">{{ $quantityLabel }}</td>
+          <td width="95" class="lbl-col">{{ $quantityLabel }}</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->bags_tons }}</td>
         </tr>
         @endif
         <tr>
-          <td width="125" class="lbl-col">Sample Date</td>
+          <td width="95" class="lbl-col">Sample Date</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $sampleDateFormatted }}</td>
         </tr>
         @if(!empty($report->buyer))
         <tr>
-          <td width="125" class="lbl-col">Buyer</td>
+          <td width="95" class="lbl-col">Buyer</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->buyer }}</td>
         </tr>
         @endif
         @if(!empty($report->seller))
         <tr>
-          <td width="125" class="lbl-col">Seller</td>
+          <td width="95" class="lbl-col">Seller</td>
           <td width="8" class="sep-col">:</td>
           <td class="val-col">{{ $report->seller }}</td>
         </tr>
@@ -465,8 +467,21 @@ body { font-size: 10.5px; color: #000000; line-height: 1.35; margin: 0; backgrou
           $clabel = $col['label'] ?? '';
           $isSno = ($ckey === 's_no');
           $isResult = ($ckey === 'result');
+          $isSpec = ($ckey === 'specification');
+          $isCustom = str_starts_with($ckey, 'custom_');
+
+          $thStyle = 'text-align: left;';
+          if ($isSno) {
+            $thStyle = 'width: 38px; text-align: center;';
+          } elseif ($isResult) {
+            $thStyle = 'width: 22%; text-align: center;';
+          } elseif ($isSpec) {
+            $thStyle = 'width: 26%; text-align: left;';
+          } elseif ($isCustom) {
+            $thStyle = 'width: 18%; text-align: left;';
+          }
         @endphp
-        <th style="{{ $isSno ? 'width: 36px; text-align: center;' : ($isResult ? 'width: 110px; text-align: center;' : 'text-align: left;') }}">
+        <th style="{{ $thStyle }}">
           {{ $clabel }}
         </th>
       @endforeach
