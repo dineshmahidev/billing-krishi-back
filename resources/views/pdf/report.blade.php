@@ -5,7 +5,7 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 12px 22px 70px 22px;
+  margin: 14px 28px 75px 28px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
 body {
@@ -100,10 +100,16 @@ body {
 }
 
 /* 2. Section Badges with Clean Seamless Flanking Lines & Smooth Light Green Pill */
+.badge-wrapper {
+  width: 100%;
+  margin-top: 14px;
+  margin-bottom: 14px;
+  padding: 0;
+}
 .section-badge-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 11px 0 8px 0;
+  margin: 0;
 }
 .section-badge-table td {
   vertical-align: middle;
@@ -130,7 +136,7 @@ body {
   font-size: 18.5px;
   font-weight: 900;
   letter-spacing: 2.5px;
-  border-radius: 7px;
+  border-radius: 6px;
   text-transform: uppercase;
   display: inline-block;
   line-height: 1.2;
@@ -139,7 +145,7 @@ body {
 
 /* 3. Customer & Sample Details Card (Centered Columns & Balanced Margins, Pixel-Perfect Alignment) */
 .details-outer-box {
-  margin: 0 auto 8px auto;
+  margin: 0 auto;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -252,45 +258,91 @@ body {
   color: #0B6B43;
 }
 
-/* 6. Signatory Section (Fixed Bottom Right - Above Footer Box with Bottom Margin) */
+/* 6. Signatory & Checked By Section (Fixed Bottom Left & Right) */
+.checked-by-wrapper {
+  position: fixed;
+  bottom: 78px;
+  left: 0px;
+  width: 240px;
+  z-index: 10;
+}
+.checked-by-box {
+  width: 240px;
+  text-align: center;
+}
+.checked-by-space {
+  height: 56px;
+}
+.checked-by-line {
+  border-top: 1.5px solid #9CA3AF;
+  width: 170px;
+  margin: 2px auto 3px auto;
+}
+.checked-by-name {
+  font-weight: 900;
+  font-size: 13.5px;
+  color: #111827;
+}
+.checked-by-title {
+  font-weight: 800;
+  font-size: 11px;
+  color: #0B6B43;
+  margin-top: 1px;
+  text-transform: uppercase;
+}
+
 .sig-wrapper {
   position: fixed;
-  bottom: 80px;
+  bottom: 78px;
   right: 0px;
-  width: 220px;
+  width: 240px;
   z-index: 10;
 }
 .sig-box {
-  width: 220px;
+  width: 240px;
   text-align: center;
 }
 .sig-img {
-  height: 42px;
+  height: 56px;
   width: auto;
-  max-width: 150px;
+  max-width: 190px;
   object-fit: contain;
   display: block;
   margin: 0 auto 2px auto;
 }
 .sig-line {
   border-top: 1.5px solid #9CA3AF;
-  width: 150px;
+  width: 170px;
   margin: 2px auto 3px auto;
 }
 .sig-name {
   font-weight: 900;
-  font-size: 13px;
+  font-size: 13.5px;
   color: #111827;
 }
 .sig-title {
   font-weight: 800;
-  font-size: 10.5px;
+  font-size: 11px;
   color: #0B6B43;
   margin-top: 1px;
   text-transform: uppercase;
 }
 
-/* 7. Static Bottom Pinned Footer with Horizontal Box & Outside Note */
+/* 6b. Remarks and Notes Box (Open / Borderless) */
+.remarks-box {
+  margin: 6px 0 6px 0;
+  width: 100%;
+  border: none;
+  page-break-inside: avoid;
+}
+.notes-box {
+  margin: 6px 0 6px 0;
+  width: 100%;
+  border: none;
+  page-break-inside: avoid;
+}
+
+/* 7. Static Bottom Pinned Footer with Top/Bottom Line Divider (Left & Right Open) */
 .footer-pinned-container {
   position: fixed;
   bottom: 0px;
@@ -301,10 +353,13 @@ body {
 }
 .footer-box {
   width: 100%;
-  border: 1.2px solid #000000;
-  border-radius: 6px;
+  border-top: 1.2px solid #000000;
+  border-bottom: 1.2px solid #000000;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
   background: transparent;
-  padding: 4px 6px;
+  padding: 4px 0;
   margin: 0;
 }
 .footer-table {
@@ -367,6 +422,11 @@ body {
   $sigRel = preg_replace('~^storage/~', '', (string)($lab->signature_path ?? ''));
   $sigPath = $sigRel !== '' && file_exists($sigAbs = storage_path('app/public/'.$sigRel)) ? $sigAbs : null;
   
+  $checkedByRel = preg_replace('~^storage/~', '', (string)($lab->seal_path ?? ($lab->tested_by_signature_path ?? ($lab->tested_by_path ?? ''))));
+  $checkedByPath = $checkedByRel !== '' && file_exists($cbAbs = storage_path('app/public/'.$checkedByRel))
+      ? $cbAbs
+      : (file_exists(public_path('checked-by.png')) ? public_path('checked-by.png') : (file_exists(public_path('tested-by.png')) ? public_path('tested-by.png') : null));
+  
   $customerName = $report->party_name ?: ($report->customer_name ?: ($report->customer?->company_name ?: ($report->customer?->name ?: '—')));
   $matchedCustomer = $report->customer ?: ($report->customer_id ? \App\Models\Customer::find($report->customer_id) : \App\Models\Customer::where('name', $customerName)->orWhere('company_name', $customerName)->first());
   $customerAddress = $report->address ?: ($matchedCustomer?->address ?: ($matchedCustomer?->city ? $matchedCustomer->city . ($matchedCustomer?->pincode ? ' - ' . $matchedCustomer->pincode : '') : ''));
@@ -391,14 +451,14 @@ body {
 
 <!-- 1. Header: Grouped Centered Logo + Vertical Green Line + Company Name & Tagline -->
 <div class="header-wrapper">
-  <table class="header-group-table" align="center" style="margin: 0 auto; border-collapse: collapse;">
+  <table class="header-group-table" align="center" style="margin: 0 auto; position: relative; left: -25px; border-collapse: collapse;">
     <tr>
-      <td style="vertical-align: middle; text-align: center; padding-right: 16px; border: none;">
+      <td style="vertical-align: middle; text-align: center; padding-left: 36px; padding-right: 8px; border: none;">
         @if(file_exists($logoPath))
           <img src="{{ $logoPath }}" class="logo-img" alt="Logo">
         @endif
       </td>
-      <td style="vertical-align: middle; text-align: center; padding: 0 16px; width: 4px; border: none;">
+      <td style="vertical-align: middle; text-align: center; padding: 0 8px; width: 4px; border: none;">
         <div class="header-green-bar"></div>
       </td>
       <td style="vertical-align: middle; text-align: center; padding-left: 0; border: none;">
@@ -410,15 +470,17 @@ body {
 </div>
 
 <!-- 2. Section 1 Badge: TEST REPORT with Smooth Border-Radius Pill -->
-<table class="section-badge-table" align="center">
-  <tr>
-    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
-    <td class="badge-pill-cell">
-      <div class="badge-pill">TEST REPORT</div>
-    </td>
-    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
-  </tr>
-</table>
+<div class="badge-wrapper" style="margin-top: 14px; margin-bottom: 14px;">
+  <table class="section-badge-table" align="center">
+    <tr>
+      <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+      <td class="badge-pill-cell">
+        <div class="badge-pill">TEST REPORT</div>
+      </td>
+      <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+    </tr>
+  </table>
+</div>
 
 <!-- 3. Customer & Sample Details Card (Centered Columns & Balanced Margins) -->
 <table class="details-outer-box" align="center">
@@ -430,15 +492,9 @@ body {
           <td style="width: 50%; padding-right: 14px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
-                <col style="width: 125px;">
+                <col style="width: 114px;">
                 <col style="width: auto;">
               </colgroup>
-              @if(!empty($report->report_no))
-              <tr>
-                <td class="lbl-col">Report No</td>
-                <td class="val-col"><span class="colon-sep">:</span>{{ $report->report_no }}</td>
-              </tr>
-              @endif
               @if(!empty($customerName) && $customerName !== '—')
               <tr>
                 <td class="lbl-col">Customer</td>
@@ -482,11 +538,11 @@ body {
             </table>
           </td>
           
-          <!-- Right Column (50%) -->
-          <td style="width: 50%; padding-left: 14px; vertical-align: top;">
+          <!-- Right Column (shifted right by 2 more tabs) -->
+          <td style="width: 50%; padding-left: 145px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
-                <col style="width: 95px;">
+                <col style="width: 96px;">
                 <col style="width: auto;">
               </colgroup>
               @if(!empty($coaDateFormatted) && $coaDateFormatted !== '—')
@@ -495,16 +551,16 @@ body {
                 <td class="val-col"><span class="colon-sep">:</span>{{ $coaDateFormatted }}</td>
               </tr>
               @endif
+              @if(!empty($report->report_no))
+              <tr>
+                <td class="lbl-col">Report No</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $report->report_no }}</td>
+              </tr>
+              @endif
               @if(!empty($report->bags_tons))
               <tr>
                 <td class="lbl-col">{{ $quantityLabel }}</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $report->bags_tons }}</td>
-              </tr>
-              @endif
-              @if(!empty($report->sample_date))
-              <tr>
-                <td class="lbl-col">Sample Date</td>
-                <td class="val-col"><span class="colon-sep">:</span>{{ $sampleDateFormatted }}</td>
               </tr>
               @endif
               @if(!empty($report->buyer))
@@ -528,15 +584,17 @@ body {
 </table>
 
 <!-- 4. Section 2 Badge: TEST RESULTS with Smooth Border-Radius Pill -->
-<table class="section-badge-table" align="center">
-  <tr>
-    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
-    <td class="badge-pill-cell">
-      <div class="badge-pill">TEST RESULTS</div>
-    </td>
-    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
-  </tr>
-</table>
+<div class="badge-wrapper" style="margin-top: 16px; margin-bottom: 14px;">
+  <table class="section-badge-table" align="center">
+    <tr>
+      <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+      <td class="badge-pill-cell">
+        <div class="badge-pill">TEST RESULTS</div>
+      </td>
+      <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+    </tr>
+  </table>
+</div>
 
 @php
   $tableCols = $report->reportType?->table_columns;
@@ -559,34 +617,41 @@ body {
   $customColsList = array_filter($activeTableCols, fn($c) => ($c['type'] ?? '') === 'custom' || str_starts_with($c['key'] ?? '', 'custom_'));
   $customCount = count($customColsList);
 
-  $colPercentWidths = [];
+  $rawWeights = [];
   foreach ($activeTableCols as $c) {
     $ckey = $c['key'] ?? '';
     if (!empty($c['width'])) {
-      $wStr = trim((string)$c['width']);
-      if (is_numeric($wStr)) {
-        $wStr = $wStr . '%';
+      $wNum = floatval(preg_replace('/[^0-9.]/', '', (string)$c['width']));
+      if ($wNum > 0) {
+        $rawWeights[$ckey] = $wNum;
+        continue;
       }
-      $colPercentWidths[$ckey] = $wStr;
-      continue;
     }
 
     if ($ckey === 's_no') {
-      $colPercentWidths[$ckey] = '8%';
+      $rawWeights[$ckey] = 8;
     } elseif ($ckey === 'result') {
-      $colPercentWidths[$ckey] = '18%';
+      $rawWeights[$ckey] = 18;
     } elseif ($ckey === 'specification') {
-      $colPercentWidths[$ckey] = '24%';
+      $rawWeights[$ckey] = 22;
     } elseif ($ckey === 'parameter') {
       if ($customCount > 0) {
-        $colPercentWidths[$ckey] = '32%';
+        $rawWeights[$ckey] = 34;
       } elseif (!$hasSpec) {
-        $colPercentWidths[$ckey] = '74%';
+        $rawWeights[$ckey] = 74;
       } else {
-        $colPercentWidths[$ckey] = '50%';
+        $rawWeights[$ckey] = 52;
       }
     } else {
-      $colPercentWidths[$ckey] = round(18 / max(1, $customCount)) . '%';
+      $rawWeights[$ckey] = 18 / max(1, $customCount);
+    }
+  }
+
+  $totalWeight = array_sum($rawWeights);
+  $colPercentWidths = [];
+  if ($totalWeight > 0) {
+    foreach ($rawWeights as $ckey => $val) {
+      $colPercentWidths[$ckey] = round(($val / $totalWeight) * 100, 1) . '%';
     }
   }
 @endphp
@@ -642,7 +707,7 @@ body {
           @elseif($ckey === 'parameter')
             <td style="width: {{ $w }}; text-align: left; font-size: 16px; font-weight: 900; color: #000000;">{{ $param->name ?? 'Parameter' }}</td>
           @elseif($ckey === 'result')
-            <td style="width: {{ $w }}; text-align: center; font-size: 17px; font-weight: 900; color: #000000;">
+            <td style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">
               {{ $resultVal }}
             </td>
           @else
@@ -687,18 +752,18 @@ body {
 @endphp
 
 @if(!empty($remarksFormatted))
-<div class="remarks-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
+<div class="remarks-box">
   <div style="font-weight: 800; font-size: 12px; color: #111827; margin-bottom: 2px;">Remarks:</div>
-  <div style="font-size: 11.5px; color: #1F2937; line-height: 1.45; padding-left: 8px; padding-right: 8px; text-align: justify;">
+  <div style="font-size: 11.5px; color: #1F2937; line-height: 1.45; padding-left: 6px; padding-right: 6px; text-align: justify;">
     {!! $remarksFormatted !!}
   </div>
 </div>
 @endif
 
 @if(!empty($notesFormatted))
-<div class="notes-box" style="margin: 6px 0 6px 0; width: 100%; page-break-inside: avoid;">
+<div class="notes-box">
   <div style="font-weight: 800; font-size: 12px; color: #111827; margin-bottom: 2px;">Notes:</div>
-  <div style="font-size: 11.5px; color: #1F2937; line-height: 1.45; padding-left: 8px; padding-right: 8px; text-align: justify;">
+  <div style="font-size: 11.5px; color: #1F2937; line-height: 1.45; padding-left: 6px; padding-right: 6px; text-align: justify;">
     {!! $notesFormatted !!}
   </div>
 </div>
@@ -709,13 +774,26 @@ body {
   ************* End of the Report *************
 </div>
 
-<!-- 7. Signatory Section -->
+<!-- 7. Signatory & Checked By Section (Left & Right Opposite) -->
+<div class="checked-by-wrapper">
+  <div class="checked-by-box">
+    @if($checkedByPath)
+      <img src="{{ $checkedByPath }}" class="sig-img" alt="Checked By Signature">
+    @else
+      <div class="checked-by-space">&nbsp;</div>
+    @endif
+    <div class="checked-by-line"></div>
+    <div class="checked-by-name">Checked By</div>
+    <div class="checked-by-title">{{ $lab->lab_name ?? 'KRISHI ANALYTICAL LAB' }}</div>
+  </div>
+</div>
+
 <div class="sig-wrapper">
   <div class="sig-box">
     @if($sigPath)
       <img src="{{ $sigPath }}" class="sig-img" alt="Signature">
     @else
-      <div style="height: 48px;">&nbsp;</div>
+      <div style="height: 56px;">&nbsp;</div>
     @endif
     <div class="sig-line"></div>
     <div class="sig-name">Authorized Signatory</div>
