@@ -100,16 +100,10 @@ body {
 }
 
 /* 2. Section Badges with Clean Seamless Flanking Lines & Smooth Light Green Pill */
-.badge-wrapper {
-  width: 100%;
-  margin-top: 14px;
-  margin-bottom: 14px;
-  padding: 0;
-}
 .section-badge-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 0;
+  margin: 11px 0 8px 0;
 }
 .section-badge-table td {
   vertical-align: middle;
@@ -136,7 +130,7 @@ body {
   font-size: 18.5px;
   font-weight: 900;
   letter-spacing: 2.5px;
-  border-radius: 6px;
+  border-radius: 7px;
   text-transform: uppercase;
   display: inline-block;
   line-height: 1.2;
@@ -145,7 +139,7 @@ body {
 
 /* 3. Customer & Sample Details Card (Centered Columns & Balanced Margins, Pixel-Perfect Alignment) */
 .details-outer-box {
-  margin: 0 auto;
+  margin: 0 auto 8px auto;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -282,13 +276,6 @@ body {
   font-weight: 900;
   font-size: 13.5px;
   color: #111827;
-}
-.checked-by-title {
-  font-weight: 800;
-  font-size: 11px;
-  color: #0B6B43;
-  margin-top: 1px;
-  text-transform: uppercase;
 }
 
 .sig-wrapper {
@@ -451,14 +438,14 @@ body {
 
 <!-- 1. Header: Grouped Centered Logo + Vertical Green Line + Company Name & Tagline -->
 <div class="header-wrapper">
-  <table class="header-group-table" align="center" style="margin: 0 auto; position: relative; left: -25px; border-collapse: collapse;">
+  <table class="header-group-table" align="center" style="margin: 0 auto; border-collapse: collapse;">
     <tr>
-      <td style="vertical-align: middle; text-align: center; padding-left: 36px; padding-right: 8px; border: none;">
+      <td style="vertical-align: middle; text-align: center; padding-right: 16px; border: none;">
         @if(file_exists($logoPath))
           <img src="{{ $logoPath }}" class="logo-img" alt="Logo">
         @endif
       </td>
-      <td style="vertical-align: middle; text-align: center; padding: 0 8px; width: 4px; border: none;">
+      <td style="vertical-align: middle; text-align: center; padding: 0 16px; width: 4px; border: none;">
         <div class="header-green-bar"></div>
       </td>
       <td style="vertical-align: middle; text-align: center; padding-left: 0; border: none;">
@@ -470,17 +457,15 @@ body {
 </div>
 
 <!-- 2. Section 1 Badge: TEST REPORT with Smooth Border-Radius Pill -->
-<div class="badge-wrapper" style="margin-top: 14px; margin-bottom: 14px;">
-  <table class="section-badge-table" align="center">
-    <tr>
-      <td style="vertical-align: middle;"><div class="badge-line"></div></td>
-      <td class="badge-pill-cell">
-        <div class="badge-pill">TEST REPORT</div>
-      </td>
-      <td style="vertical-align: middle;"><div class="badge-line"></div></td>
-    </tr>
-  </table>
-</div>
+<table class="section-badge-table" align="center">
+  <tr>
+    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+    <td class="badge-pill-cell">
+      <div class="badge-pill">TEST REPORT</div>
+    </td>
+    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+  </tr>
+</table>
 
 <!-- 3. Customer & Sample Details Card (Centered Columns & Balanced Margins) -->
 <table class="details-outer-box" align="center">
@@ -538,11 +523,11 @@ body {
             </table>
           </td>
           
-          <!-- Right Column (shifted right to balance right edge margin) -->
-          <td style="width: 50%; padding-left: 110px; vertical-align: top;">
+          <!-- Right Column (50%) -->
+          <td style="width: 50%; padding-left: 14px; vertical-align: top;">
             <table class="inner-meta-table">
               <colgroup>
-                <col style="width: 95px;">
+                <col style="width: 96px;">
                 <col style="width: auto;">
               </colgroup>
               @if(!empty($coaDateFormatted) && $coaDateFormatted !== '—')
@@ -584,17 +569,15 @@ body {
 </table>
 
 <!-- 4. Section 2 Badge: TEST RESULTS with Smooth Border-Radius Pill -->
-<div class="badge-wrapper" style="margin-top: 16px; margin-bottom: 14px;">
-  <table class="section-badge-table" align="center">
-    <tr>
-      <td style="vertical-align: middle;"><div class="badge-line"></div></td>
-      <td class="badge-pill-cell">
-        <div class="badge-pill">TEST RESULTS</div>
-      </td>
-      <td style="vertical-align: middle;"><div class="badge-line"></div></td>
-    </tr>
-  </table>
-</div>
+<table class="section-badge-table" align="center">
+  <tr>
+    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+    <td class="badge-pill-cell">
+      <div class="badge-pill">TEST RESULTS</div>
+    </td>
+    <td style="vertical-align: middle;"><div class="badge-line"></div></td>
+  </tr>
+</table>
 
 @php
   $tableCols = $report->reportType?->table_columns;
