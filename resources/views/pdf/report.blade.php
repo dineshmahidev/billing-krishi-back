@@ -674,11 +674,8 @@ body {
           @php
             $ckey = $col['key'] ?? '';
             $clabel = strtoupper($col['label'] ?? '');
-            $isSno = ($ckey === 's_no');
-            $isSpec = ($ckey === 'specification');
-            $isResult = ($ckey === 'result');
             $w = $colPercentWidths[$ckey] ?? 'auto';
-            $align = ($isSno || $isSpec || $isResult) ? 'center' : 'left';
+            $align = $col['align'] ?? (($ckey === 'parameter') ? 'left' : 'center');
           @endphp
           <th style="width: {{ $w }}; text-align: {{ $align }};">
             {{ $clabel }}
@@ -714,10 +711,14 @@ body {
             @php
               $cVal = '';
               if (is_array($res->custom_values)) {
-                $cVal = $res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '');
+                $cVal = $res->custom_values[$clabel] 
+                     ?? ($res->custom_values[strtoupper($clabel)] 
+                     ?? ($res->custom_values[strtolower($clabel)] 
+                     ?? ($res->custom_values[$ckey] 
+                     ?? ($res->custom_values[str_replace('custom_', '', $ckey)] ?? ''))));
               }
             @endphp
-            <td style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">{{ $cVal !== '' ? $cVal : '-' }}</td>
+            <td style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">{{ ($cVal !== '' && $cVal !== null) ? $cVal : '-' }}</td>
           @endif
         @endforeach
       </tr>
