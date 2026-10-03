@@ -1,132 +1,305 @@
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="utf-8">
-<style>
-body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; color:#1F2937; margin:20px;}
-.header{border-bottom:2.5px solid #0B6B43; padding-top:14px; padding-bottom:8px; margin-bottom:12px; text-align:center;}
-.logo{height:96px; width:96px; display:inline-block; vertical-align:middle;}
-.brand-block{display:inline-block; vertical-align:middle; text-align:center; margin-left:10px;}
-.brand-name{font-weight:900; color:#0B6B43; font-size:26pt; margin:0; text-align:center;}
-.brand-tagline{font-size:9pt; color:#168B57; font-weight:700; margin-top:4px; text-align:center;}
-.title{background:#0B6B43; color:#fff; display:inline-block; padding:6px 18px; font-weight:800; font-size:13pt; letter-spacing:1px; margin:8px 0;}
-.meta{width:100%; border-collapse:collapse; margin:8px 0;}
-.meta td{border:1.5px solid #1F2937; padding:6px 8px; height:22px;}
-.meta-label{background:#EAF7F0; font-weight:700; width:150px; border:1.5px solid #1F2937;}
-.results{width:100%; border-collapse:collapse; border:1.5px solid #1F2937;}
-.results th{background:#168B57; color:#fff; border:1.5px solid #1F2937; padding:7px 8px; font-size:10pt;}
-.results td{border:1.5px solid #1F2937; padding:7px 8px; height:22px;}
-.outer{border:1.5px solid #1F2937; padding:10px; margin-top:8px;}
-.remarks{border:1.5px solid #1F2937; margin:12px 0; min-height:60px;}
-.remarks-h{background:#EAF7F0; border-bottom:1.5px solid #1F2937; padding:4px 8px; font-weight:800; color:#0B6B43; font-size:9pt;}
-.remarks-b{padding:8px 10px; min-height:36px;}
-.sig{border:1.5px solid #1F2937; float:right; width:200px; text-align:center; padding:8px 10px 7px; margin-top:40px; min-height:86px;}
-.sig-line{font-weight:800; border-top:1.5px solid #1F2937; margin-top:6px; padding-top:5px;}
-.sig-sub{font-size:8pt; color:#6B7280; margin-top:2px;}
-</style></head>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"
+  xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11pt;
+      color: #1F2937;
+      margin: 20px;
+    }
+
+    .header {
+      border-bottom: 2.5px solid #0B6B43;
+      padding-top: 14px;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .logo {
+      height: 96px;
+      width: 96px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .brand-block {
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      margin-left: 10px;
+    }
+
+    .brand-name {
+      font-weight: 900;
+      color: #0B6B43;
+      font-size: 26pt;
+      margin: 0;
+      text-align: center;
+    }
+
+    .brand-tagline {
+      font-size: 9pt;
+      color: #168B57;
+      font-weight: 700;
+      margin-top: 4px;
+      text-align: center;
+    }
+
+    .title {
+      background: #0B6B43;
+      color: #fff;
+      display: inline-block;
+      padding: 6px 18px;
+      font-weight: 800;
+      font-size: 13pt;
+      letter-spacing: 1px;
+      margin: 8px 0;
+    }
+
+    .meta {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+    }
+
+    .meta td {
+      border: 1.5px solid #1F2937;
+      padding: 6px 8px;
+      height: 22px;
+    }
+
+    .meta-label {
+      background: #EAF7F0;
+      font-weight: 700;
+      width: 150px;
+      border: 1.5px solid #1F2937;
+    }
+
+    .results {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1.5px solid #1F2937;
+    }
+
+    .results th {
+      background: #168B57;
+      color: #fff;
+      border: 1.5px solid #1F2937;
+      padding: 7px 8px;
+      font-size: 10pt;
+    }
+
+    .results td {
+      border: 1.5px solid #1F2937;
+      padding: 7px 8px;
+      height: 22px;
+    }
+
+    .outer {
+      border: 1.5px solid #1F2937;
+      padding: 10px;
+      margin-top: 8px;
+    }
+
+    .remarks {
+      border: 1.5px solid #1F2937;
+      margin: 12px 0;
+      min-height: 60px;
+    }
+
+    .remarks-h {
+      background: #EAF7F0;
+      border-bottom: 1.5px solid #1F2937;
+      padding: 4px 8px;
+      font-weight: 800;
+      color: #0B6B43;
+      font-size: 9pt;
+    }
+
+    .remarks-b {
+      padding: 8px 10px;
+      min-height: 36px;
+    }
+
+    .sig {
+      border: 1.5px solid #1F2937;
+      float: right;
+      width: 200px;
+      text-align: center;
+      padding: 8px 10px 7px;
+      margin-top: 40px;
+      min-height: 86px;
+    }
+
+    .sig-line {
+      font-weight: 800;
+      border-top: 1.5px solid #1F2937;
+      margin-top: 6px;
+      padding-top: 5px;
+    }
+
+    .sig-sub {
+      font-size: 8pt;
+      color: #6B7280;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+
 <body>
-@php
-  $labName = $lab->lab_name ?? 'KRISHI ANALYTICAL LAB';
-  $tagline = $lab->tagline ?? 'Discovering Solutions, One Test at a Time';
-  $address = $lab->address ?? '182-B, Tiruppur Road, Kangeyam - 638701';
-  $phone = '+91 63793 12357, +91 88838 64756';
-  if (!empty($lab->phone)) {
+  @php
+    $labName = $lab->lab_name ?? 'KRISHI ANALYTICAL LAB';
+    $tagline = $lab->tagline ?? 'Discovering Solutions, One Test at a Time';
+    $address = $lab->address ?? '182-B, Tiruppur Road, Kangeyam - 638701';
+    $phone = '+91 63793 12357, +91 88838 64756';
+    if (!empty($lab->phone)) {
       $phone = str_contains($lab->phone, '88838') ? $lab->phone : $lab->phone . ', +91 88838 64756';
-  }
-  $email = $lab->email ?? 'info@krishianalyticallab.com';
-  $reportTitle = $report->reportType->title ?? 'TEST REPORT';
-  $isFeed = in_array($report->reportType->name ?? '', ['Rice Bran','Animal Feed']);
-  $logoW = file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
-@endphp
-<div class="header">
-  <div style="text-align:center;">
-    @if(file_exists($logoW))<img src="{{ $logoW }}" class="logo" alt="logo">@endif
-    <div class="brand-block">
-      <div class="brand-name">{{ $labName }}</div>
-      <div class="brand-tagline">"{{ $tagline }}"</div>
+    }
+    $email = (!empty($lab->email) && !str_contains($lab->email, 'info@')) ? $lab->email : 'krishianalyticallab@gmail.com';
+    $reportTitle = $report->reportType->title ?? 'TEST REPORT';
+    $isFeed = in_array($report->reportType->name ?? '', ['Rice Bran', 'Animal Feed']);
+    $logoW = file_exists(public_path('krishi-transparent.png')) ? public_path('krishi-transparent.png') : public_path('logo-krishi.png');
+  @endphp
+  <div class="header">
+    <div style="text-align:center;">
+      @if(file_exists($logoW))<img src="{{ $logoW }}" class="logo" alt="logo">@endif
+      <div class="brand-block">
+        <div class="brand-name">{{ $labName }}</div>
+        <div class="brand-tagline">"{{ $tagline }}"</div>
+      </div>
     </div>
   </div>
-</div>
-<div style="text-align:center;">
-  <div class="title">{{ $reportTitle }}</div>
-</div>
-<div class="outer">
-@php 
-  $companyW = $report->party_name ?? $report->customer_name ?? ($report->customer?->name ?? ''); 
-  $matchedCustW = $report->customer ?: ($report->customer_id ? \App\Models\Customer::find($report->customer_id) : \App\Models\Customer::where('name', $companyW)->orWhere('company_name', $companyW)->first());
-  $customerAddressW = $matchedCustW?->address ?: ($matchedCustW?->city ? $matchedCustW->city . ($matchedCustW?->pincode ? ' - ' . $matchedCustW->pincode : '') : '');
-  $showSpecW = $report->reportType->show_specification ?? true; 
-  $customColsW = $report->reportType->custom_columns ?? []; 
-  $rowsW = $report->results->filter(fn($r) => $r->enabled !== false)->values(); 
-  
-  $tableColsW = $report->reportType?->table_columns;
-  if (!is_array($tableColsW) || empty($tableColsW)) {
-    $tableColsW = [
-      ['key' => 's_no', 'label' => 'S.No', 'visible' => true, 'type' => 'system'],
-      ['key' => 'parameter', 'label' => 'Parameter', 'visible' => true, 'type' => 'system'],
-    ];
-    if ($showSpecW) {
-      $tableColsW[] = ['key' => 'specification', 'label' => 'Specification', 'visible' => true, 'type' => 'system'];
-    }
-    foreach ($customColsW as $cIdx => $cName) {
-      $tableColsW[] = ['key' => 'custom_' . $cIdx, 'label' => $cName, 'visible' => true, 'type' => 'custom'];
-    }
-    $tableColsW[] = ['key' => 'result', 'label' => 'Result', 'visible' => true, 'type' => 'system'];
-  }
-  $activeTableColsW = array_values(array_filter($tableColsW, fn($c) => ($c['visible'] ?? true) !== false));
-@endphp
-<table class="meta">
-<tr><td class="meta-label">Report No</td><td><strong>{{ $report->report_no }}</strong>&nbsp;</td><td class="meta-label">Report Date</td><td><strong>{{ $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : ($report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '') }}</strong>&nbsp;</td></tr>
-<tr><td class="meta-label">Customer</td><td>{{ $companyW }}&nbsp;</td><td class="meta-label">Sample Date</td><td>{{ $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '' }}&nbsp;</td></tr>
-<tr><td class="meta-label">Address</td><td>{{ $customerAddressW ?: '—' }}&nbsp;</td><td class="meta-label">Bill No</td><td>{{ $report->bill_no }}&nbsp;</td></tr>
-<tr><td class="meta-label">Nature of Sample</td><td>{{ $report->nature_of_sample ?: ($report->sample_name ?: 'Sample') }}&nbsp;</td><td class="meta-label">Vehicle No</td><td>{{ $report->vehicle_no }}&nbsp;</td></tr>
-<tr><td class="meta-label">Bags / Tons</td><td>{{ $report->bags_tons }}&nbsp;</td><td class="meta-label">Buyer</td><td>{{ $report->buyer }}&nbsp;</td></tr>
-<tr><td class="meta-label">Seller</td><td colspan="3">{{ $report->seller }}&nbsp;</td></tr>
-</table>
+  <div style="text-align:center;">
+    <div class="title">{{ $reportTitle }}</div>
+  </div>
+  <div class="outer">
+    @php 
+        $companyW = $report->party_name ?? $report->customer_name ?? ($report->customer?->name ?? '');
+      $matchedCustW = $report->customer ?: ($report->customer_id ? \App\Models\Customer::find($report->customer_id) : \App\Models\Customer::where('name', $companyW)->orWhere('company_name', $companyW)->first());
+      $customerAddressW = $matchedCustW?->address ?: ($matchedCustW?->city ? $matchedCustW->city . ($matchedCustW?->pincode ? ' - ' . $matchedCustW->pincode : '') : '');
+      $showSpecW = $report->reportType->show_specification ?? true;
+      $customColsW = $report->reportType->custom_columns ?? [];
+      $rowsW = $report->results->filter(fn($r) => $r->enabled !== false)->values();
 
-<table class="results">
-<tr>
-  @foreach($activeTableColsW as $col)
-    @php
-      $ckey = $col['key'] ?? '';
-      $clabel = $col['label'] ?? '';
+      $tableColsW = $report->reportType?->table_columns;
+      if (!is_array($tableColsW) || empty($tableColsW)) {
+        $tableColsW = [
+          ['key' => 's_no', 'label' => 'S.No', 'visible' => true, 'type' => 'system'],
+          ['key' => 'parameter', 'label' => 'Parameter', 'visible' => true, 'type' => 'system'],
+        ];
+        if ($showSpecW) {
+          $tableColsW[] = ['key' => 'specification', 'label' => 'Specification', 'visible' => true, 'type' => 'system'];
+        }
+        foreach ($customColsW as $cIdx => $cName) {
+          $tableColsW[] = ['key' => 'custom_' . $cIdx, 'label' => $cName, 'visible' => true, 'type' => 'custom'];
+        }
+        $tableColsW[] = ['key' => 'result', 'label' => 'Result', 'visible' => true, 'type' => 'system'];
+      }
+      $activeTableColsW = array_values(array_filter($tableColsW, fn($c) => ($c['visible'] ?? true) !== false));
     @endphp
-    <th style="{{ $ckey === 's_no' ? 'width:40px;' : ($ckey === 'result' ? 'width:110px;' : '') }}">{{ $clabel }}</th>
-  @endforeach
-</tr>
-@foreach($rowsW as $idx => $res)
-<tr>
-  @foreach($activeTableColsW as $col)
-    @php
-      $ckey = $col['key'] ?? '';
-      $clabel = $col['label'] ?? '';
-    @endphp
-    @if($ckey === 's_no')
-      <td style="text-align:center;">{{ $idx+1 }}</td>
-    @elseif($ckey === 'parameter')
-      <td><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif</td>
-    @elseif($ckey === 'specification')
-      <td>{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>
-    @elseif($ckey === 'result')
-      <td style="text-align:center; font-weight:700;">{{ $res->result }}&nbsp;</td>
-    @else
-      @php $cVal = is_array($res->custom_values) ? ($res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '')) : ''; @endphp
-      <td>{{ $cVal !== '' ? $cVal : '&nbsp;' }}</td>
-    @endif
-  @endforeach
-</tr>
-@endforeach
-@for($i = count($rowsW); $i < 8; $i++)
-<tr>
-  @foreach($activeTableColsW as $col)
-    <td>&nbsp;</td>
-  @endforeach
-</tr>
-@endfor
-</table>
-</div>
+    <table class="meta">
+      <tr>
+        <td class="meta-label">Report No</td>
+        <td><strong>{{ $report->report_no }}</strong>&nbsp;</td>
+        <td class="meta-label">Report Date</td>
+        <td>
+          <strong>{{ $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : ($report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '') }}</strong>&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td class="meta-label">Customer</td>
+        <td>{{ $companyW }}&nbsp;</td>
+        <td class="meta-label">Sample Date</td>
+        <td>{{ $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '' }}&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="meta-label">Address</td>
+        <td>{{ $customerAddressW ?: '—' }}&nbsp;</td>
+        <td class="meta-label">Bill No</td>
+        <td>{{ $report->bill_no }}&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="meta-label">Nature of Sample</td>
+        <td>{{ $report->nature_of_sample ?: ($report->sample_name ?: 'Sample') }}&nbsp;</td>
+        <td class="meta-label">Vehicle No</td>
+        <td>{{ $report->vehicle_no }}&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="meta-label">Bags / Tons</td>
+        <td>{{ $report->bags_tons }}&nbsp;</td>
+        <td class="meta-label">Buyer</td>
+        <td>{{ $report->buyer }}&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="meta-label">Seller</td>
+        <td colspan="3">{{ $report->seller }}&nbsp;</td>
+      </tr>
+    </table>
 
-<div class="remarks"><div class="remarks-h">Remarks / Opinion:</div><div class="remarks-b">{{ $report->remarks }}&nbsp;</div></div>
+    <table class="results">
+      <tr>
+        @foreach($activeTableColsW as $col)
+          @php
+            $ckey = $col['key'] ?? '';
+            $clabel = $col['label'] ?? '';
+          @endphp
+          <th style="{{ $ckey === 's_no' ? 'width:40px;' : ($ckey === 'result' ? 'width:110px;' : '') }}">{{ $clabel }}
+          </th>
+        @endforeach
+      </tr>
+      @foreach($rowsW as $idx => $res)
+        <tr>
+          @foreach($activeTableColsW as $col)
+            @php
+              $ckey = $col['key'] ?? '';
+              $clabel = $col['label'] ?? '';
+            @endphp
+            @if($ckey === 's_no')
+              <td style="text-align:center;">{{ $idx + 1 }}</td>
+            @elseif($ckey === 'parameter')
+              <td><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif
+              </td>
+            @elseif($ckey === 'specification')
+              <td>{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>
+            @elseif($ckey === 'result')
+              <td style="text-align:center; font-weight:700;">{{ $res->result }}&nbsp;</td>
+            @else
+              @php $cVal = is_array($res->custom_values) ? ($res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '')) : ''; @endphp
+              <td>{{ $cVal !== '' ? $cVal : '&nbsp;' }}</td>
+            @endif
+          @endforeach
+        </tr>
+      @endforeach
+      @for($i = count($rowsW); $i < 8; $i++)
+        <tr>
+          @foreach($activeTableColsW as $col)
+            <td>&nbsp;</td>
+          @endforeach
+        </tr>
+      @endfor
+    </table>
+  </div>
 
-<div class="sig"><div style="height:56px;">&nbsp;</div><div class="sig-line">Authorized Signatory</div><div class="sig-sub">KRISHI ANALYTICAL LAB</div></div>
-<div style="clear:both; text-align:center; font-size:11pt; font-weight:700; color:#1F2937; margin-top:60px; border-top:2.5px solid #168B57; padding-top:6px;">{{ $address }}</div>
-<div style="text-align:center; background:#DBEAFE; border-top:1.5px solid #168B57; border-bottom:1.5px solid #168B57; padding:4px 8px; margin:5px 14px 0; font-size:9.5pt; color:#1F2937; font-weight:700;">{{ $email }} | {{ $phone }} | +91 94433 12345</div>
-</body></html>
+  <div class="remarks">
+    <div class="remarks-h">Remarks / Opinion:</div>
+    <div class="remarks-b">{{ $report->remarks }}&nbsp;</div>
+  </div>
+
+  <div class="sig">
+    <div style="height:56px;">&nbsp;</div>
+    <div class="sig-line">Authorized Signatory</div>
+    <div class="sig-sub">KRISHI ANALYTICAL LAB</div>
+  </div>
+  <div
+    style="clear:both; text-align:center; font-size:11pt; font-weight:700; color:#1F2937; margin-top:60px; border-top:2.5px solid #168B57; padding-top:6px;">
+    {{ $address }}</div>
+  <div
+    style="text-align:center; background:#DBEAFE; border-top:1.5px solid #168B57; border-bottom:1.5px solid #168B57; padding:4px 8px; margin:5px 14px 0; font-size:9.5pt; color:#1F2937; font-weight:700;">
+    {{ $email }} | {{ $phone }} | +91 94433 12345</div>
+</body>
+
+</html>

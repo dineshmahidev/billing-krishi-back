@@ -385,9 +385,13 @@ body {
   if (!empty($lab->phone)) {
       $phone = str_contains($lab->phone, '88838') ? $lab->phone : $lab->phone . ', +91 88838 64756';
   }
-  $email = $lab->email ?: 'krishianalyticallab@gmail.com';
-  $website = $lab->website ?: 'www.krishilab25.in';
-  $websiteClean = preg_replace('#^https?://#i', '', $website);
+  $email = (!empty($lab->email) && !str_contains($lab->email, 'info@')) ? $lab->email : 'krishianalyticallab@gmail.com';
+  $website = (!empty($lab->website) && !str_contains($lab->website, 'krishianalyticallab.com')) ? $lab->website : 'krishilab25.in';
+  $websiteClean = preg_replace('#^https?://(www\.)?#i', '', $website);
+  if ($websiteClean === 'krishianalyticallab.com' || str_contains($websiteClean, 'krishianalyticallab.com') || empty($websiteClean)) {
+      $websiteClean = 'krishilab25.in';
+  }
+  $labAddress = (!empty($lab->address) && !str_contains($lab->address, '103-B')) ? $lab->address : '182-B, Reliance Trends Near, Tiruppur Road, Kangeyam - 638701, Tamil Nadu, India.';
 @endphp
 
 <!-- 1. Header: Grouped Centered Logo + Vertical Green Line + Company Name & Tagline -->
@@ -606,7 +610,7 @@ body {
     <table class="footer-table">
       <tr>
         <td class="footer-line-1">
-          <strong>Address:</strong> {{ $lab->address ?? '103-B, Tiruppur Road, Kangeyam - 638701, Tamil Nadu, India.' }}
+          <strong>Address:</strong> {{ $labAddress }}
         </td>
       </tr>
       <tr>
