@@ -246,8 +246,12 @@
           @php
             $ckey = $col['key'] ?? '';
             $clabel = $col['label'] ?? '';
+            $isSno = ($ckey === 's_no');
+            $isSpec = ($ckey === 'specification');
+            $isResult = ($ckey === 'result');
+            $wAlign = $col['align'] ?? (($isSno || $isSpec || $isResult) ? 'center' : 'left');
           @endphp
-          <th style="{{ $ckey === 's_no' ? 'width:40px;' : ($ckey === 'result' ? 'width:110px;' : '') }}">{{ $clabel }}
+          <th style="text-align: {{ $wAlign }}; {{ $ckey === 's_no' ? 'width:40px;' : ($ckey === 'result' ? 'width:110px;' : '') }}">{{ $clabel }}
           </th>
         @endforeach
       </tr>
@@ -257,19 +261,23 @@
             @php
               $ckey = $col['key'] ?? '';
               $clabel = $col['label'] ?? '';
+              $isSno = ($ckey === 's_no');
+              $isSpec = ($ckey === 'specification');
+              $isResult = ($ckey === 'result');
+              $wAlign = $col['align'] ?? (($isSno || $isSpec || $isResult) ? 'center' : 'left');
             @endphp
             @if($ckey === 's_no')
-              <td style="text-align:center;">{{ $idx + 1 }}</td>
+              <td style="text-align: {{ $wAlign }};">{{ $idx + 1 }}</td>
             @elseif($ckey === 'parameter')
-              <td><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif
+              <td style="text-align: {{ $wAlign }};"><strong>{{ $res->parameter->name }}</strong> @if($res->parameter->unit) ({{ $res->parameter->unit }}) @endif
               </td>
             @elseif($ckey === 'specification')
-              <td>{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>
+              <td style="text-align: {{ $wAlign }};">{{ $res->specification ?? $res->parameter->specification }}&nbsp;</td>
             @elseif($ckey === 'result')
-              <td style="text-align:center; font-weight:700;">{{ $res->result }}&nbsp;</td>
+              <td style="text-align: {{ $wAlign }}; font-weight:700;">{{ $res->result }}&nbsp;</td>
             @else
               @php $cVal = is_array($res->custom_values) ? ($res->custom_values[$clabel] ?? ($res->custom_values[$ckey] ?? '')) : ''; @endphp
-              <td>{{ $cVal !== '' ? $cVal : '&nbsp;' }}</td>
+              <td style="text-align: {{ $wAlign }};">{{ $cVal !== '' ? $cVal : '&nbsp;' }}</td>
             @endif
           @endforeach
         </tr>

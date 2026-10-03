@@ -550,11 +550,11 @@
                                 @if(!empty($customerName) && $customerName !== '—')
                                     <tr>
                                         <td class="lbl-col">Customer</td>
-                                        <td class="val-col">
+                                        <td class="val-col" style="padding-left: 9px; text-indent: -9px;">
                                             <span class="colon-sep">:</span>{{ $customerName }}
                                             @if($report->customer?->group?->name)
-                                                                            <span style="font-weight: bold; font-size: 11.5px; color: #4B5563;">({{
-                                                $report->customer->group->name }})</span>
+                                                <span
+                                                    style="font-weight: bold; font-size: 11.5px; color: #4B5563;">({{ $report->customer->group->name }})</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -736,7 +736,7 @@
                             $isSpec = ($ckey === 'specification');
                             $isResult = ($ckey === 'result');
                             $w = $colPercentWidths[$ckey] ?? 'auto';
-                            $align = ($isSno || $isSpec || $isResult) ? 'center' : 'left';
+                            $align = $col['align'] ?? (($isSno || $isSpec || $isResult) ? 'center' : 'left');
                         @endphp
                         <th style="width: {{ $w }}; text-align: {{ $align }};">
                             {{ $clabel }}
@@ -756,24 +756,28 @@
                             @php
                                 $ckey = $col['key'] ?? '';
                                 $clabel = $col['label'] ?? '';
+                                $isSno = ($ckey === 's_no');
+                                $isSpec = ($ckey === 'specification');
+                                $isResult = ($ckey === 'result');
                                 $w = $colPercentWidths[$ckey] ?? 'auto';
+                                $colAlign = $col['align'] ?? (($isSno || $isSpec || $isResult) ? 'center' : 'left');
                             @endphp
                             @if($ckey === 's_no')
                                 <td
-                                    style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 900; color: #111827;">
+                                    style="width: {{ $w }}; text-align: {{ $colAlign }}; font-size: 15.5px; font-weight: 900; color: #111827;">
                                     {{ $idx + 1 }}
                                 </td>
                             @elseif($ckey === 'specification')
                                 <td
-                                    style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">
+                                    style="width: {{ $w }}; text-align: {{ $colAlign }}; font-size: 15.5px; font-weight: 800; color: #111827;">
                                     {{ $spec }}
                                 </td>
                             @elseif($ckey === 'parameter')
-                                    <td style="width: {{ $w }}; text-align: left; font-size: 16px; font-weight: 900; color: #000000;">{{
+                                    <td style="width: {{ $w }}; text-align: {{ $colAlign }}; font-size: 16px; font-weight: 900; color: #000000;">{{
                                 $param->name ?? 'Parameter' }}</td>
                             @elseif($ckey === 'result')
                                 <td
-                                    style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">
+                                    style="width: {{ $w }}; text-align: {{ $colAlign }}; font-size: 15.5px; font-weight: 800; color: #111827;">
                                     {{ $resultVal }}
                                 </td>
                             @else
@@ -784,7 +788,7 @@
                                     }
                                 @endphp
                                 <td
-                                    style="width: {{ $w }}; text-align: center; font-size: 15.5px; font-weight: 800; color: #111827;">
+                                    style="width: {{ $w }}; text-align: {{ $colAlign }}; font-size: 15.5px; font-weight: 800; color: #111827;">
                                     {{ $cVal !== '' ? $cVal : '-' }}
                                 </td>
                             @endif
@@ -811,7 +815,7 @@
             $keywords = ['2', 'Pass', 'Fail', 'PASS', 'FAIL'];
             foreach ($keywords as $kw) {
                 $remarksFormatted = preg_replace('/\b(' . preg_quote($kw, '/') . ')\b(?=[^<]*>|[^<]*$)
-                            /', '<strong style="color: #000000; font-weight: 900;">$1</strong>', $remarksFormatted);
+                                            /', '<strong style="color: #000000; font-weight: 900;">$1</strong>', $remarksFormatted);
             }
         } else {
             $remarksFormatted = '';
