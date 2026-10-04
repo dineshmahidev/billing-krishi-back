@@ -242,10 +242,12 @@ class ReportController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        if (!$request->user()->isAdmin()) return response()->json(['message'=>'Forbidden - Admin only'], 403);
         $report = Report::findOrFail($id);
-        $report->delete();
-        return response()->json(['message'=>'Deleted']);
+        DB::transaction(function() use ($report) {
+            Invoice::where('report_id', $report->id)->delete();
+            $report->delete();
+        });
+        return response()->json(['message'=>'Report and associated invoice moved to trash']);
     }
 
     private function resolveUser(Request $request)

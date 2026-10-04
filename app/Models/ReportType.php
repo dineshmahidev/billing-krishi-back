@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Models\Concerns\DemoScoped;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ReportType extends Model
 {
-    use DemoScoped;
+    use DemoScoped, SoftDeletes;
 
     protected $fillable = ['name','title','quantity_label','default_remarks','default_notes','visible_fields','active','show_specification','custom_columns','table_columns','is_demo'];
     protected $casts = ['visible_fields'=>'array','active'=>'boolean','show_specification'=>'boolean','custom_columns'=>'array','table_columns'=>'array','is_demo'=>'boolean'];

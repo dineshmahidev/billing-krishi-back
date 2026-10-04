@@ -3,12 +3,13 @@ namespace App\Models;
 use App\Models\Concerns\DemoScoped;
 use App\Models\Scopes\DemoScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
-    use DemoScoped;
+    use DemoScoped, SoftDeletes;
 
     protected $fillable = ['report_id','invoice_no','party_name','customer_name','subtotal','gst_percent','gst_amount','total_amount','gst_enabled','status','is_demo'];
     protected $casts = ['subtotal'=>'decimal:2','gst_percent'=>'decimal:2','gst_amount'=>'decimal:2','total_amount'=>'decimal:2','gst_enabled'=>'boolean','is_demo'=>'boolean'];

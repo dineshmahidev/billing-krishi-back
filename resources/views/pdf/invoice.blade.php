@@ -152,33 +152,32 @@ body {
 .inner-meta-table td {
   border: none;
   padding: 2.5px 0;
-  font-size: 13px;
-  line-height: 1.3;
   vertical-align: top;
+  font-size: 14px;
+  line-height: 1.3;
 }
 .lbl-col {
-  color: #374151;
-  font-weight: 700;
-  font-size: 13px;
   white-space: nowrap;
+  font-weight: 700;
+  color: #374151;
+  font-size: 14px;
   vertical-align: top;
 }
 .val-col {
-  color: #000000;
   font-weight: 900;
-  font-size: 13.5px;
-  vertical-align: top;
+  color: #000000;
+  font-size: 14px;
   word-wrap: break-word;
-  white-space: normal;
+  padding-left: 14px;
+  text-indent: -14px;
+  vertical-align: top;
 }
 .colon-sep {
-  display: inline-block;
-  width: 14px;
   font-weight: 900;
-  font-size: 13px;
-  color: #000000;
-  text-align: left;
-  vertical-align: top;
+  color: #1F2937;
+  font-size: 14px;
+  margin-right: 6px;
+  display: inline;
 }
 
 .rupee {
@@ -425,69 +424,64 @@ body {
   </tr>
 </table>
 
-<!-- 3. Customer & Invoice Details Card -->
+<!-- 3. Customer & Invoice Details Card (Independent Side-by-Side Tables) -->
 <table class="details-outer-box" align="center">
   <tr>
-    <td style="padding: 12px 18px; border: none; vertical-align: top;">
-      <table class="details-table" align="center">
+    <td style="padding: 10px 14px; border: none; vertical-align: top;">
+      <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
         <tr>
-          <!-- Left Column (58%) -->
-          <td style="width: 58%; padding-right: 14px; vertical-align: top;">
-            <table class="inner-meta-table">
+          <!-- Left Column (50%) -->
+          <td style="width: 50%; padding-right: 14px; vertical-align: top; border: none;">
+            <table class="inner-meta-table" style="width: 100%; table-layout: fixed;">
               <colgroup>
-                <col style="width: 120px;">
+                <col style="width: 76px;">
                 <col style="width: auto;">
               </colgroup>
               @if(!empty($partyName) && $partyName !== '—')
               <tr>
-                <td class="lbl-col">Customer</td>
-                <td class="val-col">
-                  <span class="colon-sep">:</span>{{ $partyName }}
-                  @if($custGroup)
-                    <span style="font-weight: bold; font-size: 11.5px; color: #4B5563;">({{ $custGroup }})</span>
-                  @endif
-                </td>
+                <td class="lbl-col" style="padding-right: 4px;">Customer</td>
+                <td class="val-col"><span class="colon-sep">:</span>{{ $partyName }}</td>
               </tr>
               @endif
-              @if(!empty($custAddr))
+              @if(!empty($custAddr) && $custAddr !== '—')
               <tr>
-                <td class="lbl-col">Address</td>
+                <td class="lbl-col" style="padding-right: 4px;">Address</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $custAddr }}</td>
               </tr>
               @endif
               @if(!empty($custPhone))
               <tr>
-                <td class="lbl-col">Contact No</td>
+                <td class="lbl-col" style="padding-right: 4px;">Contact No</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $custPhone }}</td>
               </tr>
               @endif
               @if(!empty($report->report_no))
               <tr>
-                <td class="lbl-col">Report No</td>
+                <td class="lbl-col" style="padding-right: 4px;">Report No</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $report->report_no }}</td>
               </tr>
               @endif
             </table>
           </td>
           
-          <!-- Right Column (42%) -->
-          <td style="width: 42%; padding-left: 14px; vertical-align: top;">
-            <table class="inner-meta-table">
+          <!-- Right Column (50%) -->
+          <td style="width: 50%; padding-left: 20px; vertical-align: top; border: none;">
+            <table class="inner-meta-table" style="width: 100%; table-layout: fixed;">
               <colgroup>
-                <col style="width: 105px;">
+                <col style="width: 82px;">
                 <col style="width: auto;">
               </colgroup>
               <tr>
-                <td class="lbl-col">Invoice No</td>
+                <td class="lbl-col" style="padding-right: 4px;">Invoice No</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $invoice->invoice_no }}</td>
               </tr>
               <tr>
-                <td class="lbl-col">Invoice Date</td>
+                <td class="lbl-col" style="padding-right: 4px;">Invoice Date</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ \Carbon\Carbon::parse($invoice->created_at)->format('d-M-Y') }}</td>
               </tr>
               @if($invoice->gst_enabled && $gstin)
               <tr>
-                <td class="lbl-col">GSTIN</td>
+                <td class="lbl-col" style="padding-right: 4px;">GSTIN</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $gstin }}</td>
               </tr>
               @endif

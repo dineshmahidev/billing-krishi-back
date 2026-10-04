@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\LabSettingController;
 use App\Http\Controllers\Api\CmsController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\TrashController;
 
 // Public
 Route::post('/login', [AuthController::class, 'login']);
@@ -52,6 +53,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports/{id}', [ReportController::class, 'show']);
     Route::put('/reports/{id}', [ReportController::class, 'update']);
     Route::delete('/reports/{id}', [ReportController::class, 'destroy']);
+
+    // Trash / Recycle Bin
+    Route::get('/trash', [TrashController::class, 'index']);
+    Route::post('/trash/reports/{id}/restore', [TrashController::class, 'restoreReport']);
+    Route::delete('/trash/reports/{id}/force', [TrashController::class, 'forceDeleteReport']);
+    Route::post('/trash/invoices/{id}/restore', [TrashController::class, 'restoreInvoice']);
+    Route::delete('/trash/invoices/{id}/force', [TrashController::class, 'forceDeleteInvoice']);
+    Route::post('/trash/parameters/{id}/restore', [TrashController::class, 'restoreParameter']);
+    Route::delete('/trash/parameters/{id}/force', [TrashController::class, 'forceDeleteParameter']);
+    Route::post('/trash/report-types/{id}/restore', [TrashController::class, 'restoreReportType']);
+    Route::delete('/trash/report-types/{id}/force', [TrashController::class, 'forceDeleteReportType']);
+    Route::delete('/trash/empty', [TrashController::class, 'emptyTrash']);
 
     // Staff (admin only - controller checks role)
     Route::get('/staff', [StaffController::class, 'index']);

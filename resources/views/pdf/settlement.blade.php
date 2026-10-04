@@ -152,33 +152,32 @@ body {
 .inner-meta-table td {
   border: none;
   padding: 2.5px 0;
-  font-size: 13px;
-  line-height: 1.3;
   vertical-align: top;
+  font-size: 14px;
+  line-height: 1.3;
 }
 .lbl-col {
-  color: #374151;
-  font-weight: 700;
-  font-size: 13px;
   white-space: nowrap;
+  font-weight: 700;
+  color: #374151;
+  font-size: 14px;
   vertical-align: top;
 }
 .val-col {
-  color: #000000;
   font-weight: 900;
-  font-size: 13.5px;
-  vertical-align: top;
+  color: #000000;
+  font-size: 14px;
   word-wrap: break-word;
-  white-space: normal;
+  padding-left: 14px;
+  text-indent: -14px;
+  vertical-align: top;
 }
 .colon-sep {
-  display: inline-block;
-  width: 14px;
   font-weight: 900;
-  font-size: 13px;
-  color: #000000;
-  text-align: left;
-  vertical-align: top;
+  color: #1F2937;
+  font-size: 14px;
+  margin-right: 6px;
+  display: inline;
 }
 
 .rupee {
@@ -440,53 +439,53 @@ body {
   </tr>
 </table>
 
-<!-- 3. Customer & Statement Details Card -->
+<!-- 3. Customer & Statement Details Card (Independent Side-by-Side Tables) -->
 <table class="details-outer-box" align="center">
   <tr>
-    <td style="padding: 12px 18px; border: none; vertical-align: top;">
-      <table class="details-table" align="center">
+    <td style="padding: 10px 14px; border: none; vertical-align: top;">
+      <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
         <tr>
-          <!-- Left Column (55%) -->
-          <td style="width: 55%; padding-right: 14px; vertical-align: top;">
-            <table class="inner-meta-table">
+          <!-- Left Column (50%) -->
+          <td style="width: 50%; padding-right: 14px; vertical-align: top; border: none;">
+            <table class="inner-meta-table" style="width: 100%; table-layout: fixed;">
               <colgroup>
-                <col style="width: 110px;">
+                <col style="width: 88px;">
                 <col style="width: auto;">
               </colgroup>
               @if(!empty($custName) && $custName !== '—')
               <tr>
-                <td class="lbl-col">Customer</td>
+                <td class="lbl-col" style="padding-right: 4px;">Customer</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $custName }}</td>
               </tr>
               @endif
               @if(!empty($custAddr))
               <tr>
-                <td class="lbl-col">Address</td>
+                <td class="lbl-col" style="padding-right: 4px;">Address</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $custAddr }}</td>
               </tr>
               @endif
               @if(!empty($data['filter_types_label']))
               <tr>
-                <td class="lbl-col">Report Type</td>
+                <td class="lbl-col" style="padding-right: 4px;">Report Type</td>
                 <td class="val-col" style="color: #0B6B43;"><span class="colon-sep">:</span>{{ $data['filter_types_label'] }}</td>
               </tr>
               @endif
             </table>
           </td>
           
-          <!-- Right Column (45%) -->
-          <td style="width: 45%; padding-left: 14px; vertical-align: top;">
-            <table class="inner-meta-table">
+          <!-- Right Column (50%) -->
+          <td style="width: 50%; padding-left: 20px; vertical-align: top; border: none;">
+            <table class="inner-meta-table" style="width: 100%; table-layout: fixed;">
               <colgroup>
-                <col style="width: 110px;">
+                <col style="width: 105px;">
                 <col style="width: auto;">
               </colgroup>
               <tr>
-                <td class="lbl-col">Period</td>
+                <td class="lbl-col" style="padding-right: 4px;">Period</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ $fromFormatted }} to {{ $toFormatted }}</td>
               </tr>
               <tr>
-                <td class="lbl-col">Statement Date</td>
+                <td class="lbl-col" style="padding-right: 4px;">Statement Date</td>
                 <td class="val-col"><span class="colon-sep">:</span>{{ \Carbon\Carbon::now()->format('d-M-Y') }}</td>
               </tr>
             </table>

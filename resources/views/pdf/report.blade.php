@@ -205,14 +205,16 @@
             color: #000000;
             font-size: 14.5px;
             word-wrap: break-word;
-            padding-left: 0;
+            padding-left: 14px;
+            text-indent: -14px;
+            vertical-align: top;
         }
 
         .colon-sep {
             font-weight: 900;
             color: #1F2937;
             font-size: 13.5px;
-            margin-right: 4px;
+            margin-right: 6px;
             display: inline;
         }
 
@@ -550,9 +552,9 @@
                                 @if(!empty($customerName) && $customerName !== '—')
                                     <tr>
                                         <td class="lbl-col">Customer</td>
-                                        <td class="val-col" style="padding-left: 9px; text-indent: -9px;">
+                                        <td class="val-col">
                                             <span class="colon-sep">:</span>{{ $customerName }}
-                                            @if($report->customer?->group?->name)
+                                            @if($report->customer?->group?->name && strtolower(trim($report->customer->group->name)) !== strtolower(trim($customerName)))
                                                 <span
                                                     style="font-weight: bold; font-size: 11.5px; color: #4B5563;">({{ $report->customer->group->name }})</span>
                                             @endif
@@ -593,8 +595,8 @@
                             </table>
                         </td>
 
-                        <!-- Right Column (shifted right by 2 more tabs) -->
-                        <td style="width: 50%; padding-left: 145px; vertical-align: top;">
+                        <!-- Right Column (shifted left by 1 more tab) -->
+                        <td style="width: 50%; padding-left: 85px; vertical-align: top;">
                             <table class="inner-meta-table">
                                 <colgroup>
                                     <col style="width: 96px;">
