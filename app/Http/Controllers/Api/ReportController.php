@@ -69,6 +69,10 @@ class ReportController extends Controller
             'bags_tons'=>'nullable|string',
             'buyer'=>'nullable|string',
             'seller'=>'nullable|string',
+            'depositor_name'=>'nullable|string',
+            'cid_no'=>'nullable|string',
+            'si_no'=>'nullable|string',
+            'lot_no'=>'nullable|string',
             'remarks'=>'nullable|string',
             'notes'=>'nullable|string',
             'results'=>'required|array|min:1',
@@ -117,6 +121,11 @@ class ReportController extends Controller
         $data['customer_id'] = $customerId;
         return DB::transaction(function() use ($data, $request){
             $reportNo = !empty($data['report_no']) ? trim($data['report_no']) : $this->generateReportNo();
+            // If the report_no exists (active or in Trash), automatically skip to the next available number
+            $existsInDb = Report::withTrashed()->withoutGlobalScope(\App\Models\Scopes\DemoScope::class)->where('report_no', $reportNo)->exists();
+            if ($existsInDb) {
+                $reportNo = $this->generateReportNo();
+            }
             $report = Report::create([
                 'report_no'=>$reportNo,
                 'report_type_id'=>$data['report_type_id'],
@@ -132,6 +141,10 @@ class ReportController extends Controller
                 'bags_tons'=>$data['bags_tons'] ?? null,
                 'buyer'=>$data['buyer'] ?? null,
                 'seller'=>$data['seller'] ?? null,
+                'depositor_name'=>$data['depositor_name'] ?? null,
+                'cid_no'=>$data['cid_no'] ?? null,
+                'si_no'=>$data['si_no'] ?? null,
+                'lot_no'=>$data['lot_no'] ?? null,
                 'remarks'=>$data['remarks'] ?? null,
                 'notes'=>$data['notes'] ?? null,
                 'status'=>'completed',
@@ -197,6 +210,10 @@ class ReportController extends Controller
             'bags_tons'=>'nullable|string',
             'buyer'=>'nullable|string',
             'seller'=>'nullable|string',
+            'depositor_name'=>'nullable|string',
+            'cid_no'=>'nullable|string',
+            'si_no'=>'nullable|string',
+            'lot_no'=>'nullable|string',
             'remarks'=>'nullable|string',
             'notes'=>'nullable|string',
             'results'=>'sometimes|array',
@@ -380,24 +397,25 @@ class ReportController extends Controller
 
     private function generateReportNo(): string
     {
-        // Include trashed rows: report_no is UNIQUE in DB even for soft-deleted reports
+        // Query ALL reports including trashed ones across all scopes
         $base = Report::withTrashed()->withoutGlobalScope(\App\Models\Scopes\DemoScope::class);
-        // Find max numeric part
-        $last = (clone $base)->where('report_no','like','KAL-%')->orderByRaw("CAST(SUBSTRING(report_no,5) AS UNSIGNED) DESC")->first();
-        $next = 1;
-        if ($last) {
-            $num = intval(substr($last->report_no, 4));
-            $next = $num + 1;
-        } else {
-            $next = 4412; // spec example starting point if empty? but KAL-0001 spec says 0001, we use 1 padded to 4
+        $allNos = (clone $base)->where('report_no', 'like', 'KAL-%')->pluck('report_no')->all();
+        $maxNum = 0;
+        foreach ($allNos as $no) {
+            $numPart = intval(preg_replace('/[^0-9]/', '', substr($no, 4)));
+            if ($numPart > $maxNum) {
+                $maxNum = $numPart;
+            }
         }
-        // Ensure padded 4 digits, but allow larger
-        $candidate = 'KAL-'.str_pad($next, 4, '0', STR_PAD_LEFT);
-        // Ensure uniqueness loop
-        while ((clone $base)->where('report_no',$candidate)->exists()) {
+
+        $next = $maxNum > 0 ? ($maxNum + 1) : 4412;
+        $candidate = 'KAL-' . str_pad($next, 4, '0', STR_PAD_LEFT);
+
+        while ((clone $base)->where('report_no', $candidate)->exists()) {
             $next++;
-            $candidate = 'KAL-'.str_pad($next, 4, '0', STR_PAD_LEFT);
+            $candidate = 'KAL-' . str_pad($next, 4, '0', STR_PAD_LEFT);
         }
+
         return $candidate;
     }
 
@@ -410,12 +428,21 @@ class ReportController extends Controller
         return $type.' ('.$no.').pdf';
     }
 
-    private function wordFilename(Report $report): string
+    public function fieldSuggestions(Request $request)
     {
-        $type = $report->reportType->name ?? 'REPORT';
-        $type = preg_replace('/[^A-Za-z0-9_\- ]/','', $type);
-        $type = strtoupper(trim($type));
-        $no = $report->report_no;
-        return $type.' ('.$no.').doc';
+        $fields = ['buyer', 'seller', 'depositor_name', 'cid_no', 'si_no', 'lot_no', 'sample_name', 'vehicle_no', 'bill_no', 'nature_of_sample', 'bags_tons', 'party_name', 'customer_name', 'address'];
+        $suggestions = [];
+        foreach ($fields as $field) {
+            $suggestions[$field] = DB::table('reports')
+                ->whereNotNull($field)
+                ->where($field, '!=', '')
+                ->select($field)
+                ->distinct()
+                ->orderBy($field)
+                ->limit(100)
+                ->pluck($field)
+                ->all();
+        }
+        return response()->json($suggestions);
     }
 }

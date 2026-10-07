@@ -11,7 +11,7 @@ class ReportType extends Model
 {
     use DemoScoped, SoftDeletes;
 
-    protected $fillable = ['name','title','quantity_label','default_remarks','default_notes','visible_fields','active','show_specification','custom_columns','table_columns','is_demo'];
+    protected $fillable = ['name','title','quantity_label','default_nature_of_sample','default_remarks','default_notes','visible_fields','active','show_specification','custom_columns','table_columns','is_demo'];
     protected $casts = ['visible_fields'=>'array','active'=>'boolean','show_specification'=>'boolean','custom_columns'=>'array','table_columns'=>'array','is_demo'=>'boolean'];
 
     public function parameters(): HasMany

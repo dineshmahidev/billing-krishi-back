@@ -61,11 +61,22 @@ class Invoice extends Model
     {
         $lab = LabSetting::current();
         $prefix = $lab->invoice_prefix ?? 'KAL-INV-';
-        $base = self::withoutGlobalScope(DemoScope::class);
-        $last = (clone $base)->where('invoice_no','like',$prefix.'%')->orderByRaw("CAST(SUBSTRING(invoice_no, ".(strlen($prefix)+1).") AS UNSIGNED) DESC")->first();
-        $next = $last ? intval(substr($last->invoice_no, strlen($prefix))) + 1 : 1;
+        $base = self::withTrashed()->withoutGlobalScope(DemoScope::class);
+        $allNos = (clone $base)->where('invoice_no', 'like', $prefix.'%')->pluck('invoice_no')->all();
+        $maxNum = 0;
+        $prefixLen = strlen($prefix);
+        foreach ($allNos as $no) {
+            $numPart = intval(preg_replace('/[^0-9]/', '', substr($no, $prefixLen)));
+            if ($numPart > $maxNum) {
+                $maxNum = $numPart;
+            }
+        }
+        $next = $maxNum > 0 ? ($maxNum + 1) : 1;
         $candidate = $prefix . str_pad($next, 4, '0', STR_PAD_LEFT);
-        while ((clone $base)->where('invoice_no',$candidate)->exists()) { $next++; $candidate = $prefix . str_pad($next,4,'0',STR_PAD_LEFT); }
+        while ((clone $base)->where('invoice_no', $candidate)->exists()) {
+            $next++;
+            $candidate = $prefix . str_pad($next, 4, '0', STR_PAD_LEFT);
+        }
         return $candidate;
     }
 }

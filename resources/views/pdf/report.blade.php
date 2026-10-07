@@ -496,6 +496,12 @@
 
         $rows = $report->results->filter(fn($r) => $r->enabled !== false && $r->parameter &&
             $r->parameter->active)->values();
+
+        $visFieldsArr = is_array($report->reportType?->visible_fields) ? $report->reportType->visible_fields : null;
+        $isVis = function($key) use ($visFieldsArr) {
+            if ($visFieldsArr === null || empty($visFieldsArr)) return false;
+            return in_array($key, $visFieldsArr);
+        };
     @endphp
 
     <!-- 1. Header: Grouped Centered Logo + Vertical Green Line + Company Name & Tagline -->
@@ -554,10 +560,6 @@
                                         <td class="lbl-col">Customer</td>
                                         <td class="val-col">
                                             <span class="colon-sep">:</span>{{ $customerName }}
-                                            @if($report->customer?->group?->name && strtolower(trim($report->customer->group->name)) !== strtolower(trim($customerName)))
-                                                <span
-                                                    style="font-weight: bold; font-size: 11.5px; color: #4B5563;">({{ $report->customer->group->name }})</span>
-                                            @endif
                                         </td>
                                     </tr>
                                 @endif
@@ -580,6 +582,12 @@
                                         </td>
                                     </tr>
                                 @endif
+                                @if(!empty($report->sample_name))
+                                    <tr>
+                                        <td class="lbl-col">Sample Name</td>
+                                        <td class="val-col"><span class="colon-sep">:</span>{{ $report->sample_name }}</td>
+                                    </tr>
+                                @endif
                                 @if(!empty($report->bill_no))
                                     <tr>
                                         <td class="lbl-col">Bill No</td>
@@ -590,6 +598,18 @@
                                     <tr>
                                         <td class="lbl-col">Vehicle No</td>
                                         <td class="val-col"><span class="colon-sep">:</span>{{ $report->vehicle_no }}</td>
+                                    </tr>
+                                @endif
+                                @if(!empty($report->depositor_name))
+                                    <tr>
+                                        <td class="lbl-col">Depositer Name</td>
+                                        <td class="val-col"><span class="colon-sep">:</span>{{ $report->depositor_name }}</td>
+                                    </tr>
+                                @endif
+                                @if(!empty($report->cid_no))
+                                    <tr>
+                                        <td class="lbl-col">CID No</td>
+                                        <td class="val-col"><span class="colon-sep">:</span>{{ $report->cid_no }}</td>
                                     </tr>
                                 @endif
                             </table>
@@ -630,6 +650,18 @@
                                     <tr>
                                         <td class="lbl-col">Seller</td>
                                         <td class="val-col"><span class="colon-sep">:</span>{{ $report->seller }}</td>
+                                    </tr>
+                                @endif
+                                @if(!empty($report->si_no))
+                                    <tr>
+                                        <td class="lbl-col">SI No</td>
+                                        <td class="val-col"><span class="colon-sep">:</span>{{ $report->si_no }}</td>
+                                    </tr>
+                                @endif
+                                @if(!empty($report->lot_no))
+                                    <tr>
+                                        <td class="lbl-col">Lot No</td>
+                                        <td class="val-col"><span class="colon-sep">:</span>{{ $report->lot_no }}</td>
                                     </tr>
                                 @endif
                             </table>

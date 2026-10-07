@@ -210,34 +210,54 @@
           <strong>{{ $report->coa_date ? \Carbon\Carbon::parse($report->coa_date)->format('d-M-Y') : ($report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '') }}</strong>&nbsp;
         </td>
       </tr>
+      @if(!empty($companyW))
       <tr>
         <td class="meta-label">Customer</td>
         <td>{{ $companyW }}&nbsp;</td>
         <td class="meta-label">Sample Date</td>
         <td>{{ $report->sample_date ? \Carbon\Carbon::parse($report->sample_date)->format('d-M-Y') : '' }}&nbsp;</td>
       </tr>
+      @endif
+      @if(!empty($customerAddressW) || !empty($report->bill_no))
       <tr>
         <td class="meta-label">Address</td>
-        <td>{{ $customerAddressW ?: '—' }}&nbsp;</td>
+        <td>{{ $customerAddressW ?: '' }}&nbsp;</td>
         <td class="meta-label">Bill No</td>
         <td>{{ $report->bill_no }}&nbsp;</td>
       </tr>
+      @endif
+      @if(!empty($report->nature_of_sample) || !empty($report->vehicle_no))
       <tr>
         <td class="meta-label">Nature of Sample</td>
-        <td>{{ $report->nature_of_sample ?: ($report->sample_name ?: 'Sample') }}&nbsp;</td>
+        <td>{{ $report->nature_of_sample ?: ($report->sample_name ?: '') }}&nbsp;</td>
         <td class="meta-label">Vehicle No</td>
         <td>{{ $report->vehicle_no }}&nbsp;</td>
       </tr>
+      @endif
+      @if(!empty($report->bags_tons) || !empty($report->buyer))
       <tr>
         <td class="meta-label">Bags / Tons</td>
         <td>{{ $report->bags_tons }}&nbsp;</td>
         <td class="meta-label">Buyer</td>
         <td>{{ $report->buyer }}&nbsp;</td>
       </tr>
+      @endif
+      @if(!empty($report->seller) || !empty($report->depositor_name))
       <tr>
         <td class="meta-label">Seller</td>
-        <td colspan="3">{{ $report->seller }}&nbsp;</td>
+        <td>{{ $report->seller }}&nbsp;</td>
+        <td class="meta-label">Depositer Name</td>
+        <td>{{ $report->depositor_name }}&nbsp;</td>
       </tr>
+      @endif
+      @if(!empty($report->cid_no) || !empty($report->si_no) || !empty($report->lot_no))
+      <tr>
+        <td class="meta-label">CID No / SI No</td>
+        <td>{{ implode(' / ', array_filter([$report->cid_no, $report->si_no])) }}&nbsp;</td>
+        <td class="meta-label">Lot No</td>
+        <td>{{ $report->lot_no }}&nbsp;</td>
+      </tr>
+      @endif
     </table>
 
     <table class="results">

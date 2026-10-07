@@ -22,8 +22,9 @@ Route::get('/reports/by-no/{reportNo}', [ReportController::class, 'byNo']);
 Route::get('/reports/by-no/{reportNo}/pdf', [ReportController::class, 'pdfByNo']);
 Route::get('/reports/by-no/{reportNo}/pdf/download', [ReportController::class, 'downloadPdfByNo']);
 
-// Public website forms — sample test enquiry + contact (throttled)
+// Public website forms & traffic recording — sample test enquiry + contact (throttled)
 Route::post('/enquiries', [\App\Http\Controllers\Api\EnquiryController::class, 'store'])->middleware('throttle:10,1');
+Route::post('/traffic/visit', [\App\Http\Controllers\Api\EnquiryController::class, 'recordVisit']);
 
 // Protected
 Route::middleware('auth:sanctum')->group(function () {
@@ -32,6 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/password', [AuthController::class, 'changePassword']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    // Website Enquiries & Traffic Stats
+    Route::get('/enquiries', [\App\Http\Controllers\Api\EnquiryController::class, 'index']);
+    Route::delete('/enquiries/{id}', [\App\Http\Controllers\Api\EnquiryController::class, 'destroy']);
+    Route::get('/traffic/stats', [\App\Http\Controllers\Api\EnquiryController::class, 'trafficStats']);
 
     // Report Types (read for staff, write admin only enforced in controller)
     Route::get('/report-types', [ReportTypeController::class, 'index']);
@@ -49,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Reports
     Route::get('/reports', [ReportController::class, 'index']);
+    Route::get('/reports/field-suggestions', [ReportController::class, 'fieldSuggestions']);
     Route::post('/reports', [ReportController::class, 'store']);
     Route::get('/reports/{id}', [ReportController::class, 'show']);
     Route::put('/reports/{id}', [ReportController::class, 'update']);

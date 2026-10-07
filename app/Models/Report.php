@@ -15,6 +15,7 @@ class Report extends Model
     protected $fillable = [
         'report_no','report_type_id','sample_date','coa_date','party_name','customer_name','address',
         'sample_name','nature_of_sample','vehicle_no','bill_no','bags_tons','buyer','seller',
+        'depositor_name','cid_no','si_no','lot_no',
         'remarks','notes','status','created_by','customer_id','is_demo'
     ];
 
