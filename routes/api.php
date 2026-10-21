@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\LabSettingController;
 use App\Http\Controllers\Api\CmsController;
+use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TrashController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Api\TrashController;
 // Public
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/cms/landing', [CmsController::class, 'landing']);
+Route::get('/testimonials', [TestimonialController::class, 'index']);
 
 // Public report download by report number (hero softcopy download)
 Route::get('/reports/by-no/{reportNo}', [ReportController::class, 'byNo']);
@@ -90,6 +92,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // CMS Landing (admin only for update)
     Route::put('/cms/landing', [CmsController::class, 'updateLanding']);
     Route::post('/cms/landing', [CmsController::class, 'updateLanding']);
+
+    // Testimonials CRUD (admin only, enforced in controller)
+    Route::get('/testimonials/all', [TestimonialController::class, 'adminIndex']);
+    Route::post('/testimonials', [TestimonialController::class, 'store']);
+    Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
+    Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
 
     // Customers - searchable for autocomplete, all authenticated can read, admin write
     Route::get('/customers', [CustomerController::class, 'index']);

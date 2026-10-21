@@ -509,6 +509,8 @@ class InvoiceController extends Controller
                 'report_no' => $rep->report_no,
                 'company_name' => $compName,
                 'customer_name' => $rep->customer_name ?: $compName,
+                'buyer' => trim((string)($rep->buyer ?? '')),
+                'seller' => trim((string)($rep->seller ?? '')),
                 'sample_name' => $rep->sample_name,
                 'vehicle_no' => $rep->vehicle_no,
                 'params_text' => $paramsSummary,

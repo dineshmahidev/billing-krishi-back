@@ -5,7 +5,7 @@
 <style>
 @page {
   size: A4 portrait;
-  margin: 12px 22px 70px 22px;
+  margin: 12px 22px 18px 22px;
 }
 * { font-family: 'Krishi', 'Helvetica', 'Arial', sans-serif; box-sizing: border-box; }
 body {
@@ -114,11 +114,11 @@ body {
   font-family: 'Arial', 'Helvetica', sans-serif;
   font-size: 17.5px;
   font-weight: 900;
-  color: #0B6B43;
+  color: #FFFFFF;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  background-color: #EAF7F0;
-  border: 1.5px solid #86C1A4;
+  background-color: #0B6B43;
+  border: 2.5px solid #08512F;
   border-radius: 7px;
   padding: 6px 32px;
   line-height: 1.2;
@@ -272,13 +272,13 @@ body {
   color: #0B6B43;
 }
 
-/* 7. Signatory Section (Fixed Bottom Right - Above Footer Box with Bottom Margin) */
+/* 7. Signatory Section (in-flow — renders once, on the last page only) */
 .sig-wrapper {
-  position: fixed;
-  bottom: 80px;
-  right: 0px;
+  position: static;
   width: 220px;
+  margin: 14px 0 0 auto;
   z-index: 10;
+  page-break-inside: avoid;
 }
 .sig-box {
   width: 220px;
@@ -310,14 +310,16 @@ body {
   text-transform: uppercase;
 }
 
-/* 8. Static Bottom Pinned Footer with Horizontal Box & Outside Note */
+/* 8. Bottom Footer (in-flow — renders once, on the last page only) */
+.doc-tail {
+  page-break-inside: avoid;
+}
 .footer-pinned-container {
-  position: fixed;
-  bottom: 0px;
-  left: 0;
-  right: 0;
+  position: static;
   width: 100%;
   text-align: center;
+  margin-top: 8px;
+  page-break-inside: avoid;
 }
 .footer-box {
   width: 100%;
@@ -526,12 +528,22 @@ body {
             <strong style="color: #0B6B43;">O/B (Opening Balance)</strong>
           @else
             <span style="font-weight: 800; color: #0B6B43; margin-right: 4px;">{{ $row['date'] }}</span>
-            @if(!empty($row['company_name']))
-              <strong style="color: #000000; font-size: 10px; margin-right: 4px;">[{{ $row['company_name'] }}]</strong>
-            @endif
             <span>{{ $row['params_text'] }}</span>
             @if(!empty($row['vehicle_no']))
               <span style="color: #4B5563; font-size: 9.5px;">({{ $row['vehicle_no'] }})</span>
+            @endif
+            @if(!empty($row['buyer']) || !empty($row['seller']))
+              <div style="font-size: 9.5px; color: #374151; margin-top: 1px;">
+                @if(!empty($row['buyer']))
+                  <span><strong style="color:#0B6B43;">Buyer:</strong> {{ $row['buyer'] }}</span>
+                @endif
+                @if(!empty($row['buyer']) && !empty($row['seller']))
+                  <span style="margin: 0 6px;">&bull;</span>
+                @endif
+                @if(!empty($row['seller']))
+                  <span><strong style="color:#0B6B43;">Seller:</strong> {{ $row['seller'] }}</span>
+                @endif
+              </div>
             @endif
           @endif
         </td>
@@ -566,7 +578,8 @@ body {
   ************* End of Statement *************
 </div>
 
-<!-- 8. Signatory Block (Fixed Bottom Right - Above Footer Box with Bottom Margin) -->
+<!-- 8. Signatory Block + Footer (kept together — rendered once, on the last page) -->
+<div class="doc-tail">
 <div class="sig-wrapper">
   <div class="sig-box">
     @if($sigPath)
@@ -599,6 +612,7 @@ body {
   <div class="footer-note">
     Note: This is a computer-generated account statement.
   </div>
+</div>
 </div>
 
 <script type="text/php">

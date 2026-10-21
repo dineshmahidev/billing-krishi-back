@@ -702,6 +702,21 @@
             }
             $tableCols[] = ['key' => 'result', 'label' => 'RESULT', 'visible' => true, 'type' => 'system'];
         }
+        $hasSpecCol = in_array('specification', array_column($tableCols, 'key'));
+        $normalizedCols = [];
+        foreach ($tableCols as $c) {
+            $isSpecLabel = strtoupper(trim((string) ($c['label'] ?? ''))) === 'SPECIFICATION';
+            if (($c['type'] ?? '') === 'custom' && $isSpecLabel) {
+                if ($hasSpecCol) {
+                    continue;
+                }
+                $hasSpecCol = true;
+                $c['key'] = 'specification';
+                $c['type'] = 'system';
+            }
+            $normalizedCols[] = $c;
+        }
+        $tableCols = $normalizedCols;
         $activeTableCols = array_values(array_filter($tableCols, fn($c) => ($c['visible'] ?? true) !== false));
 
         $hasSpec = in_array('specification', array_column($activeTableCols, 'key'));
