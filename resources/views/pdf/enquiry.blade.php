@@ -99,7 +99,7 @@ body {
   border: none;
 }
 .badge-line {
-  border-bottom: 1.2px solid #86C1A4;
+  border-bottom: 1.5px solid #0B6B43;
   height: 1px;
   width: 100%;
 }
@@ -114,11 +114,11 @@ body {
   font-family: 'Arial', 'Helvetica', sans-serif;
   font-size: 17.5px;
   font-weight: 900;
-  color: #0B6B43;
+  color: #FFFFFF;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  background-color: #EAF7F0;
-  border: 1.5px solid #86C1A4;
+  background-color: #0B6B43;
+  border: 2px solid #08512F;
   border-radius: 7px;
   padding: 6px 32px;
   line-height: 1.2;

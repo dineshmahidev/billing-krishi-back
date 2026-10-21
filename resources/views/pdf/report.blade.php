@@ -127,7 +127,7 @@
         }
 
         .badge-line {
-            border-bottom: 1.2px solid #86C1A4;
+            border-bottom: 1.5px solid #0B6B43;
             height: 1px;
             width: 100%;
         }
@@ -141,9 +141,9 @@
 
         .badge-pill {
             font-family: 'Arial', 'Helvetica', sans-serif;
-            background-color: #EAF7F0;
-            color: #0B6B43;
-            border: 1.5px solid #86C1A4;
+            background-color: #0B6B43;
+            color: #FFFFFF;
+            border: 2px solid #08512F;
             padding: 6px 34px;
             font-size: 18.5px;
             font-weight: 900;
