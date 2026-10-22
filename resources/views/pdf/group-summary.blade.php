@@ -114,11 +114,11 @@ body {
   font-family: 'Arial', 'Helvetica', sans-serif;
   font-size: 17.5px;
   font-weight: 900;
-  color: #FFFFFF;
+  color: #0B6B43;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  background-color: #0B6B43;
-  border: 2px solid #08512F;
+  background-color: #E6F4EA;
+  border: 1.5px solid #0B6B43;
   border-radius: 7px;
   padding: 6px 32px;
   line-height: 1.2;
